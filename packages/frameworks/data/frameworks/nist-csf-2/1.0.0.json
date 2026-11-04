@@ -7,14 +7,14 @@
   "publisher": "National Institute of Standards and Technology (NIST)",
   "kind": "control_framework",
   "category": "cyber",
-  "description": "The CSF 2.0 Core: 6 Functions, 22 Categories, and 106 Subcategories of cybersecurity outcomes. Text is public domain; this file was entered without access to the source PDF and every item is flagged for verification against CSWP 29 Appendix A.",
+  "description": "The NIST Cybersecurity Framework 2.0: cybersecurity outcomes across Govern, Identify, Protect, Detect, Respond, and Recover. Use it for the IT, network, and data side of a site.",
   "sources": [
     {
       "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
       "section": "Appendix A, CSF Core",
       "url": "https://doi.org/10.6028/NIST.CSWP.29",
       "verified": false,
-      "note": "wording to be checked against CSWP 29; nist.gov was unreachable from the build container"
+      "note": "wording to be checked against CSWP 29; nist.gov was unreachable from the build container Library provenance: The CSF 2.0 Core: 6 Functions, 22 Categories, and 106 Subcategories of cybersecurity outcomes. Text is public domain; this file was entered without access to the source PDF and every item is flagged for verification against CSWP 29 Appendix A."
     }
   ],
   "levels": [
@@ -124,7 +124,7 @@
     },
     {
       "code": "GV.OC-01",
-      "title": "Organizational Context 01",
+      "title": "The organizational mission is understood and informs cybersecurity risk management",
       "text": "The organizational mission is understood and informs cybersecurity risk management",
       "level": "subcategory",
       "parentCode": "GV.OC",
@@ -139,7 +139,7 @@
     },
     {
       "code": "GV.OC-02",
-      "title": "Organizational Context 02",
+      "title": "Internal and external stakeholders are understood, and their needs and expectations...",
       "text": "Internal and external stakeholders are understood, and their needs and expectations regarding cybersecurity risk management are understood and considered",
       "level": "subcategory",
       "parentCode": "GV.OC",
@@ -154,7 +154,7 @@
     },
     {
       "code": "GV.OC-03",
-      "title": "Organizational Context 03",
+      "title": "Legal, regulatory, and contractual requirements regarding cybersecurity, including...",
       "text": "Legal, regulatory, and contractual requirements regarding cybersecurity, including privacy and civil liberties obligations, are understood and managed",
       "level": "subcategory",
       "parentCode": "GV.OC",
@@ -169,7 +169,7 @@
     },
     {
       "code": "GV.OC-04",
-      "title": "Organizational Context 04",
+      "title": "Critical objectives, capabilities, and services that external stakeholders depend on or...",
       "text": "Critical objectives, capabilities, and services that external stakeholders depend on or expect from the organization are understood and communicated",
       "level": "subcategory",
       "parentCode": "GV.OC",
@@ -184,7 +184,7 @@
     },
     {
       "code": "GV.OC-05",
-      "title": "Organizational Context 05",
+      "title": "Outcomes, capabilities, and services that the organization depends on are understood...",
       "text": "Outcomes, capabilities, and services that the organization depends on are understood and communicated",
       "level": "subcategory",
       "parentCode": "GV.OC",
@@ -214,7 +214,7 @@
     },
     {
       "code": "GV.RM-01",
-      "title": "Risk Management Strategy 01",
+      "title": "Risk management objectives are established and agreed to by organizational stakeholders",
       "text": "Risk management objectives are established and agreed to by organizational stakeholders",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -229,7 +229,7 @@
     },
     {
       "code": "GV.RM-02",
-      "title": "Risk Management Strategy 02",
+      "title": "Risk appetite and risk tolerance statements are established, communicated, and maintained",
       "text": "Risk appetite and risk tolerance statements are established, communicated, and maintained",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -244,7 +244,7 @@
     },
     {
       "code": "GV.RM-03",
-      "title": "Risk Management Strategy 03",
+      "title": "Cybersecurity risk management activities and outcomes are included in enterprise risk...",
       "text": "Cybersecurity risk management activities and outcomes are included in enterprise risk management processes",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -259,7 +259,7 @@
     },
     {
       "code": "GV.RM-04",
-      "title": "Risk Management Strategy 04",
+      "title": "Strategic direction that describes appropriate risk response options is established and...",
       "text": "Strategic direction that describes appropriate risk response options is established and communicated",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -274,7 +274,7 @@
     },
     {
       "code": "GV.RM-05",
-      "title": "Risk Management Strategy 05",
+      "title": "Lines of communication across the organization are established for cybersecurity risks,...",
       "text": "Lines of communication across the organization are established for cybersecurity risks, including risks from suppliers and other third parties",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -289,7 +289,7 @@
     },
     {
       "code": "GV.RM-06",
-      "title": "Risk Management Strategy 06",
+      "title": "A standardized method for calculating, documenting, categorizing, and prioritizing...",
       "text": "A standardized method for calculating, documenting, categorizing, and prioritizing cybersecurity risks is established and communicated",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -304,7 +304,7 @@
     },
     {
       "code": "GV.RM-07",
-      "title": "Risk Management Strategy 07",
+      "title": "Strategic opportunities (i.e., positive risks) are characterized and are included in...",
       "text": "Strategic opportunities (i.e., positive risks) are characterized and are included in organizational cybersecurity risk discussions",
       "level": "subcategory",
       "parentCode": "GV.RM",
@@ -334,7 +334,7 @@
     },
     {
       "code": "GV.RR-01",
-      "title": "Roles, Responsibilities, and Authorities 01",
+      "title": "Organizational leadership is responsible and accountable for cybersecurity risk and...",
       "text": "Organizational leadership is responsible and accountable for cybersecurity risk and fosters a culture that is risk-aware, ethical, and continually improving",
       "level": "subcategory",
       "parentCode": "GV.RR",
@@ -349,7 +349,7 @@
     },
     {
       "code": "GV.RR-02",
-      "title": "Roles, Responsibilities, and Authorities 02",
+      "title": "Roles, responsibilities, and authorities related to cybersecurity risk management are...",
       "text": "Roles, responsibilities, and authorities related to cybersecurity risk management are established, communicated, understood, and enforced",
       "level": "subcategory",
       "parentCode": "GV.RR",
@@ -364,7 +364,7 @@
     },
     {
       "code": "GV.RR-03",
-      "title": "Roles, Responsibilities, and Authorities 03",
+      "title": "Adequate resources are allocated commensurate with the cybersecurity risk strategy,...",
       "text": "Adequate resources are allocated commensurate with the cybersecurity risk strategy, roles, responsibilities, and policies",
       "level": "subcategory",
       "parentCode": "GV.RR",
@@ -379,7 +379,7 @@
     },
     {
       "code": "GV.RR-04",
-      "title": "Roles, Responsibilities, and Authorities 04",
+      "title": "Cybersecurity is included in human resources practices",
       "text": "Cybersecurity is included in human resources practices",
       "level": "subcategory",
       "parentCode": "GV.RR",
@@ -409,7 +409,7 @@
     },
     {
       "code": "GV.PO-01",
-      "title": "Policy 01",
+      "title": "Policy for managing cybersecurity risks is established based on organizational context,...",
       "text": "Policy for managing cybersecurity risks is established based on organizational context, cybersecurity strategy, and priorities and is communicated and enforced",
       "level": "subcategory",
       "parentCode": "GV.PO",
@@ -424,7 +424,7 @@
     },
     {
       "code": "GV.PO-02",
-      "title": "Policy 02",
+      "title": "Policy for managing cybersecurity risks is reviewed, updated, communicated, and...",
       "text": "Policy for managing cybersecurity risks is reviewed, updated, communicated, and enforced to reflect changes in requirements, threats, technology, and organizational mission",
       "level": "subcategory",
       "parentCode": "GV.PO",
@@ -454,7 +454,7 @@
     },
     {
       "code": "GV.OV-01",
-      "title": "Oversight 01",
+      "title": "Cybersecurity risk management strategy outcomes are reviewed to inform and adjust...",
       "text": "Cybersecurity risk management strategy outcomes are reviewed to inform and adjust strategy and direction",
       "level": "subcategory",
       "parentCode": "GV.OV",
@@ -469,7 +469,7 @@
     },
     {
       "code": "GV.OV-02",
-      "title": "Oversight 02",
+      "title": "The cybersecurity risk management strategy is reviewed and adjusted to ensure coverage...",
       "text": "The cybersecurity risk management strategy is reviewed and adjusted to ensure coverage of organizational requirements and risks",
       "level": "subcategory",
       "parentCode": "GV.OV",
@@ -484,7 +484,7 @@
     },
     {
       "code": "GV.OV-03",
-      "title": "Oversight 03",
+      "title": "Organizational cybersecurity risk management performance is evaluated and reviewed for...",
       "text": "Organizational cybersecurity risk management performance is evaluated and reviewed for adjustments needed",
       "level": "subcategory",
       "parentCode": "GV.OV",
@@ -514,7 +514,7 @@
     },
     {
       "code": "GV.SC-10",
-      "title": "Cybersecurity Supply Chain Risk Management 10",
+      "title": "Cybersecurity supply chain risk management plans include provisions for activities that...",
       "text": "Cybersecurity supply chain risk management plans include provisions for activities that occur after the conclusion of a partnership or service agreement",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -529,7 +529,7 @@
     },
     {
       "code": "GV.SC-01",
-      "title": "Cybersecurity Supply Chain Risk Management 01",
+      "title": "A cybersecurity supply chain risk management program, strategy, objectives, policies,...",
       "text": "A cybersecurity supply chain risk management program, strategy, objectives, policies, and processes are established and agreed to by organizational stakeholders",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -544,7 +544,7 @@
     },
     {
       "code": "GV.SC-02",
-      "title": "Cybersecurity Supply Chain Risk Management 02",
+      "title": "Cybersecurity roles and responsibilities for suppliers, customers, and partners are...",
       "text": "Cybersecurity roles and responsibilities for suppliers, customers, and partners are established, communicated, and coordinated internally and externally",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -559,7 +559,7 @@
     },
     {
       "code": "GV.SC-03",
-      "title": "Cybersecurity Supply Chain Risk Management 03",
+      "title": "Cybersecurity supply chain risk management is integrated into cybersecurity and...",
       "text": "Cybersecurity supply chain risk management is integrated into cybersecurity and enterprise risk management, risk assessment, and improvement processes",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -574,7 +574,7 @@
     },
     {
       "code": "GV.SC-04",
-      "title": "Cybersecurity Supply Chain Risk Management 04",
+      "title": "Suppliers are known and prioritized by criticality",
       "text": "Suppliers are known and prioritized by criticality",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -589,7 +589,7 @@
     },
     {
       "code": "GV.SC-05",
-      "title": "Cybersecurity Supply Chain Risk Management 05",
+      "title": "Requirements to address cybersecurity risks in supply chains are established,...",
       "text": "Requirements to address cybersecurity risks in supply chains are established, prioritized, and integrated into contracts and other types of agreements with suppliers and other relevant third parties",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -604,7 +604,7 @@
     },
     {
       "code": "GV.SC-06",
-      "title": "Cybersecurity Supply Chain Risk Management 06",
+      "title": "Planning and due diligence are performed to reduce risks before entering into formal...",
       "text": "Planning and due diligence are performed to reduce risks before entering into formal supplier or other third-party relationships",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -619,7 +619,7 @@
     },
     {
       "code": "GV.SC-07",
-      "title": "Cybersecurity Supply Chain Risk Management 07",
+      "title": "The risks posed by a supplier, their products and services, and other third parties are...",
       "text": "The risks posed by a supplier, their products and services, and other third parties are understood, recorded, prioritized, assessed, responded to, and monitored over the course of the relationship",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -634,7 +634,7 @@
     },
     {
       "code": "GV.SC-08",
-      "title": "Cybersecurity Supply Chain Risk Management 08",
+      "title": "Relevant suppliers and other third parties are included in incident planning, response,...",
       "text": "Relevant suppliers and other third parties are included in incident planning, response, and recovery activities",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -649,7 +649,7 @@
     },
     {
       "code": "GV.SC-09",
-      "title": "Cybersecurity Supply Chain Risk Management 09",
+      "title": "Supply chain security practices are integrated into cybersecurity and enterprise risk...",
       "text": "Supply chain security practices are integrated into cybersecurity and enterprise risk management programs, and their performance is monitored throughout the technology product and service life cycle",
       "level": "subcategory",
       "parentCode": "GV.SC",
@@ -679,7 +679,7 @@
     },
     {
       "code": "ID.AM-01",
-      "title": "Asset Management 01",
+      "title": "Inventories of hardware managed by the organization are maintained",
       "text": "Inventories of hardware managed by the organization are maintained",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -694,7 +694,7 @@
     },
     {
       "code": "ID.AM-02",
-      "title": "Asset Management 02",
+      "title": "Inventories of software, services, and systems managed by the organization are maintained",
       "text": "Inventories of software, services, and systems managed by the organization are maintained",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -709,7 +709,7 @@
     },
     {
       "code": "ID.AM-03",
-      "title": "Asset Management 03",
+      "title": "Representations of the organization's authorized network communication and internal and...",
       "text": "Representations of the organization's authorized network communication and internal and external network data flows are maintained",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -724,7 +724,7 @@
     },
     {
       "code": "ID.AM-04",
-      "title": "Asset Management 04",
+      "title": "Inventories of services provided by suppliers are maintained",
       "text": "Inventories of services provided by suppliers are maintained",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -739,7 +739,7 @@
     },
     {
       "code": "ID.AM-05",
-      "title": "Asset Management 05",
+      "title": "Assets are prioritized based on classification, criticality, resources, and impact on...",
       "text": "Assets are prioritized based on classification, criticality, resources, and impact on the mission",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -754,7 +754,7 @@
     },
     {
       "code": "ID.AM-07",
-      "title": "Asset Management 07",
+      "title": "Inventories of data and corresponding metadata for designated data types are maintained",
       "text": "Inventories of data and corresponding metadata for designated data types are maintained",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -769,7 +769,7 @@
     },
     {
       "code": "ID.AM-08",
-      "title": "Asset Management 08",
+      "title": "Systems, hardware, software, services, and data are managed throughout their life cycles",
       "text": "Systems, hardware, software, services, and data are managed throughout their life cycles",
       "level": "subcategory",
       "parentCode": "ID.AM",
@@ -799,7 +799,7 @@
     },
     {
       "code": "ID.RA-10",
-      "title": "Risk Assessment 10",
+      "title": "Critical suppliers are assessed prior to acquisition",
       "text": "Critical suppliers are assessed prior to acquisition",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -814,7 +814,7 @@
     },
     {
       "code": "ID.RA-01",
-      "title": "Risk Assessment 01",
+      "title": "Vulnerabilities in assets are identified, validated, and recorded",
       "text": "Vulnerabilities in assets are identified, validated, and recorded",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -829,7 +829,7 @@
     },
     {
       "code": "ID.RA-02",
-      "title": "Risk Assessment 02",
+      "title": "Cyber threat intelligence is received from information sharing forums and sources",
       "text": "Cyber threat intelligence is received from information sharing forums and sources",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -844,7 +844,7 @@
     },
     {
       "code": "ID.RA-03",
-      "title": "Risk Assessment 03",
+      "title": "Internal and external threats to the organization are identified and recorded",
       "text": "Internal and external threats to the organization are identified and recorded",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -859,7 +859,7 @@
     },
     {
       "code": "ID.RA-04",
-      "title": "Risk Assessment 04",
+      "title": "Potential impacts and likelihoods of threats exploiting vulnerabilities are identified...",
       "text": "Potential impacts and likelihoods of threats exploiting vulnerabilities are identified and recorded",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -874,7 +874,7 @@
     },
     {
       "code": "ID.RA-05",
-      "title": "Risk Assessment 05",
+      "title": "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk...",
       "text": "Threats, vulnerabilities, likelihoods, and impacts are used to understand inherent risk and inform risk response prioritization",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -889,7 +889,7 @@
     },
     {
       "code": "ID.RA-06",
-      "title": "Risk Assessment 06",
+      "title": "Risk responses are chosen, prioritized, planned, tracked, and communicated",
       "text": "Risk responses are chosen, prioritized, planned, tracked, and communicated",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -904,7 +904,7 @@
     },
     {
       "code": "ID.RA-07",
-      "title": "Risk Assessment 07",
+      "title": "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked",
       "text": "Changes and exceptions are managed, assessed for risk impact, recorded, and tracked",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -919,7 +919,7 @@
     },
     {
       "code": "ID.RA-08",
-      "title": "Risk Assessment 08",
+      "title": "Processes for receiving, analyzing, and responding to vulnerability disclosures are...",
       "text": "Processes for receiving, analyzing, and responding to vulnerability disclosures are established",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -934,7 +934,7 @@
     },
     {
       "code": "ID.RA-09",
-      "title": "Risk Assessment 09",
+      "title": "The authenticity and integrity of hardware and software are assessed prior to...",
       "text": "The authenticity and integrity of hardware and software are assessed prior to acquisition and use",
       "level": "subcategory",
       "parentCode": "ID.RA",
@@ -964,7 +964,7 @@
     },
     {
       "code": "ID.IM-01",
-      "title": "Improvement 01",
+      "title": "Improvements are identified from evaluations",
       "text": "Improvements are identified from evaluations",
       "level": "subcategory",
       "parentCode": "ID.IM",
@@ -979,7 +979,7 @@
     },
     {
       "code": "ID.IM-02",
-      "title": "Improvement 02",
+      "title": "Improvements are identified from security tests and exercises, including those done in...",
       "text": "Improvements are identified from security tests and exercises, including those done in coordination with suppliers and relevant third parties",
       "level": "subcategory",
       "parentCode": "ID.IM",
@@ -994,7 +994,7 @@
     },
     {
       "code": "ID.IM-03",
-      "title": "Improvement 03",
+      "title": "Improvements are identified from execution of operational processes, procedures, and...",
       "text": "Improvements are identified from execution of operational processes, procedures, and activities",
       "level": "subcategory",
       "parentCode": "ID.IM",
@@ -1009,7 +1009,7 @@
     },
     {
       "code": "ID.IM-04",
-      "title": "Improvement 04",
+      "title": "Incident response plans and other cybersecurity plans that affect operations are...",
       "text": "Incident response plans and other cybersecurity plans that affect operations are established, communicated, maintained, and improved",
       "level": "subcategory",
       "parentCode": "ID.IM",
@@ -1039,7 +1039,7 @@
     },
     {
       "code": "PR.AA-01",
-      "title": "Identity Management, Authentication, and Access Control 01",
+      "title": "Identities and credentials for authorized users, services, and hardware are managed by...",
       "text": "Identities and credentials for authorized users, services, and hardware are managed by the organization",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1054,7 +1054,7 @@
     },
     {
       "code": "PR.AA-02",
-      "title": "Identity Management, Authentication, and Access Control 02",
+      "title": "Identities are proofed and bound to credentials based on the context of interactions",
       "text": "Identities are proofed and bound to credentials based on the context of interactions",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1069,7 +1069,7 @@
     },
     {
       "code": "PR.AA-03",
-      "title": "Identity Management, Authentication, and Access Control 03",
+      "title": "Users, services, and hardware are authenticated",
       "text": "Users, services, and hardware are authenticated",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1084,7 +1084,7 @@
     },
     {
       "code": "PR.AA-04",
-      "title": "Identity Management, Authentication, and Access Control 04",
+      "title": "Identity assertions are protected, conveyed, and verified",
       "text": "Identity assertions are protected, conveyed, and verified",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1099,7 +1099,7 @@
     },
     {
       "code": "PR.AA-05",
-      "title": "Identity Management, Authentication, and Access Control 05",
+      "title": "Access permissions, entitlements, and authorizations are defined in a policy, managed,...",
       "text": "Access permissions, entitlements, and authorizations are defined in a policy, managed, enforced, and reviewed, and incorporate the principles of least privilege and separation of duties",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1114,7 +1114,7 @@
     },
     {
       "code": "PR.AA-06",
-      "title": "Identity Management, Authentication, and Access Control 06",
+      "title": "Physical access to assets is managed, monitored, and enforced commensurate with risk",
       "text": "Physical access to assets is managed, monitored, and enforced commensurate with risk",
       "level": "subcategory",
       "parentCode": "PR.AA",
@@ -1144,7 +1144,7 @@
     },
     {
       "code": "PR.AT-01",
-      "title": "Awareness and Training 01",
+      "title": "Personnel are provided with awareness and training so that they possess the knowledge...",
       "text": "Personnel are provided with awareness and training so that they possess the knowledge and skills to perform general tasks with cybersecurity risks in mind",
       "level": "subcategory",
       "parentCode": "PR.AT",
@@ -1159,7 +1159,7 @@
     },
     {
       "code": "PR.AT-02",
-      "title": "Awareness and Training 02",
+      "title": "Individuals in specialized roles are provided with awareness and training so that they...",
       "text": "Individuals in specialized roles are provided with awareness and training so that they possess the knowledge and skills to perform relevant tasks with cybersecurity risks in mind",
       "level": "subcategory",
       "parentCode": "PR.AT",
@@ -1189,7 +1189,7 @@
     },
     {
       "code": "PR.DS-10",
-      "title": "Data Security 10",
+      "title": "The confidentiality, integrity, and availability of data-in-use are protected",
       "text": "The confidentiality, integrity, and availability of data-in-use are protected",
       "level": "subcategory",
       "parentCode": "PR.DS",
@@ -1204,7 +1204,7 @@
     },
     {
       "code": "PR.DS-11",
-      "title": "Data Security 11",
+      "title": "Backups of data are created, protected, maintained, and tested",
       "text": "Backups of data are created, protected, maintained, and tested",
       "level": "subcategory",
       "parentCode": "PR.DS",
@@ -1219,7 +1219,7 @@
     },
     {
       "code": "PR.DS-01",
-      "title": "Data Security 01",
+      "title": "The confidentiality, integrity, and availability of data-at-rest are protected",
       "text": "The confidentiality, integrity, and availability of data-at-rest are protected",
       "level": "subcategory",
       "parentCode": "PR.DS",
@@ -1234,7 +1234,7 @@
     },
     {
       "code": "PR.DS-02",
-      "title": "Data Security 02",
+      "title": "The confidentiality, integrity, and availability of data-in-transit are protected",
       "text": "The confidentiality, integrity, and availability of data-in-transit are protected",
       "level": "subcategory",
       "parentCode": "PR.DS",
@@ -1264,7 +1264,7 @@
     },
     {
       "code": "PR.PS-01",
-      "title": "Platform Security 01",
+      "title": "Configuration management practices are established and applied",
       "text": "Configuration management practices are established and applied",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1279,7 +1279,7 @@
     },
     {
       "code": "PR.PS-02",
-      "title": "Platform Security 02",
+      "title": "Software is maintained, replaced, and removed commensurate with risk",
       "text": "Software is maintained, replaced, and removed commensurate with risk",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1294,7 +1294,7 @@
     },
     {
       "code": "PR.PS-03",
-      "title": "Platform Security 03",
+      "title": "Hardware is maintained, replaced, and removed commensurate with risk",
       "text": "Hardware is maintained, replaced, and removed commensurate with risk",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1309,7 +1309,7 @@
     },
     {
       "code": "PR.PS-04",
-      "title": "Platform Security 04",
+      "title": "Log records are generated and made available for continuous monitoring",
       "text": "Log records are generated and made available for continuous monitoring",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1324,7 +1324,7 @@
     },
     {
       "code": "PR.PS-05",
-      "title": "Platform Security 05",
+      "title": "Installation and execution of unauthorized software are prevented",
       "text": "Installation and execution of unauthorized software are prevented",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1339,7 +1339,7 @@
     },
     {
       "code": "PR.PS-06",
-      "title": "Platform Security 06",
+      "title": "Secure software development practices are integrated, and their performance is...",
       "text": "Secure software development practices are integrated, and their performance is monitored throughout the software development life cycle",
       "level": "subcategory",
       "parentCode": "PR.PS",
@@ -1369,7 +1369,7 @@
     },
     {
       "code": "PR.IR-01",
-      "title": "Technology Infrastructure Resilience 01",
+      "title": "Networks and environments are protected from unauthorized logical access and usage",
       "text": "Networks and environments are protected from unauthorized logical access and usage",
       "level": "subcategory",
       "parentCode": "PR.IR",
@@ -1384,7 +1384,7 @@
     },
     {
       "code": "PR.IR-02",
-      "title": "Technology Infrastructure Resilience 02",
+      "title": "The organization's technology assets are protected from environmental threats",
       "text": "The organization's technology assets are protected from environmental threats",
       "level": "subcategory",
       "parentCode": "PR.IR",
@@ -1399,7 +1399,7 @@
     },
     {
       "code": "PR.IR-03",
-      "title": "Technology Infrastructure Resilience 03",
+      "title": "Mechanisms are implemented to achieve resilience requirements in normal and adverse...",
       "text": "Mechanisms are implemented to achieve resilience requirements in normal and adverse situations",
       "level": "subcategory",
       "parentCode": "PR.IR",
@@ -1414,7 +1414,7 @@
     },
     {
       "code": "PR.IR-04",
-      "title": "Technology Infrastructure Resilience 04",
+      "title": "Adequate resource capacity to ensure availability is maintained",
       "text": "Adequate resource capacity to ensure availability is maintained",
       "level": "subcategory",
       "parentCode": "PR.IR",
@@ -1444,7 +1444,7 @@
     },
     {
       "code": "DE.CM-01",
-      "title": "Continuous Monitoring 01",
+      "title": "Networks and network services are monitored to find potentially adverse events",
       "text": "Networks and network services are monitored to find potentially adverse events",
       "level": "subcategory",
       "parentCode": "DE.CM",
@@ -1459,7 +1459,7 @@
     },
     {
       "code": "DE.CM-02",
-      "title": "Continuous Monitoring 02",
+      "title": "The physical environment is monitored to find potentially adverse events",
       "text": "The physical environment is monitored to find potentially adverse events",
       "level": "subcategory",
       "parentCode": "DE.CM",
@@ -1474,7 +1474,7 @@
     },
     {
       "code": "DE.CM-03",
-      "title": "Continuous Monitoring 03",
+      "title": "Personnel activity and technology usage are monitored to find potentially adverse events",
       "text": "Personnel activity and technology usage are monitored to find potentially adverse events",
       "level": "subcategory",
       "parentCode": "DE.CM",
@@ -1489,7 +1489,7 @@
     },
     {
       "code": "DE.CM-06",
-      "title": "Continuous Monitoring 06",
+      "title": "External service provider activities and services are monitored to find potentially...",
       "text": "External service provider activities and services are monitored to find potentially adverse events",
       "level": "subcategory",
       "parentCode": "DE.CM",
@@ -1504,7 +1504,7 @@
     },
     {
       "code": "DE.CM-09",
-      "title": "Continuous Monitoring 09",
+      "title": "Computing hardware and software, runtime environments, and their data are monitored to...",
       "text": "Computing hardware and software, runtime environments, and their data are monitored to find potentially adverse events",
       "level": "subcategory",
       "parentCode": "DE.CM",
@@ -1534,7 +1534,7 @@
     },
     {
       "code": "DE.AE-02",
-      "title": "Adverse Event Analysis 02",
+      "title": "Potentially adverse events are analyzed to better understand associated activities",
       "text": "Potentially adverse events are analyzed to better understand associated activities",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1549,7 +1549,7 @@
     },
     {
       "code": "DE.AE-03",
-      "title": "Adverse Event Analysis 03",
+      "title": "Information is correlated from multiple sources",
       "text": "Information is correlated from multiple sources",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1564,7 +1564,7 @@
     },
     {
       "code": "DE.AE-04",
-      "title": "Adverse Event Analysis 04",
+      "title": "The estimated impact and scope of adverse events are understood",
       "text": "The estimated impact and scope of adverse events are understood",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1579,7 +1579,7 @@
     },
     {
       "code": "DE.AE-06",
-      "title": "Adverse Event Analysis 06",
+      "title": "Information on adverse events is provided to authorized staff and tools",
       "text": "Information on adverse events is provided to authorized staff and tools",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1594,7 +1594,7 @@
     },
     {
       "code": "DE.AE-07",
-      "title": "Adverse Event Analysis 07",
+      "title": "Cyber threat intelligence and other contextual information are integrated into the...",
       "text": "Cyber threat intelligence and other contextual information are integrated into the analysis",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1609,7 +1609,7 @@
     },
     {
       "code": "DE.AE-08",
-      "title": "Adverse Event Analysis 08",
+      "title": "Incidents are declared when adverse events meet the defined incident criteria",
       "text": "Incidents are declared when adverse events meet the defined incident criteria",
       "level": "subcategory",
       "parentCode": "DE.AE",
@@ -1639,7 +1639,7 @@
     },
     {
       "code": "RS.MA-01",
-      "title": "Incident Management 01",
+      "title": "The incident response plan is executed in coordination with relevant third parties once...",
       "text": "The incident response plan is executed in coordination with relevant third parties once an incident is declared",
       "level": "subcategory",
       "parentCode": "RS.MA",
@@ -1654,7 +1654,7 @@
     },
     {
       "code": "RS.MA-02",
-      "title": "Incident Management 02",
+      "title": "Incident reports are triaged and validated",
       "text": "Incident reports are triaged and validated",
       "level": "subcategory",
       "parentCode": "RS.MA",
@@ -1669,7 +1669,7 @@
     },
     {
       "code": "RS.MA-03",
-      "title": "Incident Management 03",
+      "title": "Incidents are categorized and prioritized",
       "text": "Incidents are categorized and prioritized",
       "level": "subcategory",
       "parentCode": "RS.MA",
@@ -1684,7 +1684,7 @@
     },
     {
       "code": "RS.MA-04",
-      "title": "Incident Management 04",
+      "title": "Incidents are escalated or elevated as needed",
       "text": "Incidents are escalated or elevated as needed",
       "level": "subcategory",
       "parentCode": "RS.MA",
@@ -1699,7 +1699,7 @@
     },
     {
       "code": "RS.MA-05",
-      "title": "Incident Management 05",
+      "title": "The criteria for initiating incident recovery are applied",
       "text": "The criteria for initiating incident recovery are applied",
       "level": "subcategory",
       "parentCode": "RS.MA",
@@ -1729,7 +1729,7 @@
     },
     {
       "code": "RS.AN-03",
-      "title": "Incident Analysis 03",
+      "title": "Analysis is performed to establish what has taken place during an incident and the root...",
       "text": "Analysis is performed to establish what has taken place during an incident and the root cause of the incident",
       "level": "subcategory",
       "parentCode": "RS.AN",
@@ -1744,7 +1744,7 @@
     },
     {
       "code": "RS.AN-06",
-      "title": "Incident Analysis 06",
+      "title": "Actions performed during an investigation are recorded, and the records' integrity and...",
       "text": "Actions performed during an investigation are recorded, and the records' integrity and provenance are preserved",
       "level": "subcategory",
       "parentCode": "RS.AN",
@@ -1759,7 +1759,7 @@
     },
     {
       "code": "RS.AN-07",
-      "title": "Incident Analysis 07",
+      "title": "Incident data and metadata are collected, and their integrity and provenance are preserved",
       "text": "Incident data and metadata are collected, and their integrity and provenance are preserved",
       "level": "subcategory",
       "parentCode": "RS.AN",
@@ -1774,7 +1774,7 @@
     },
     {
       "code": "RS.AN-08",
-      "title": "Incident Analysis 08",
+      "title": "An incident's magnitude is estimated and validated",
       "text": "An incident's magnitude is estimated and validated",
       "level": "subcategory",
       "parentCode": "RS.AN",
@@ -1804,7 +1804,7 @@
     },
     {
       "code": "RS.CO-02",
-      "title": "Incident Response Reporting and Communication 02",
+      "title": "Internal and external stakeholders are notified of incidents",
       "text": "Internal and external stakeholders are notified of incidents",
       "level": "subcategory",
       "parentCode": "RS.CO",
@@ -1819,7 +1819,7 @@
     },
     {
       "code": "RS.CO-03",
-      "title": "Incident Response Reporting and Communication 03",
+      "title": "Information is shared with designated internal and external stakeholders",
       "text": "Information is shared with designated internal and external stakeholders",
       "level": "subcategory",
       "parentCode": "RS.CO",
@@ -1849,7 +1849,7 @@
     },
     {
       "code": "RS.MI-01",
-      "title": "Incident Mitigation 01",
+      "title": "Incidents are contained",
       "text": "Incidents are contained",
       "level": "subcategory",
       "parentCode": "RS.MI",
@@ -1864,7 +1864,7 @@
     },
     {
       "code": "RS.MI-02",
-      "title": "Incident Mitigation 02",
+      "title": "Incidents are eradicated",
       "text": "Incidents are eradicated",
       "level": "subcategory",
       "parentCode": "RS.MI",
@@ -1894,7 +1894,7 @@
     },
     {
       "code": "RC.RP-01",
-      "title": "Incident Recovery Plan Execution 01",
+      "title": "The recovery portion of the incident response plan is executed once initiated from the...",
       "text": "The recovery portion of the incident response plan is executed once initiated from the incident response process",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1909,7 +1909,7 @@
     },
     {
       "code": "RC.RP-02",
-      "title": "Incident Recovery Plan Execution 02",
+      "title": "Recovery actions are selected, scoped, prioritized, and performed",
       "text": "Recovery actions are selected, scoped, prioritized, and performed",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1924,7 +1924,7 @@
     },
     {
       "code": "RC.RP-03",
-      "title": "Incident Recovery Plan Execution 03",
+      "title": "The integrity of backups and other restoration assets is verified before using them for...",
       "text": "The integrity of backups and other restoration assets is verified before using them for restoration",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1939,7 +1939,7 @@
     },
     {
       "code": "RC.RP-04",
-      "title": "Incident Recovery Plan Execution 04",
+      "title": "Critical mission functions and cybersecurity risk management are considered to...",
       "text": "Critical mission functions and cybersecurity risk management are considered to establish post-incident operational norms",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1954,7 +1954,7 @@
     },
     {
       "code": "RC.RP-05",
-      "title": "Incident Recovery Plan Execution 05",
+      "title": "The integrity of restored assets is verified, systems and services are restored, and...",
       "text": "The integrity of restored assets is verified, systems and services are restored, and normal operating status is confirmed",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1969,7 +1969,7 @@
     },
     {
       "code": "RC.RP-06",
-      "title": "Incident Recovery Plan Execution 06",
+      "title": "The end of incident recovery is declared based on criteria, and incident-related...",
       "text": "The end of incident recovery is declared based on criteria, and incident-related documentation is completed",
       "level": "subcategory",
       "parentCode": "RC.RP",
@@ -1999,7 +1999,7 @@
     },
     {
       "code": "RC.CO-03",
-      "title": "Incident Recovery Communication 03",
+      "title": "Recovery activities and progress in restoring operational capabilities are communicated...",
       "text": "Recovery activities and progress in restoring operational capabilities are communicated to designated internal and external stakeholders",
       "level": "subcategory",
       "parentCode": "RC.CO",
@@ -2014,7 +2014,7 @@
     },
     {
       "code": "RC.CO-04",
-      "title": "Incident Recovery Communication 04",
+      "title": "Public updates on incident recovery are shared using approved methods and messaging",
       "text": "Public updates on incident recovery are shared using approved methods and messaging",
       "level": "subcategory",
       "parentCode": "RC.CO",

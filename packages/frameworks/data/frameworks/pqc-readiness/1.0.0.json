@@ -310,14 +310,14 @@
   "publisher": "Sentinel Assess (derived from NIST, CISA, and NSA publications)",
   "kind": "readiness_model",
   "category": "cyber",
-  "description": "A readiness model for migrating from quantum-vulnerable public-key cryptography (RSA, elliptic curve, finite-field Diffie-Hellman) to the NIST post-quantum standards ML-KEM (FIPS 203), ML-DSA (FIPS 204), and SLH-DSA (FIPS 205). The requirements are Sentinel requirements derived from the standards and government guidance; they are not quoted from them.",
+  "description": "How ready the client is to move off encryption that future quantum computers could break (RSA, elliptic curve) to the new NIST standards (FIPS 203, 204, and 205): crypto inventory, exposed data, vendor plans, and migration planning.",
   "sources": [
     {
       "source": "NIST FIPS 203, Module-Lattice-Based Key-Encapsulation Mechanism Standard (ML-KEM), August 13, 2024",
       "url": "https://doi.org/10.6028/NIST.FIPS.203",
       "section": "Whole standard",
       "verified": false,
-      "note": "Sentinel requirement derived from the cited source; not text from it"
+      "note": "Sentinel requirement derived from the cited source; not text from it Library provenance: A readiness model for migrating from quantum-vulnerable public-key cryptography (RSA, elliptic curve, finite-field Diffie-Hellman) to the NIST post-quantum standards ML-KEM (FIPS 203), ML-DSA (FIPS 204), and SLH-DSA (FIPS 205). The requirements are Sentinel requirements derived from the standards and government guidance; they are not quoted from them."
     },
     {
       "source": "NIST FIPS 204, Module-Lattice-Based Digital Signature Standard (ML-DSA), August 13, 2024",

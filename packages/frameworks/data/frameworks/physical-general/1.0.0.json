@@ -621,13 +621,13 @@
   "publisher": "Sentinel Assess",
   "kind": "assessment_checklist",
   "category": "physical",
-  "description": "Sentinel general physical security checklist organized by area: perimeter, access control, video surveillance and camera positioning, intruder alarms, locks and hardware, lighting, guard operations, and policies. Requirements are Sentinel paraphrases; cited sources are listed for traceability and many are paywalled.",
+  "description": "A general physical security survey: perimeter, access control, video surveillance and camera positioning, intruder alarms, locks and hardware, lighting, guard operations, and policies.",
   "sources": [
     {
       "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
       "section": "Whole document",
       "verified": false,
-      "note": "paraphrase; source not checked from the build container"
+      "note": "paraphrase; source not checked from the build container Library provenance: Sentinel general physical security checklist organized by area: perimeter, access control, video surveillance and camera positioning, intruder alarms, locks and hardware, lighting, guard operations, and policies. Requirements are Sentinel paraphrases; cited sources are listed for traceability and many are paywalled."
     },
     {
       "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",

@@ -276,13 +276,13 @@
   "publisher": "Sentinel Assess (adapted from US Army doctrine and FDA guidance)",
   "kind": "target_analysis",
   "category": "physical",
-  "description": "CARVER scores each target (asset, area, or process) on six criteria from 1 (least attractive to an adversary) to 10 (most attractive). Shared controls inform the Accessibility, Vulnerability, and Recognizability scores rather than satisfying them (see decision D-007). The anchors are Sentinel paraphrases adapted for facility security.",
+  "description": "Scores each important asset or area from the attacker point of view: Criticality, Accessibility, Recuperability, Vulnerability, Effect, and Recognizability, each 1 to 10. Your physical findings feed the scores.",
   "sources": [
     {
       "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
       "section": "Appendix D, CARVER matrix",
       "verified": false,
-      "note": "doctrine superseded; cited for lineage; not checked"
+      "note": "doctrine superseded; cited for lineage; not checked Library provenance: CARVER scores each target (asset, area, or process) on six criteria from 1 (least attractive to an adversary) to 10 (most attractive). Shared controls inform the Accessibility, Vulnerability, and Recognizability scores rather than satisfying them (see decision D-007). The anchors are Sentinel paraphrases adapted for facility security."
     },
     {
       "source": "US Army ATP 3-05.20, Special Forces Intelligence (current doctrine lineage for CARVER)",

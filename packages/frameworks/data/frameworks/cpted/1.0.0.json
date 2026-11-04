@@ -329,13 +329,13 @@
   "publisher": "Sentinel Assess (paraphrased from ISO and CPTED literature)",
   "kind": "design_principles",
   "category": "physical",
-  "description": "First-generation CPTED principles (natural surveillance, natural access control, territorial reinforcement, maintenance and image, activity support) as assessable strategies, plus second-generation concepts flagged as such. All text is a Sentinel paraphrase; codes are Sentinel codes.",
+  "description": "Crime Prevention Through Environmental Design: how the layout, sightlines, landscaping, signage, and upkeep of a site discourage crime. Walk the grounds by day and by night.",
   "sources": [
     {
       "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
       "section": "Whole standard",
       "verified": false,
-      "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      "note": "paraphrase; ISO 22341 is paywalled and not checked Library provenance: First-generation CPTED principles (natural surveillance, natural access control, territorial reinforcement, maintenance and image, activity support) as assessable strategies, plus second-generation concepts flagged as such. All text is a Sentinel paraphrase; codes are Sentinel codes."
     },
     {
       "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",

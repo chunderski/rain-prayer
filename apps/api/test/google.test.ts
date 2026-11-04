@@ -9,7 +9,7 @@ const GOOGLE_ENV = { GOOGLE_CLIENT_ID: CLIENT_ID, GOOGLE_CLIENT_SECRET: "test-go
 
 describe("Google sign-in not configured", () => {
   it("answers 404 google_not_configured with placeholder or missing credentials", async () => {
-    for (const env of [{}, { GOOGLE_CLIENT_ID: "replace-me.apps.googleusercontent.com", GOOGLE_CLIENT_SECRET: "replace-me" }]) {
+    for (const env of [{} as Record<string, string>, { GOOGLE_CLIENT_ID: "replace-me.apps.googleusercontent.com", GOOGLE_CLIENT_SECRET: "replace-me" }]) {
       const app = await makeApp(env);
       for (const url of ["/auth/google/start", "/auth/google/callback?code=x&state=y"]) {
         const res = await app.inject({ url });

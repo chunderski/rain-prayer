@@ -10,3 +10,4 @@ test-results/
 .vite/
 dev-dist/
 __pycache__/
+!**/.env*.example

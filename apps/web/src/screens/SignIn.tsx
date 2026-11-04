@@ -8,6 +8,14 @@ import { Banner, Button, Field, Logo, buttonClass } from "../components/ui";
 const GOOGLE_ERRORS: Record<string, string> = {
   no_workspace: "No workspace found; ask your administrator for an invite.",
   google_not_configured: "Google sign in is not set up for this server yet. Use email and password.",
+  no_account: "No Sentinel account uses that Google address; ask your administrator for an invite.",
+  no_tenant_access: "Your account has no access to that workspace; ask your administrator.",
+  email_not_verified: "Google has not verified that email address; verify it with Google, then try again.",
+  google_account_mismatch: "That Google account is linked to a different Sentinel user.",
+  account_mismatch: "That Google account is linked to a different Sentinel user.",
+  google_denied: "Google sign in was cancelled.",
+  invalid_state: "The sign in link expired; try again.",
+  google_failed: "Google sign in failed; try again or use email and password.",
 };
 
 export function SignIn() {

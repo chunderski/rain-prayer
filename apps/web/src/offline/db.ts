@@ -37,7 +37,10 @@ export const OutboxInput = z.object({
   path: z
     .string()
     .startsWith("/")
-    .refine((p) => !p.startsWith("/auth"), "auth requests are never queued"),
+    .refine((p) => !p.startsWith("//") && !p.includes("\\"), "path must be a plain API path")
+    // Check the path as fetch will send it: dot segments and %2e are resolved first, so
+    // "/./auth/login" or "/clients/../auth/refresh" cannot slip past the check.
+    .refine((p) => !new URL(p, "http://outbox.invalid").pathname.toLowerCase().startsWith("/auth"), "auth requests are never queued"),
   body: z.unknown().optional(),
   /** Client-generated id the server can use to de-duplicate retries. */
   idempotencyKey: z.string().min(8).optional(),

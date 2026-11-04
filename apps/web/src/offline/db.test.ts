@@ -34,6 +34,9 @@ describe("outbox", () => {
 
   it("refuses to queue auth requests or unknown kinds", async () => {
     await expect(enqueue({ kind: "create_client", method: "POST", path: "/auth/login" })).rejects.toThrow();
+    for (const path of ["/./auth/login", "/%2e/auth/refresh", "/clients/../auth/logout", "//auth/login", "/AUTH/login", "/clients\\..\\auth"]) {
+      await expect(enqueue({ kind: "create_client", method: "POST", path })).rejects.toThrow();
+    }
     // @ts-expect-error unknown kind
     await expect(enqueue({ kind: "delete_everything", method: "POST", path: "/x" })).rejects.toThrow();
     await expect(enqueue({ kind: "create_client", method: "POST", path: "clients" })).rejects.toThrow();

@@ -1,0 +1,16 @@
+# Engineering decisions log
+
+Routine engineering decisions, newest last. Product decisions go to CW and are recorded here only once CW has made them.
+
+| # | Date | Decision | Why | By |
+|---|---|---|---|---|
+| D-001 | 2026-11-04 | Build Sentinel Assess in this repository (`rain-prayer`) on branch `claude/sentinel-assess-kickoff-5g3n44`; the original `rain_prayer.py` is left untouched. | This is the repository the session was given; moving to a dedicated repo later is a simple copy. Flagged to CW. | Head of Eng |
+| D-002 | 2026-11-04 | npm workspaces monorepo: `packages/shared`, `packages/frameworks`, `apps/api`, `apps/web`. | One lockfile, shared types between API and PWA, no extra tooling. | Head of Eng |
+| D-003 | 2026-11-04 | zod 3 for all validation; schemas in `packages/shared` are the contract. | Same validation on client and server; types derived from schemas. | Head of Eng |
+| D-004 | 2026-11-04 | Vitest 3.2 instead of 4.x. | npm 10 arborist crashes resolving Vitest 4 optional peers in workspaces. Revisit when upgrading npm. | Head of Eng |
+| D-005 | 2026-11-04 | Framework library is JSON in `packages/frameworks/data`, validated in CI and loaded into Postgres by a seed script; each file carries a semantic version and assessments pin the version they used. | Reviewable diffs for content experts; reproducible reports. | Head of Eng |
+| D-006 | 2026-11-04 | Three-layer library: shared controls (own the questions), framework versions (own requirements and citations), crosswalk (`satisfies`, `supports`, `informs`). | Delivers requirement 2: one finding counts toward every mapped framework. | Head of Eng |
+| D-007 | 2026-11-04 | CARVER modeled as a `target_analysis` framework: its six criteria are requirements with 1 to 10 scales; shared controls `inform` Accessibility, Vulnerability, and Recognizability rather than "satisfy" them. | CARVER scores targets, it is not a control catalog; forcing it into a control model would misrepresent it. | Head of Eng |
+| D-008 | 2026-11-04 | Tenant isolation through Postgres RLS keyed on the transaction-local setting `app.tenant_id`; API connects as non-owner role `sentinel_app`; migrations run as a separate owner role. | Defense in depth: a missing WHERE clause cannot leak data across tenants. | Head of Eng |
+| D-009 | 2026-11-04 | Auth: email and password (argon2id) for local and fallback use, plus Google OIDC sign-in enabled when Google credentials are configured. Short-lived access JWT (15 min) in memory plus an httpOnly, SameSite=Strict refresh cookie. | Works offline-first and locally with no external accounts; Google sign-in per US-1.01 without blocking dev. | Head of Eng |
+| D-010 | 2026-11-04 | Playwright pinned to 1.63.0 to match the browser build available in CI containers. | Avoids browser download mismatches. | Head of Eng |

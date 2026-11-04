@@ -5,6 +5,7 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
+import { z } from "zod";
 import {
   Crosswalk,
   FrameworkVersion,
@@ -44,7 +45,7 @@ export function loadLibrary(dataDir = DATA_DIR): Library {
   return lib;
 }
 
-function parseOrThrow<T>(schema: { safeParse: (v: unknown) => { success: true; data: T } | { success: false; error: { issues: { path: (string | number)[]; message: string }[] } } }, file: string): T {
+function parseOrThrow<T>(schema: z.ZodType<T>, file: string): T {
   const r = schema.safeParse(readJson(file));
   if (!r.success) {
     const msg = r.error.issues.slice(0, 20).map((i) => `${i.path.join(".")}: ${i.message}`).join("\n  ");

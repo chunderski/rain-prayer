@@ -1,0 +1,20 @@
+{
+  "name": "@sentinel/ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p .",
+    "test": "vitest run --passWithNoTests"
+  },
+  "dependencies": {
+    "@sentinel/shared": "*",
+    "@anthropic-ai/sdk": "^1.5.0",
+    "zod": "^4.1.0"
+  }
+}

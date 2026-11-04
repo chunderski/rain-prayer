@@ -13,7 +13,7 @@ export const ConfigSchema = z
     API_HOST: z.string().default("127.0.0.1"),
     API_PORT: z.coerce.number().int().min(1).max(65535).default(3000),
     WEB_ORIGIN: z.string().url(),
-    TRUST_PROXY: bool.default("false"),
+    TRUST_PROXY: bool.default(false),
     DATABASE_URL: z.string().regex(/^postgres(ql)?:\/\//, "must be a postgres:// URL"),
     JWT_SECRET: z
       .string()

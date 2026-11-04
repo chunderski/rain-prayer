@@ -22,8 +22,14 @@
     "pg": "^8.16.0",
     "argon2": "^0.44.0",
     "jose": "^6.1.0",
-    "zod": "^3.25.76",
-    "pino-pretty": "^13.0.0"
+    "zod": "^4.1.0",
+    "pino-pretty": "^13.0.0",
+    "@aws-sdk/client-s3": "^3.1162.0",
+    "@aws-sdk/s3-request-presigner": "^3.1162.0",
+    "@fastify/multipart": "^10.1.0",
+    "file-type": "^22.0.0",
+    "sharp": "^0.35.0",
+    "@sentinel/ai": "*"
   },
   "devDependencies": {
     "@types/pg": "^8.15.0"

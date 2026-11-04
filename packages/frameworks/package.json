@@ -14,7 +14,7 @@
     "validate": "tsx src/validate-cli.ts"
   },
   "dependencies": {
-    "zod": "^3.25.76",
+    "zod": "^4.1.0",
     "@sentinel/shared": "*"
   }
 }

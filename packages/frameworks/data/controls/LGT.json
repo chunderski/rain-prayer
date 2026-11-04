@@ -1,0 +1,256 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "LGT",
+  "controls": [
+    {
+      "id": "SC-LGT-001",
+      "domain": "LGT",
+      "title": "Parking area illuminance",
+      "objective": "Parking areas meet the site's minimum illuminance target at night.",
+      "assetTypes": [
+        "lighting",
+        "parking"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "Light meter readings at the darkest points"
+        },
+        {
+          "type": "photo",
+          "description": "Night photo of dark areas"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-001-01",
+          "text": "Lowest horizontal illuminance measured at grade in the parking area at night",
+          "answerType": "number",
+          "unit": "lux",
+          "guidance": "Take readings with a calibrated meter at the darkest visible points, sensor flat at grade. 1 foot-candle = 10.76 lux. Compare with the site target or ANSI/IES RP-20 (unverified).",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-LGT-001-02",
+          "text": "Ratio of the highest to the lowest horizontal reading across the parking area",
+          "answerType": "number",
+          "unit": "ratio (max:min)",
+          "guidance": "Divide the highest reading by the lowest. Higher ratios mean darker gaps; compare with the design target.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LGT-002",
+      "domain": "LGT",
+      "title": "Pedestrian path lighting continuity",
+      "objective": "Exterior pedestrian paths are lit at night with no unlit gaps between fixtures.",
+      "assetTypes": [
+        "lighting"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Night photo of each unlit gap"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-002-01",
+          "text": "Are exterior pedestrian paths lit at night with no unlit gaps between fixtures?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Walk each path at night. A gap is a stretch where a person's face cannot be seen at 30 ft (9 m). Photograph each gap.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        },
+        {
+          "source": "Crowe and Fennelly, Crime Prevention Through Environmental Design, 3rd ed., 2013",
+          "section": "CPTED strategies",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LGT-003",
+      "domain": "LGT",
+      "title": "Entrance lighting",
+      "objective": "Every building entrance is lit so that faces are visible to people and cameras.",
+      "assetTypes": [
+        "lighting",
+        "door"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "Vertical illuminance reading at each entrance"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-003-01",
+          "text": "Lowest vertical illuminance measured at face height (5 ft, 1.5 m) at any building entrance at night",
+          "answerType": "number",
+          "unit": "lux",
+          "guidance": "Hold the meter vertical facing outward at the threshold. Record the lowest entrance value.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LGT-004",
+      "domain": "LGT",
+      "title": "Lighting maintenance",
+      "objective": "Failed or damaged exterior fixtures are found and repaired within a defined time.",
+      "assetTypes": [
+        "lighting"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each failed fixture"
+        },
+        {
+          "type": "document",
+          "description": "Work orders for lighting repairs"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-004-01",
+          "text": "Number of exterior fixtures out, dim, or damaged at the time of the night inspection",
+          "answerType": "number",
+          "unit": "fixtures",
+          "guidance": "Count during the night walk.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-LGT-004-02",
+          "text": "Is there a defined repair time for failed exterior lights (for example 72 hours) and was it met for the last 5 work orders?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: target defined but not met.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LGT-005",
+      "domain": "LGT",
+      "title": "Lighting control and backup power",
+      "objective": "Exterior lights switch on automatically and critical lighting has backup power.",
+      "assetTypes": [
+        "lighting"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Lighting control schedule"
+        },
+        {
+          "type": "interview",
+          "description": "Facilities manager"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-005-01",
+          "text": "Are exterior lights controlled by photocell or astronomical timer rather than manual switching?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: mixed automatic and manual.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-LGT-005-02",
+          "text": "Is lighting at entrances, camera views, and guard posts on emergency or generator power?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check panel schedules or ask facilities to show the circuits.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LGT-006",
+      "domain": "LGT",
+      "title": "Glare and camera coordination",
+      "objective": "Fixtures do not shine into camera lenses or guard sightlines.",
+      "assetTypes": [
+        "lighting",
+        "camera"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each glare conflict"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LGT-006-01",
+          "text": "Is every camera view and guard sightline free of light fixtures shining directly toward it?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check night camera views for bright fixtures in frame. Photograph conflicts.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

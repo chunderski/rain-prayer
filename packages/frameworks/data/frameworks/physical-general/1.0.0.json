@@ -1,0 +1,687 @@
+{
+  "version": "1.0.0",
+  "levels": [
+    "area",
+    "requirement"
+  ],
+  "requirements": [
+    {
+      "code": "SA-PHY-PER",
+      "title": "Perimeter",
+      "text": "The site boundary deters, detects, and delays unauthorized entry by people and vehicles.",
+      "level": "area",
+      "citation": {
+        "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
+        "section": "General",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-PER-01",
+      "title": "Boundary defined and marked",
+      "text": "The site boundary is physically delineated and posted so that unauthorized entry is clearly identifiable.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-PER",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Physical protection measures",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-PER-02",
+      "title": "Barrier height and condition",
+      "text": "Perimeter barriers meet the site's specified height and are free of breaches, ground gaps, and damage.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-PER",
+      "citation": {
+        "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
+        "section": "Fence fabric, height, and ground clearance",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-PER-03",
+      "title": "Clear zones maintained",
+      "text": "Clear zones on both sides of perimeter barriers are kept free of climb aids, vegetation, and objects that provide concealment.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-PER",
+      "citation": {
+        "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
+        "section": "Clear zones",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-PER-04",
+      "title": "Gates and openings controlled",
+      "text": "Gates, culverts, and other openings in the perimeter are secured or controlled to the same level as the barrier.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-PER",
+      "citation": {
+        "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
+        "section": "Gates and barrier openings",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-PER-05",
+      "title": "Vehicle approach controlled",
+      "text": "Vehicle approaches to occupied buildings and critical assets are controlled with barriers and standoff distance matched to the threat.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-PER",
+      "citation": {
+        "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+        "section": "Standoff and vehicle barriers",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC",
+      "title": "Access control",
+      "text": "Entry to the site, buildings, and restricted areas is limited to authorized people.",
+      "level": "area",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-01",
+      "title": "Entry points controlled",
+      "text": "Every exterior door and every door into a restricted area is controlled by an electronic or mechanical access control or by staff.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-02",
+      "title": "Credential lifecycle managed",
+      "text": "Credentials are issued on authorization, reviewed periodically, and revoked promptly when no longer needed.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-03",
+      "title": "Visitors managed",
+      "text": "Visitors are identified, recorded, badged, and escorted where required.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-04",
+      "title": "Door status monitored",
+      "text": "Controlled doors report forced and held-open conditions to a staffed monitoring point.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "CISA physical security guidance (Physical Security resources, cisa.gov)",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-05",
+      "title": "Restricted areas segregated",
+      "text": "Restricted areas such as server rooms, cash rooms, and loading docks have separate access rights limited to named people.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-ACC-06",
+      "title": "Tailgating countered",
+      "text": "Main controlled entries have measures that prevent or detect more than one person entering on a single authorization.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-ACC",
+      "citation": {
+        "source": "CISA physical security guidance (Physical Security resources, cisa.gov)",
+        "section": "Access control",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-VSS",
+      "title": "Video surveillance and camera positioning",
+      "text": "Cameras are positioned and configured so that recorded video can detect, observe, recognize, or identify as the purpose requires.",
+      "level": "area",
+      "citation": {
+        "source": "IEC 62676-4, Video surveillance systems for use in security applications, Part 4: Application guidelines",
+        "section": "Operational requirements",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-VSS-01",
+      "title": "Coverage of entries and critical areas",
+      "text": "Entrances, perimeter lines, parking, and critical assets are within camera fields of view with no unplanned blind spots.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-VSS",
+      "citation": {
+        "source": "IEC 62676-4, Video surveillance systems for use in security applications, Part 4: Application guidelines",
+        "section": "Operational requirements",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-VSS-02",
+      "title": "Pixel density matched to purpose",
+      "text": "Each camera delivers the pixel density on target needed for its purpose (detect, observe, recognize, identify) in day and night conditions.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-VSS",
+      "citation": {
+        "source": "IEC 62676-4, Video surveillance systems for use in security applications, Part 4: Application guidelines",
+        "section": "DORI pixel density table (about 25, 62, 125, and 250 pixels per meter)",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-VSS-03",
+      "title": "Recording and retention",
+      "text": "Video is recorded and retained for the period set by policy or regulation, with accurate time stamps and a controlled export process.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-VSS",
+      "citation": {
+        "source": "IEC 62676-4, Video surveillance systems for use in security applications, Part 4: Application guidelines",
+        "section": "Recording and export",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-VSS-04",
+      "title": "System health and cybersecurity",
+      "text": "Cameras and recorders are monitored for failure and hardened (no default passwords, segmented network, current firmware).",
+      "level": "requirement",
+      "parentCode": "SA-PHY-VSS",
+      "citation": {
+        "source": "CISA physical security guidance (Physical Security resources, cisa.gov)",
+        "section": "Video surveillance system cybersecurity",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-IDS",
+      "title": "Intruder alarms",
+      "text": "Intrusion detection covers likely entry routes and alarms reach a responder who acts.",
+      "level": "area",
+      "citation": {
+        "source": "NFPA 731, Standard for the Installation of Electronic Premises Security Systems",
+        "section": "Intrusion detection",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-IDS-01",
+      "title": "Detection coverage",
+      "text": "Exterior openings and high-value interior areas are covered by intrusion sensors.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-IDS",
+      "citation": {
+        "source": "NFPA 731, Standard for the Installation of Electronic Premises Security Systems",
+        "section": "Intrusion detection",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-IDS-02",
+      "title": "Monitoring and response",
+      "text": "Alarms are monitored around the clock by a certified central station or a staffed console, with a documented response.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-IDS",
+      "citation": {
+        "source": "UL 2050, Standard for National Industrial Security Systems; UL certificate programs for alarm monitoring",
+        "section": "Monitoring",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-IDS-03",
+      "title": "Testing and maintenance",
+      "text": "The system is tested end to end on a defined schedule and faults are corrected.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-IDS",
+      "citation": {
+        "source": "NFPA 731, Standard for the Installation of Electronic Premises Security Systems",
+        "section": "Testing and maintenance",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-IDS-04",
+      "title": "Duress and panic",
+      "text": "Duress or panic alarms are provided where staff face threats, and are tested.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-IDS",
+      "citation": {
+        "source": "NFPA 731, Standard for the Installation of Electronic Premises Security Systems",
+        "section": "Holdup and duress",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LCK",
+      "title": "Locks and hardware",
+      "text": "Doors, frames, windows, and locks resist forced and covert entry, and keys are controlled.",
+      "level": "area",
+      "citation": {
+        "source": "ANSI/BHMA A156 series, Builders Hardware standards (for example A156.2 bored locks, A156.13 mortise locks)",
+        "section": "A156 series",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LCK-01",
+      "title": "Hardware grade and condition",
+      "text": "Locks and door hardware on exterior and restricted doors are commercial grade and in working order.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LCK",
+      "citation": {
+        "source": "ANSI/BHMA A156 series, Builders Hardware standards (for example A156.2 bored locks, A156.13 mortise locks)",
+        "section": "Grade 1 performance levels",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LCK-02",
+      "title": "Key and combination control",
+      "text": "Keys and combinations are registered, issued on authorization, recovered, and changed when compromised.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LCK",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Key control",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LCK-03",
+      "title": "Door, frame, and window hardening",
+      "text": "Hinges, latches, frames, and accessible windows resist removal, shimming, and prying.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LCK",
+      "citation": {
+        "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+        "section": "Doors and windows",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LGT",
+      "title": "Lighting",
+      "text": "Security lighting lets people and cameras see at night without glare or dark gaps.",
+      "level": "area",
+      "citation": {
+        "source": "ANSI/IES G-1, Guide for Security Lighting for People, Property, and Critical Infrastructure",
+        "section": "Security lighting",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LGT-01",
+      "title": "Illuminance levels",
+      "text": "Measured illuminance at parking, paths, and entrances meets the site's design target (for example from IES RP-20 or IES G-1).",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LGT",
+      "citation": {
+        "source": "ANSI/IES RP-20, Lighting for Parking Facilities",
+        "section": "Recommended illuminance",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LGT-02",
+      "title": "Uniformity and continuity",
+      "text": "Lighting is uniform enough to avoid dark gaps along routes and across parking areas.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LGT",
+      "citation": {
+        "source": "ANSI/IES RP-20, Lighting for Parking Facilities",
+        "section": "Uniformity ratios",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LGT-03",
+      "title": "Controls, maintenance, and power",
+      "text": "Lights are automatically controlled, outages are repaired promptly, and critical lighting has backup power.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LGT",
+      "citation": {
+        "source": "ANSI/IES G-1, Guide for Security Lighting for People, Property, and Critical Infrastructure",
+        "section": "Maintenance and controls",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-LGT-04",
+      "title": "Coordination with cameras and sightlines",
+      "text": "Fixtures do not shine into camera lenses or guard sightlines.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-LGT",
+      "citation": {
+        "source": "ANSI/IES G-1, Guide for Security Lighting for People, Property, and Critical Infrastructure",
+        "section": "Glare and video",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD",
+      "title": "Guard operations",
+      "text": "Security officers are directed, trained, equipped, and supervised for the duties of each post.",
+      "level": "area",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD-01",
+      "title": "Post orders",
+      "text": "Each post has current written post orders that officers have read.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-GRD",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD-02",
+      "title": "Patrol verification",
+      "text": "Patrols are scheduled and their completion is verified.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-GRD",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD-03",
+      "title": "Training and licensing",
+      "text": "Officers hold required licenses and documented site training.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-GRD",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD-04",
+      "title": "Communications and reporting",
+      "text": "Officers can reach supervisors and responders at all times and record incidents in a reviewed log.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-GRD",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-GRD-05",
+      "title": "Staffing",
+      "text": "Required posts are staffed for their scheduled hours.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-GRD",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Security personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL",
+      "title": "Policies and procedures",
+      "text": "Physical security is governed by documented, approved, and exercised policies and procedures.",
+      "level": "area",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Management system",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL-01",
+      "title": "Physical security policy",
+      "text": "A written physical security policy is approved by management and reviewed on a schedule.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-POL",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Policy",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL-02",
+      "title": "Security risk assessment",
+      "text": "A documented security risk assessment for the site is current.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-POL",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Risk assessment",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL-03",
+      "title": "Emergency plans and drills",
+      "text": "Emergency action plans, including lockdown and evacuation, are documented and exercised.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-POL",
+      "citation": {
+        "source": "CISA physical security guidance (Physical Security resources, cisa.gov)",
+        "section": "Emergency planning",
+        "verified": false,
+        "note": "paraphrase; source not checked from the build container"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL-04",
+      "title": "Personnel security and awareness",
+      "text": "Staff with unescorted access are screened, and staff receive security awareness training.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-POL",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Personnel",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PHY-POL-05",
+      "title": "Information and media handling",
+      "text": "Sensitive documents and media are protected, critical areas are not advertised, and disposal is controlled.",
+      "level": "requirement",
+      "parentCode": "SA-PHY-POL",
+      "citation": {
+        "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+        "section": "Information protection",
+        "verified": false,
+        "note": "paraphrase; paywalled source not checked"
+      },
+      "status": "needs_review"
+    }
+  ],
+  "id": "physical-general",
+  "name": "General Physical Security Assessment",
+  "shortName": "Physical Security",
+  "sourceEdition": "Sentinel checklist 1.0 drawing on public DoD and CISA guidance and industry standards",
+  "publisher": "Sentinel Assess",
+  "kind": "assessment_checklist",
+  "category": "physical",
+  "description": "Sentinel general physical security checklist organized by area: perimeter, access control, video surveillance and camera positioning, intruder alarms, locks and hardware, lighting, guard operations, and policies. Requirements are Sentinel paraphrases; cited sources are listed for traceability and many are paywalled.",
+  "sources": [
+    {
+      "source": "UFC 4-022-03, Security Fencing and Gates, US Department of Defense",
+      "section": "Whole document",
+      "verified": false,
+      "note": "paraphrase; source not checked from the build container"
+    },
+    {
+      "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+      "section": "Whole document",
+      "verified": false,
+      "note": "paraphrase; source not checked from the build container"
+    },
+    {
+      "source": "ASIS PAP.1-2012, Security Management Standard: Physical Asset Protection",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "IEC 62676-4, Video surveillance systems for use in security applications, Part 4: Application guidelines",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "UL 2050, Standard for National Industrial Security Systems; UL certificate programs for alarm monitoring",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "NFPA 731, Standard for the Installation of Electronic Premises Security Systems",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked; check current edition status, NFPA has been consolidating standards"
+    },
+    {
+      "source": "ANSI/BHMA A156 series, Builders Hardware standards (for example A156.2 bored locks, A156.13 mortise locks)",
+      "section": "A156 series",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "ANSI/IES G-1, Guide for Security Lighting for People, Property, and Critical Infrastructure",
+      "section": "Whole guide",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "ANSI/IES RP-20, Lighting for Parking Facilities",
+      "section": "Whole practice",
+      "verified": false,
+      "note": "paraphrase; paywalled source not checked"
+    },
+    {
+      "source": "CISA physical security guidance (Physical Security resources, cisa.gov)",
+      "section": "Physical security resources",
+      "verified": false,
+      "note": "paraphrase; source not checked from the build container"
+    }
+  ]
+}

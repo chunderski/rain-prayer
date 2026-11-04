@@ -1,0 +1,309 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "PRT",
+  "controls": [
+    {
+      "id": "SC-PRT-001",
+      "domain": "PRT",
+      "title": "Multi-factor authentication",
+      "objective": "MFA is enforced for remote access, administrative accounts, and email.",
+      "assetTypes": [
+        "application",
+        "server"
+      ],
+      "defaultSeverity": "critical",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Identity provider MFA policy and enrollment report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-001-01",
+          "text": "Percentage of user accounts enrolled in and required to use MFA",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Use the identity provider report.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-PRT-001-02",
+          "text": "Is MFA enforced for all remote access and all administrative accounts with no standing exceptions?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: exceptions exist with documented approval.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-002",
+      "domain": "PRT",
+      "title": "Least privilege and access review",
+      "objective": "Access rights follow least privilege and are reviewed at least every 6 months.",
+      "assetTypes": [
+        "application",
+        "server"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Last access review record"
+        },
+        {
+          "type": "configuration",
+          "description": "Privileged group membership"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-002-01",
+          "text": "Was a review of user and privileged access rights completed in the last 6 months, with removals recorded?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: review done for some systems only.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-PRT-002-02",
+          "text": "Number of accounts with domain or global administrator rights",
+          "answerType": "number",
+          "unit": "accounts",
+          "guidance": "Count from the directory. Compare with the number of people whose roles require it.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-003",
+      "domain": "PRT",
+      "title": "Patch management",
+      "objective": "Security patches are applied within defined times by severity.",
+      "assetTypes": [
+        "server",
+        "endpoint",
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Patch compliance report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-003-01",
+          "text": "Median days to deploy critical security patches over the last 3 months",
+          "answerType": "number",
+          "unit": "days",
+          "guidance": "Use patch management reports.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-PRT-003-02",
+          "text": "Percentage of endpoints and servers running an operating system version with vendor support",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Compare inventory versions with vendor lifecycle.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-004",
+      "domain": "PRT",
+      "title": "Secure configuration and application control",
+      "objective": "Systems are built from hardened baselines and unauthorized software is blocked.",
+      "assetTypes": [
+        "server",
+        "endpoint"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Baseline documents and compliance scan"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-004-01",
+          "text": "Are servers and endpoints built from a documented hardened baseline with drift monitored?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: baseline exists but drift not monitored.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-PRT-004-02",
+          "text": "Is installation or execution of unapproved software blocked on endpoints (application allowlisting or no local admin rights)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Test with a standard user account if allowed.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-005",
+      "domain": "PRT",
+      "title": "Network segmentation",
+      "objective": "Networks are segmented so that critical systems, OT, and security devices are separated from general user networks.",
+      "assetTypes": [
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Network diagram"
+        },
+        {
+          "type": "configuration",
+          "description": "Firewall rules between segments"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-005-01",
+          "text": "Are critical servers, operational technology, and building security systems on segments separated from user networks with deny-by-default rules?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: segmented but with any-any rules between segments.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-006",
+      "domain": "PRT",
+      "title": "Cybersecurity awareness training",
+      "objective": "Staff complete security awareness training, and specialized roles receive role training, at least every 12 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Training completion and phishing simulation reports"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-006-01",
+          "text": "Percentage of staff completing cybersecurity awareness training in the last 12 months",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Use the training system report.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-PRT-006-02",
+          "text": "Have administrators and developers completed role-specific security training in the last 12 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: some roles covered.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PRT-007",
+      "domain": "PRT",
+      "title": "Server room environmental protection",
+      "objective": "Technology rooms are protected against fire, water, heat, and power loss.",
+      "assetTypes": [
+        "server_room"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of environmental controls and hazards"
+        },
+        {
+          "type": "log",
+          "description": "Environmental monitoring alerts"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PRT-007-01",
+          "text": "Does the main technology room have fire detection, temperature and water monitoring with alerts, and UPS power?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: one control missing. Photograph water pipes above equipment or missing controls.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PRT-007-02",
+          "text": "Highest temperature reading in the technology room at the time of inspection",
+          "answerType": "number",
+          "unit": "degrees C",
+          "guidance": "Read from the room monitor or a handheld thermometer at rack inlet height.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

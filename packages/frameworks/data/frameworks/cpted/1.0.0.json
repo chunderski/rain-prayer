@@ -1,0 +1,359 @@
+{
+  "version": "1.0.0",
+  "levels": [
+    "principle",
+    "strategy"
+  ],
+  "requirements": [
+    {
+      "code": "SA-CPTED-NS",
+      "title": "Natural surveillance",
+      "text": "Place features, activities, and people so that legitimate users can easily see what happens around them, increasing the perceived risk to offenders.",
+      "level": "principle",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Natural surveillance",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-NS-01",
+      "title": "Sightlines from occupied spaces",
+      "text": "Entrances, parking, and approaches are visible from regularly occupied interior spaces and from adjacent public areas.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-NS",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Natural surveillance",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-NS-02",
+      "title": "Landscaping preserves visibility",
+      "text": "Vegetation is selected and maintained so that it does not block views of paths, entrances, and windows.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-NS",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Natural surveillance, landscaping",
+        "verified": false,
+        "note": "paraphrase; specific height rules vary by jurisdiction"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-NS-03",
+      "title": "Lighting supports surveillance",
+      "text": "Lighting lets users see and recognize people along routes and at entrances at night, without glare or dark gaps.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-NS",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Natural surveillance, lighting",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-NS-04",
+      "title": "No concealment or entrapment spots",
+      "text": "Routes avoid hiding places and entrapment areas, or such spots are opened up, lit, or covered by surveillance.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-NS",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Natural surveillance, entrapment areas",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AC",
+      "title": "Natural access control",
+      "text": "Use the layout of entrances, paths, landscaping, and barriers to guide people to legitimate destinations and deny easy access elsewhere.",
+      "level": "principle",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Natural access control",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AC-01",
+      "title": "Defined and limited entrances",
+      "text": "Public entry is concentrated at a small number of clearly identified entrances; other doors are visibly not for public use.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-AC",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Natural access control",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AC-02",
+      "title": "Wayfinding channels movement",
+      "text": "Paths, signage, and site layout lead users to the intended entrance and away from restricted areas.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-AC",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Natural access control",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AC-03",
+      "title": "Physical features restrict access",
+      "text": "Fencing, landscaping, and grade changes restrict movement into areas where users have no reason to be.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-AC",
+      "citation": {
+        "source": "Newman, O., Creating Defensible Space, US Department of Housing and Urban Development, Office of Policy Development and Research, 1996",
+        "section": "Defensible space, access",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-TR",
+      "title": "Territorial reinforcement",
+      "text": "Make ownership of space clear so that users feel responsible for it and intruders feel noticed.",
+      "level": "principle",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Territorial reinforcement",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-TR-01",
+      "title": "Public to private transitions are marked",
+      "text": "Changes from public to semi-private to private space are marked by visible physical cues such as paving, gates, fencing, or landscaping.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-TR",
+      "citation": {
+        "source": "Newman, O., Creating Defensible Space, US Department of Housing and Urban Development, Office of Policy Development and Research, 1996",
+        "section": "Defensible space, hierarchy of space",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-TR-02",
+      "title": "Ownership and rules are signaled",
+      "text": "Signage and site features communicate who owns the space and what use is permitted.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-TR",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Territorial reinforcement",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-MM",
+      "title": "Maintenance and image",
+      "text": "Keep the site in good repair so it signals that it is cared for and monitored, and so that other CPTED features keep working.",
+      "level": "principle",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Maintenance and management",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-MM-01",
+      "title": "Prompt repair and cleanup",
+      "text": "Vandalism, graffiti, litter, and broken fixtures are removed or repaired within a defined time.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-MM",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Maintenance",
+        "verified": false,
+        "note": "paraphrase; 'broken windows' theory is contested in the literature"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-MM-02",
+      "title": "Ongoing maintenance of CPTED features",
+      "text": "Lighting, landscaping, and signage are maintained on a schedule so that surveillance and access control features keep working.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-MM",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Maintenance and management",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AS",
+      "title": "Activity support",
+      "text": "Encourage legitimate activity in public and common spaces so that more people are present to observe.",
+      "level": "principle",
+      "citation": {
+        "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+        "section": "Activity support",
+        "verified": false,
+        "note": "paraphrase; ISO 22341 is paywalled and not checked"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AS-01",
+      "title": "Common areas support legitimate use",
+      "text": "Common areas have features or programs that draw legitimate users during operating hours.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-AS",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Activity support",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-AS-02",
+      "title": "Vulnerable activities placed in observed locations",
+      "text": "Activities that attract offenders (cash handling, deliveries, isolated parking) are placed where they can be observed.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-AS",
+      "citation": {
+        "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+        "section": "Activity support",
+        "verified": false,
+        "note": "paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-2G",
+      "title": "Second-generation CPTED (flagged)",
+      "text": "Second-generation concepts that address the social conditions around a site. Flagged: these are community-level concepts and are only partly assessable during a site walkthrough.",
+      "level": "principle",
+      "citation": {
+        "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+        "section": "Second-generation CPTED",
+        "verified": false,
+        "note": "second-generation concept; paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-2G-01",
+      "title": "Social cohesion",
+      "text": "Site users and neighbors have opportunities and structures to work together on safety (for example tenant or neighborhood associations).",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-2G",
+      "citation": {
+        "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+        "section": "Social cohesion",
+        "verified": false,
+        "note": "second-generation concept; paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-2G-02",
+      "title": "Connectivity",
+      "text": "The site and its users have working relationships with outside agencies and neighboring organizations.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-2G",
+      "citation": {
+        "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+        "section": "Connectivity",
+        "verified": false,
+        "note": "second-generation concept; paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-2G-03",
+      "title": "Community culture",
+      "text": "Shared events and spaces give users a common sense of place.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-2G",
+      "citation": {
+        "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+        "section": "Community culture",
+        "verified": false,
+        "note": "second-generation concept; paraphrase"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-CPTED-2G-04",
+      "title": "Threshold capacity",
+      "text": "Land uses that tend to generate crime are kept below the level the area can absorb.",
+      "level": "strategy",
+      "parentCode": "SA-CPTED-2G",
+      "citation": {
+        "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+        "section": "Threshold capacity",
+        "verified": false,
+        "note": "second-generation concept; paraphrase"
+      },
+      "status": "needs_review"
+    }
+  ],
+  "id": "cpted",
+  "name": "Crime Prevention Through Environmental Design",
+  "shortName": "CPTED",
+  "sourceEdition": "Sentinel model 1.0 based on ISO 22341:2021 and established CPTED literature",
+  "publisher": "Sentinel Assess (paraphrased from ISO and CPTED literature)",
+  "kind": "design_principles",
+  "category": "physical",
+  "description": "First-generation CPTED principles (natural surveillance, natural access control, territorial reinforcement, maintenance and image, activity support) as assessable strategies, plus second-generation concepts flagged as such. All text is a Sentinel paraphrase; codes are Sentinel codes.",
+  "sources": [
+    {
+      "source": "ISO 22341:2021, Security and resilience, Protective security, Guidelines for crime prevention through environmental design",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "paraphrase; ISO 22341 is paywalled and not checked"
+    },
+    {
+      "source": "Crowe, T. D. and Fennelly, L. J., Crime Prevention Through Environmental Design, 3rd edition, Butterworth-Heinemann, 2013",
+      "section": "Chapters on the CPTED strategies",
+      "verified": false,
+      "note": "paraphrase; book not checked from the build container"
+    },
+    {
+      "source": "Newman, O., Creating Defensible Space, US Department of Housing and Urban Development, Office of Policy Development and Research, 1996",
+      "section": "Defensible space principles",
+      "verified": false,
+      "note": "public HUD publication; not checked from the build container"
+    },
+    {
+      "source": "Saville, G. and Cleveland, G., 2nd Generation CPTED: An Antidote to the Social Y2K Virus of Urban Design, paper presented at the 3rd Annual International CPTED Conference, 1998",
+      "section": "Second-generation CPTED concepts",
+      "verified": false,
+      "note": "conference paper; not checked from the build container"
+    }
+  ]
+}

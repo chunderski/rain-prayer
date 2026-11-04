@@ -1,0 +1,1909 @@
+{
+  "libraryVersion": "1.0.0",
+  "entries": [
+    {
+      "sharedControlId": "SC-PER-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-02",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter fence height and condition' directly verifies the Physical Security requirement 'Barrier height and condition'."
+    },
+    {
+      "sharedControlId": "SC-PER-001",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-03",
+      "relationship": "supports",
+      "rationale": "'Perimeter fence height and condition' provides partial evidence toward the CPTED requirement 'Physical features restrict access'."
+    },
+    {
+      "sharedControlId": "SC-PER-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Perimeter fence height and condition' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-PER-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "A sound perimeter barrier is the outermost layer of managing physical access to assets."
+    },
+    {
+      "sharedControlId": "SC-PER-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-03",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter clear zone' directly verifies the Physical Security requirement 'Clear zones maintained'."
+    },
+    {
+      "sharedControlId": "SC-PER-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-04",
+      "relationship": "supports",
+      "rationale": "'Perimeter clear zone' provides partial evidence toward the CPTED requirement 'No concealment or entrapment spots'."
+    },
+    {
+      "sharedControlId": "SC-PER-002",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Perimeter clear zone' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-PER-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-04",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter gate control' directly verifies the Physical Security requirement 'Gates and openings controlled'."
+    },
+    {
+      "sharedControlId": "SC-PER-003",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-01",
+      "relationship": "supports",
+      "rationale": "'Perimeter gate control' provides partial evidence toward the CPTED requirement 'Defined and limited entrances'."
+    },
+    {
+      "sharedControlId": "SC-PER-003",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Perimeter gate control' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-PER-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "Gates are physical access control points to the site's assets."
+    },
+    {
+      "sharedControlId": "SC-PER-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-05",
+      "relationship": "satisfies",
+      "rationale": "'Vehicle approach and standoff' directly verifies the Physical Security requirement 'Vehicle approach controlled'."
+    },
+    {
+      "sharedControlId": "SC-PER-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Vehicle approach and standoff' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-PER-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Standoff distance determines how vulnerable the facade is to a vehicle-borne attack."
+    },
+    {
+      "sharedControlId": "SC-PER-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-04",
+      "relationship": "supports",
+      "rationale": "'Perimeter openings and penetrations' provides partial evidence toward the Physical Security requirement 'Gates and openings controlled'."
+    },
+    {
+      "sharedControlId": "SC-PER-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Perimeter openings and penetrations' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-PER-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-01",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter signage' directly verifies the Physical Security requirement 'Boundary defined and marked'."
+    },
+    {
+      "sharedControlId": "SC-PER-006",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-TR-02",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter signage' directly verifies the CPTED requirement 'Ownership and rules are signaled'."
+    },
+    {
+      "sharedControlId": "SC-PER-006",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-RCG",
+      "relationship": "informs",
+      "rationale": "Signs that name what is protected raise how recognizable the target is."
+    },
+    {
+      "sharedControlId": "SC-ACC-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-01",
+      "relationship": "satisfies",
+      "rationale": "'Controlled entry points' directly verifies the Physical Security requirement 'Entry points controlled'."
+    },
+    {
+      "sharedControlId": "SC-ACC-001",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-01",
+      "relationship": "supports",
+      "rationale": "'Controlled entry points' provides partial evidence toward the CPTED requirement 'Defined and limited entrances'."
+    },
+    {
+      "sharedControlId": "SC-ACC-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "Controlling every entry point is how physical access to assets is enforced."
+    },
+    {
+      "sharedControlId": "SC-ACC-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Controlled entry points' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-ACC-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-02",
+      "relationship": "satisfies",
+      "rationale": "'Credential lifecycle' directly verifies the Physical Security requirement 'Credential lifecycle managed'."
+    },
+    {
+      "sharedControlId": "SC-ACC-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Physical credentials are identities and credentials managed by the organization."
+    },
+    {
+      "sharedControlId": "SC-ACC-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-05",
+      "relationship": "supports",
+      "rationale": "Periodic access review applies least privilege to physical entitlements."
+    },
+    {
+      "sharedControlId": "SC-ACC-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-03",
+      "relationship": "satisfies",
+      "rationale": "'Visitor management' directly verifies the Physical Security requirement 'Visitors managed'."
+    },
+    {
+      "sharedControlId": "SC-ACC-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "Visitor control is part of managing physical access to assets."
+    },
+    {
+      "sharedControlId": "SC-ACC-003",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-TR-02",
+      "relationship": "supports",
+      "rationale": "'Visitor management' provides partial evidence toward the CPTED requirement 'Ownership and rules are signaled'."
+    },
+    {
+      "sharedControlId": "SC-ACC-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-04",
+      "relationship": "satisfies",
+      "rationale": "'Door forced and held-open alarms' directly verifies the Physical Security requirement 'Door status monitored'."
+    },
+    {
+      "sharedControlId": "SC-ACC-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Door alarms monitor the physical environment for potentially adverse events."
+    },
+    {
+      "sharedControlId": "SC-ACC-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Door forced and held-open alarms' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-ACC-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-05",
+      "relationship": "satisfies",
+      "rationale": "'Restricted area segregation' directly verifies the Physical Security requirement 'Restricted areas segregated'."
+    },
+    {
+      "sharedControlId": "SC-ACC-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "satisfies",
+      "rationale": "Restricting technology rooms to named people directly manages physical access to IT assets."
+    },
+    {
+      "sharedControlId": "SC-ACC-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-05",
+      "relationship": "supports",
+      "rationale": "Access groups for restricted rooms apply least privilege."
+    },
+    {
+      "sharedControlId": "SC-ACC-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Restricted area segregation' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-ACC-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-06",
+      "relationship": "satisfies",
+      "rationale": "'Anti-tailgating at main entry' directly verifies the Physical Security requirement 'Tailgating countered'."
+    },
+    {
+      "sharedControlId": "SC-ACC-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "Tailgating defeats enforcement of physical access."
+    },
+    {
+      "sharedControlId": "SC-ACC-006",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Anti-tailgating at main entry' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-ACC-007",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-05",
+      "relationship": "supports",
+      "rationale": "'Loading dock and receiving control' provides partial evidence toward the Physical Security requirement 'Restricted areas segregated'."
+    },
+    {
+      "sharedControlId": "SC-ACC-007",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AS-02",
+      "relationship": "supports",
+      "rationale": "'Loading dock and receiving control' provides partial evidence toward the CPTED requirement 'Vulnerable activities placed in observed locations'."
+    },
+    {
+      "sharedControlId": "SC-ACC-007",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Loading dock and receiving control' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-VSS-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-01",
+      "relationship": "satisfies",
+      "rationale": "'Entrance identification coverage' directly verifies the Physical Security requirement 'Coverage of entries and critical areas'."
+    },
+    {
+      "sharedControlId": "SC-VSS-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-02",
+      "relationship": "supports",
+      "rationale": "'Entrance identification coverage' provides partial evidence toward the Physical Security requirement 'Pixel density matched to purpose'."
+    },
+    {
+      "sharedControlId": "SC-VSS-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Cameras monitor the physical environment for adverse events."
+    },
+    {
+      "sharedControlId": "SC-VSS-001",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-01",
+      "relationship": "supports",
+      "rationale": "'Entrance identification coverage' provides partial evidence toward the CPTED requirement 'Sightlines from occupied spaces'."
+    },
+    {
+      "sharedControlId": "SC-VSS-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-01",
+      "relationship": "satisfies",
+      "rationale": "'Perimeter and parking camera coverage' directly verifies the Physical Security requirement 'Coverage of entries and critical areas'."
+    },
+    {
+      "sharedControlId": "SC-VSS-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-02",
+      "relationship": "supports",
+      "rationale": "'Perimeter and parking camera coverage' provides partial evidence toward the Physical Security requirement 'Pixel density matched to purpose'."
+    },
+    {
+      "sharedControlId": "SC-VSS-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Perimeter cameras monitor the physical environment."
+    },
+    {
+      "sharedControlId": "SC-VSS-002",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Perimeter and parking camera coverage' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-VSS-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-03",
+      "relationship": "satisfies",
+      "rationale": "'Video recording and retention' directly verifies the Physical Security requirement 'Recording and retention'."
+    },
+    {
+      "sharedControlId": "SC-VSS-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.AN-07",
+      "relationship": "supports",
+      "rationale": "Retained video is incident data available for investigation."
+    },
+    {
+      "sharedControlId": "SC-VSS-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-04",
+      "relationship": "satisfies",
+      "rationale": "'Camera health and tamper' directly verifies the Physical Security requirement 'System health and cybersecurity'."
+    },
+    {
+      "sharedControlId": "SC-VSS-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Camera health monitoring keeps physical monitoring working."
+    },
+    {
+      "sharedControlId": "SC-VSS-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-02",
+      "relationship": "satisfies",
+      "rationale": "'Night and glare performance' directly verifies the Physical Security requirement 'Pixel density matched to purpose'."
+    },
+    {
+      "sharedControlId": "SC-VSS-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-04",
+      "relationship": "supports",
+      "rationale": "'Night and glare performance' provides partial evidence toward the Physical Security requirement 'Coordination with cameras and sightlines'."
+    },
+    {
+      "sharedControlId": "SC-VSS-005",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-03",
+      "relationship": "supports",
+      "rationale": "'Night and glare performance' provides partial evidence toward the CPTED requirement 'Lighting supports surveillance'."
+    },
+    {
+      "sharedControlId": "SC-VSS-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-04",
+      "relationship": "satisfies",
+      "rationale": "'Video system cybersecurity' directly verifies the Physical Security requirement 'System health and cybersecurity'."
+    },
+    {
+      "sharedControlId": "SC-VSS-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Device credentials are identities and credentials managed by the organization."
+    },
+    {
+      "sharedControlId": "SC-VSS-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-01",
+      "relationship": "supports",
+      "rationale": "Segmentation protects the video network from unauthorized logical access."
+    },
+    {
+      "sharedControlId": "SC-VSS-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-02",
+      "relationship": "supports",
+      "rationale": "Firmware maintenance is software maintained commensurate with risk."
+    },
+    {
+      "sharedControlId": "SC-VSS-007",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-03",
+      "relationship": "supports",
+      "rationale": "'Video time accuracy and evidence export' provides partial evidence toward the Physical Security requirement 'Recording and retention'."
+    },
+    {
+      "sharedControlId": "SC-VSS-007",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.AN-07",
+      "relationship": "supports",
+      "rationale": "Integrity-protected exports preserve the provenance of incident data."
+    },
+    {
+      "sharedControlId": "SC-IDS-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-01",
+      "relationship": "satisfies",
+      "rationale": "'Exterior opening detection' directly verifies the Physical Security requirement 'Detection coverage'."
+    },
+    {
+      "sharedControlId": "SC-IDS-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Intrusion sensors monitor the physical environment."
+    },
+    {
+      "sharedControlId": "SC-IDS-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Exterior opening detection' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-IDS-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-01",
+      "relationship": "supports",
+      "rationale": "'Interior detection of high-value areas' provides partial evidence toward the Physical Security requirement 'Detection coverage'."
+    },
+    {
+      "sharedControlId": "SC-IDS-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Interior detection monitors the physical environment around critical assets."
+    },
+    {
+      "sharedControlId": "SC-IDS-002",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Interior detection of high-value areas' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-IDS-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-02",
+      "relationship": "satisfies",
+      "rationale": "'Alarm monitoring and response' directly verifies the Physical Security requirement 'Monitoring and response'."
+    },
+    {
+      "sharedControlId": "SC-IDS-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-06",
+      "relationship": "supports",
+      "rationale": "Alarm monitoring delivers adverse event information to authorized staff."
+    },
+    {
+      "sharedControlId": "SC-IDS-003",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Alarm monitoring and response' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-IDS-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-03",
+      "relationship": "satisfies",
+      "rationale": "'Alarm system testing' directly verifies the Physical Security requirement 'Testing and maintenance'."
+    },
+    {
+      "sharedControlId": "SC-IDS-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.IM-02",
+      "relationship": "supports",
+      "rationale": "Test results identify improvements to detection."
+    },
+    {
+      "sharedControlId": "SC-IDS-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-04",
+      "relationship": "satisfies",
+      "rationale": "'Duress and panic alarms' directly verifies the Physical Security requirement 'Duress and panic'."
+    },
+    {
+      "sharedControlId": "SC-IDS-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Duress alarms report adverse events in the physical environment."
+    },
+    {
+      "sharedControlId": "SC-IDS-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-IDS-02",
+      "relationship": "supports",
+      "rationale": "'Alarm panel protection and communication' provides partial evidence toward the Physical Security requirement 'Monitoring and response'."
+    },
+    {
+      "sharedControlId": "SC-IDS-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-03",
+      "relationship": "supports",
+      "rationale": "A second communication path is a resilience mechanism."
+    },
+    {
+      "sharedControlId": "SC-IDS-006",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Alarm panel protection and communication' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-01",
+      "relationship": "satisfies",
+      "rationale": "'Exterior lock hardware grade' directly verifies the Physical Security requirement 'Hardware grade and condition'."
+    },
+    {
+      "sharedControlId": "SC-LCK-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Exterior lock hardware grade' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "supports",
+      "rationale": "Locks enforce physical access to assets."
+    },
+    {
+      "sharedControlId": "SC-LCK-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-02",
+      "relationship": "satisfies",
+      "rationale": "'Key control' directly verifies the Physical Security requirement 'Key and combination control'."
+    },
+    {
+      "sharedControlId": "SC-LCK-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Physical keys are credentials managed by the organization."
+    },
+    {
+      "sharedControlId": "SC-LCK-002",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Key control' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-03",
+      "relationship": "satisfies",
+      "rationale": "'Door and frame hardening' directly verifies the Physical Security requirement 'Door, frame, and window hardening'."
+    },
+    {
+      "sharedControlId": "SC-LCK-003",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Door and frame hardening' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-03",
+      "relationship": "supports",
+      "rationale": "'Accessible window security' provides partial evidence toward the Physical Security requirement 'Door, frame, and window hardening'."
+    },
+    {
+      "sharedControlId": "SC-LCK-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Accessible window security' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-01",
+      "relationship": "supports",
+      "rationale": "'Equipment rack and cabinet locks' provides partial evidence toward the Physical Security requirement 'Hardware grade and condition'."
+    },
+    {
+      "sharedControlId": "SC-LCK-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-06",
+      "relationship": "satisfies",
+      "rationale": "Locked racks directly limit physical access to network assets."
+    },
+    {
+      "sharedControlId": "SC-LCK-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Equipment rack and cabinet locks' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-LCK-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LCK-02",
+      "relationship": "satisfies",
+      "rationale": "'Combination and code changes' directly verifies the Physical Security requirement 'Key and combination control'."
+    },
+    {
+      "sharedControlId": "SC-LCK-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Codes are credentials managed by the organization."
+    },
+    {
+      "sharedControlId": "SC-LGT-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-01",
+      "relationship": "satisfies",
+      "rationale": "'Parking area illuminance' directly verifies the Physical Security requirement 'Illuminance levels'."
+    },
+    {
+      "sharedControlId": "SC-LGT-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-02",
+      "relationship": "supports",
+      "rationale": "'Parking area illuminance' provides partial evidence toward the Physical Security requirement 'Uniformity and continuity'."
+    },
+    {
+      "sharedControlId": "SC-LGT-001",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-03",
+      "relationship": "supports",
+      "rationale": "'Parking area illuminance' provides partial evidence toward the CPTED requirement 'Lighting supports surveillance'."
+    },
+    {
+      "sharedControlId": "SC-LGT-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-02",
+      "relationship": "satisfies",
+      "rationale": "'Pedestrian path lighting continuity' directly verifies the Physical Security requirement 'Uniformity and continuity'."
+    },
+    {
+      "sharedControlId": "SC-LGT-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-03",
+      "relationship": "satisfies",
+      "rationale": "'Pedestrian path lighting continuity' directly verifies the CPTED requirement 'Lighting supports surveillance'."
+    },
+    {
+      "sharedControlId": "SC-LGT-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-02",
+      "relationship": "supports",
+      "rationale": "'Pedestrian path lighting continuity' provides partial evidence toward the CPTED requirement 'Wayfinding channels movement'."
+    },
+    {
+      "sharedControlId": "SC-LGT-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-01",
+      "relationship": "satisfies",
+      "rationale": "'Entrance lighting' directly verifies the Physical Security requirement 'Illuminance levels'."
+    },
+    {
+      "sharedControlId": "SC-LGT-003",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-03",
+      "relationship": "supports",
+      "rationale": "'Entrance lighting' provides partial evidence toward the CPTED requirement 'Lighting supports surveillance'."
+    },
+    {
+      "sharedControlId": "SC-LGT-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-02",
+      "relationship": "supports",
+      "rationale": "'Entrance lighting' provides partial evidence toward the Physical Security requirement 'Pixel density matched to purpose'."
+    },
+    {
+      "sharedControlId": "SC-LGT-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-03",
+      "relationship": "satisfies",
+      "rationale": "'Lighting maintenance' directly verifies the Physical Security requirement 'Controls, maintenance, and power'."
+    },
+    {
+      "sharedControlId": "SC-LGT-004",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-MM-02",
+      "relationship": "supports",
+      "rationale": "'Lighting maintenance' provides partial evidence toward the CPTED requirement 'Ongoing maintenance of CPTED features'."
+    },
+    {
+      "sharedControlId": "SC-LGT-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-03",
+      "relationship": "satisfies",
+      "rationale": "'Lighting control and backup power' directly verifies the Physical Security requirement 'Controls, maintenance, and power'."
+    },
+    {
+      "sharedControlId": "SC-LGT-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-03",
+      "relationship": "supports",
+      "rationale": "Backup power for security lighting is a resilience mechanism in adverse conditions."
+    },
+    {
+      "sharedControlId": "SC-LGT-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-LGT-04",
+      "relationship": "satisfies",
+      "rationale": "'Glare and camera coordination' directly verifies the Physical Security requirement 'Coordination with cameras and sightlines'."
+    },
+    {
+      "sharedControlId": "SC-LGT-006",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-03",
+      "relationship": "supports",
+      "rationale": "'Glare and camera coordination' provides partial evidence toward the CPTED requirement 'Lighting supports surveillance'."
+    },
+    {
+      "sharedControlId": "SC-GRD-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-01",
+      "relationship": "satisfies",
+      "rationale": "'Post orders' directly verifies the Physical Security requirement 'Post orders'."
+    },
+    {
+      "sharedControlId": "SC-GRD-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AT-02",
+      "relationship": "supports",
+      "rationale": "Post orders and their knowledge are role-specific training for security staff."
+    },
+    {
+      "sharedControlId": "SC-GRD-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-02",
+      "relationship": "satisfies",
+      "rationale": "'Patrol verification' directly verifies the Physical Security requirement 'Patrol verification'."
+    },
+    {
+      "sharedControlId": "SC-GRD-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "supports",
+      "rationale": "Patrols monitor the physical environment."
+    },
+    {
+      "sharedControlId": "SC-GRD-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-01",
+      "relationship": "supports",
+      "rationale": "'Patrol verification' provides partial evidence toward the CPTED requirement 'Sightlines from occupied spaces'."
+    },
+    {
+      "sharedControlId": "SC-GRD-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-03",
+      "relationship": "satisfies",
+      "rationale": "'Officer licensing and training' directly verifies the Physical Security requirement 'Training and licensing'."
+    },
+    {
+      "sharedControlId": "SC-GRD-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AT-02",
+      "relationship": "supports",
+      "rationale": "Officer training is training for individuals in specialized roles."
+    },
+    {
+      "sharedControlId": "SC-GRD-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-04",
+      "relationship": "satisfies",
+      "rationale": "'Officer communications' directly verifies the Physical Security requirement 'Communications and reporting'."
+    },
+    {
+      "sharedControlId": "SC-GRD-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-04",
+      "relationship": "supports",
+      "rationale": "Reliable communications let officers escalate incidents."
+    },
+    {
+      "sharedControlId": "SC-GRD-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-05",
+      "relationship": "satisfies",
+      "rationale": "'Post staffing' directly verifies the Physical Security requirement 'Staffing'."
+    },
+    {
+      "sharedControlId": "SC-GRD-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Post staffing' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-GRD-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-GRD-04",
+      "relationship": "satisfies",
+      "rationale": "'Incident logging and review' directly verifies the Physical Security requirement 'Communications and reporting'."
+    },
+    {
+      "sharedControlId": "SC-GRD-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-02",
+      "relationship": "supports",
+      "rationale": "Supervisor review triages and validates incident reports."
+    },
+    {
+      "sharedControlId": "SC-GRD-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-06",
+      "relationship": "supports",
+      "rationale": "Reporting physical incidents to IT provides adverse event information to authorized staff."
+    },
+    {
+      "sharedControlId": "SC-POL-001",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-01",
+      "relationship": "satisfies",
+      "rationale": "'Physical security policy' directly verifies the Physical Security requirement 'Physical security policy'."
+    },
+    {
+      "sharedControlId": "SC-POL-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.PO-01",
+      "relationship": "supports",
+      "rationale": "Physical security policy is part of policy for managing security risks."
+    },
+    {
+      "sharedControlId": "SC-POL-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-02",
+      "relationship": "satisfies",
+      "rationale": "'Site security risk assessment' directly verifies the Physical Security requirement 'Security risk assessment'."
+    },
+    {
+      "sharedControlId": "SC-POL-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-03",
+      "relationship": "supports",
+      "rationale": "A site risk assessment identifies and records threats."
+    },
+    {
+      "sharedControlId": "SC-POL-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-06",
+      "relationship": "supports",
+      "rationale": "Tracking recommendations plans and tracks risk responses."
+    },
+    {
+      "sharedControlId": "SC-POL-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-03",
+      "relationship": "satisfies",
+      "rationale": "'Emergency plans and drills' directly verifies the Physical Security requirement 'Emergency plans and drills'."
+    },
+    {
+      "sharedControlId": "SC-POL-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.IM-04",
+      "relationship": "supports",
+      "rationale": "Emergency plans are plans that affect operations and must be maintained and improved."
+    },
+    {
+      "sharedControlId": "SC-POL-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-04",
+      "relationship": "satisfies",
+      "rationale": "'Security awareness training' directly verifies the Physical Security requirement 'Personnel security and awareness'."
+    },
+    {
+      "sharedControlId": "SC-POL-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AT-01",
+      "relationship": "supports",
+      "rationale": "Awareness training gives personnel knowledge to work with security risks in mind."
+    },
+    {
+      "sharedControlId": "SC-POL-005",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-04",
+      "relationship": "satisfies",
+      "rationale": "'Personnel screening' directly verifies the Physical Security requirement 'Personnel security and awareness'."
+    },
+    {
+      "sharedControlId": "SC-POL-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RR-04",
+      "relationship": "supports",
+      "rationale": "Screening includes security in human resources practices."
+    },
+    {
+      "sharedControlId": "SC-POL-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-02",
+      "relationship": "supports",
+      "rationale": "Screening is part of proofing identities before binding credentials."
+    },
+    {
+      "sharedControlId": "SC-POL-006",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-05",
+      "relationship": "satisfies",
+      "rationale": "'Document and media destruction' directly verifies the Physical Security requirement 'Information and media handling'."
+    },
+    {
+      "sharedControlId": "SC-POL-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-01",
+      "relationship": "supports",
+      "rationale": "Controlled destruction protects data at rest on paper and media."
+    },
+    {
+      "sharedControlId": "SC-POL-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-03",
+      "relationship": "supports",
+      "rationale": "Media destruction is part of removing hardware commensurate with risk."
+    },
+    {
+      "sharedControlId": "SC-POL-007",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-POL-05",
+      "relationship": "supports",
+      "rationale": "'Critical areas not advertised' provides partial evidence toward the Physical Security requirement 'Information and media handling'."
+    },
+    {
+      "sharedControlId": "SC-POL-007",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-RCG",
+      "relationship": "informs",
+      "rationale": "Labels on critical rooms directly raise recognizability."
+    },
+    {
+      "sharedControlId": "SC-ENV-001",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-01",
+      "relationship": "satisfies",
+      "rationale": "'Sightlines from occupied spaces' directly verifies the CPTED requirement 'Sightlines from occupied spaces'."
+    },
+    {
+      "sharedControlId": "SC-ENV-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Findings on 'Sightlines from occupied spaces' feed the CARVER Vulnerability score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-ENV-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-02",
+      "relationship": "satisfies",
+      "rationale": "'Landscaping for visibility' directly verifies the CPTED requirement 'Landscaping preserves visibility'."
+    },
+    {
+      "sharedControlId": "SC-ENV-002",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-MM-02",
+      "relationship": "supports",
+      "rationale": "'Landscaping for visibility' provides partial evidence toward the CPTED requirement 'Ongoing maintenance of CPTED features'."
+    },
+    {
+      "sharedControlId": "SC-ENV-002",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-03",
+      "relationship": "supports",
+      "rationale": "'Landscaping for visibility' provides partial evidence toward the Physical Security requirement 'Clear zones maintained'."
+    },
+    {
+      "sharedControlId": "SC-ENV-003",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-TR-01",
+      "relationship": "satisfies",
+      "rationale": "'Defined territory' directly verifies the CPTED requirement 'Public to private transitions are marked'."
+    },
+    {
+      "sharedControlId": "SC-ENV-003",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-PER-01",
+      "relationship": "supports",
+      "rationale": "'Defined territory' provides partial evidence toward the Physical Security requirement 'Boundary defined and marked'."
+    },
+    {
+      "sharedControlId": "SC-ENV-004",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-01",
+      "relationship": "satisfies",
+      "rationale": "'Wayfinding to a single public entrance' directly verifies the CPTED requirement 'Defined and limited entrances'."
+    },
+    {
+      "sharedControlId": "SC-ENV-004",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AC-02",
+      "relationship": "satisfies",
+      "rationale": "'Wayfinding to a single public entrance' directly verifies the CPTED requirement 'Wayfinding channels movement'."
+    },
+    {
+      "sharedControlId": "SC-ENV-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-01",
+      "relationship": "supports",
+      "rationale": "'Wayfinding to a single public entrance' provides partial evidence toward the Physical Security requirement 'Entry points controlled'."
+    },
+    {
+      "sharedControlId": "SC-ENV-005",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-MM-01",
+      "relationship": "satisfies",
+      "rationale": "'Maintenance and image' directly verifies the CPTED requirement 'Prompt repair and cleanup'."
+    },
+    {
+      "sharedControlId": "SC-ENV-005",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-MM-02",
+      "relationship": "supports",
+      "rationale": "'Maintenance and image' provides partial evidence toward the CPTED requirement 'Ongoing maintenance of CPTED features'."
+    },
+    {
+      "sharedControlId": "SC-ENV-006",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-AS-01",
+      "relationship": "satisfies",
+      "rationale": "'Activity support in common areas' directly verifies the CPTED requirement 'Common areas support legitimate use'."
+    },
+    {
+      "sharedControlId": "SC-ENV-006",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-2G-03",
+      "relationship": "supports",
+      "rationale": "'Activity support in common areas' provides partial evidence toward the CPTED requirement 'Community culture'."
+    },
+    {
+      "sharedControlId": "SC-ENV-007",
+      "frameworkId": "cpted",
+      "requirementCode": "SA-CPTED-NS-04",
+      "relationship": "satisfies",
+      "rationale": "'Concealment and entrapment areas' directly verifies the CPTED requirement 'No concealment or entrapment spots'."
+    },
+    {
+      "sharedControlId": "SC-ENV-007",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-VSS-01",
+      "relationship": "supports",
+      "rationale": "'Concealment and entrapment areas' provides partial evidence toward the Physical Security requirement 'Coverage of entries and critical areas'."
+    },
+    {
+      "sharedControlId": "SC-ENV-007",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Findings on 'Concealment and entrapment areas' feed the CARVER Accessibility score of the targets they protect."
+    },
+    {
+      "sharedControlId": "SC-GOV-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.PO-01",
+      "relationship": "satisfies",
+      "rationale": "An approved, communicated policy establishes policy for managing cybersecurity risks."
+    },
+    {
+      "sharedControlId": "SC-GOV-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.PO-02",
+      "relationship": "satisfies",
+      "rationale": "Scheduled review keeps the policy current."
+    },
+    {
+      "sharedControlId": "SC-GOV-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RR-01",
+      "relationship": "satisfies",
+      "rationale": "Names the leadership accountable for cybersecurity risk."
+    },
+    {
+      "sharedControlId": "SC-GOV-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RR-02",
+      "relationship": "satisfies",
+      "rationale": "Documents roles and responsibilities."
+    },
+    {
+      "sharedControlId": "SC-GOV-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RM-02",
+      "relationship": "satisfies",
+      "rationale": "Documents risk appetite and tolerance."
+    },
+    {
+      "sharedControlId": "SC-GOV-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RM-06",
+      "relationship": "satisfies",
+      "rationale": "A defined scoring method standardizes risk calculation."
+    },
+    {
+      "sharedControlId": "SC-GOV-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RM-03",
+      "relationship": "supports",
+      "rationale": "A register links cyber risk to enterprise risk processes."
+    },
+    {
+      "sharedControlId": "SC-GOV-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-04",
+      "relationship": "satisfies",
+      "rationale": "Suppliers known and prioritized by criticality."
+    },
+    {
+      "sharedControlId": "SC-GOV-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-05",
+      "relationship": "satisfies",
+      "rationale": "Security requirements in supplier contracts."
+    },
+    {
+      "sharedControlId": "SC-GOV-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-07",
+      "relationship": "supports",
+      "rationale": "Contract requirements support monitoring supplier risk."
+    },
+    {
+      "sharedControlId": "SC-GOV-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.OC-03",
+      "relationship": "satisfies",
+      "rationale": "Records and manages legal, regulatory, and contractual requirements."
+    },
+    {
+      "sharedControlId": "SC-GOV-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.OV-01",
+      "relationship": "satisfies",
+      "rationale": "Leadership review of outcomes informs strategy."
+    },
+    {
+      "sharedControlId": "SC-GOV-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.OV-03",
+      "relationship": "supports",
+      "rationale": "Performance review identifies adjustments."
+    },
+    {
+      "sharedControlId": "SC-GOV-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.IM-01",
+      "relationship": "supports",
+      "rationale": "Evaluations identify improvements."
+    },
+    {
+      "sharedControlId": "SC-IDN-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-01",
+      "relationship": "satisfies",
+      "rationale": "Maintains the hardware inventory."
+    },
+    {
+      "sharedControlId": "SC-IDN-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-05",
+      "relationship": "supports",
+      "rationale": "Criticality field supports asset prioritization."
+    },
+    {
+      "sharedControlId": "SC-IDN-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-C",
+      "relationship": "informs",
+      "rationale": "Asset criticality ratings feed the Criticality score of a target."
+    },
+    {
+      "sharedControlId": "SC-IDN-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-02",
+      "relationship": "satisfies",
+      "rationale": "Maintains the software, services, and systems inventory."
+    },
+    {
+      "sharedControlId": "SC-IDN-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-04",
+      "relationship": "satisfies",
+      "rationale": "Includes services provided by suppliers."
+    },
+    {
+      "sharedControlId": "SC-IDN-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-03",
+      "relationship": "satisfies",
+      "rationale": "Maintains representations of authorized network communication and data flows."
+    },
+    {
+      "sharedControlId": "SC-IDN-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-07",
+      "relationship": "satisfies",
+      "rationale": "Maintains the data inventory."
+    },
+    {
+      "sharedControlId": "SC-IDN-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-05",
+      "relationship": "satisfies",
+      "rationale": "Prioritizes assets by classification and criticality."
+    },
+    {
+      "sharedControlId": "SC-IDN-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-C",
+      "relationship": "informs",
+      "rationale": "Data criticality informs target Criticality."
+    },
+    {
+      "sharedControlId": "SC-IDN-004",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-E",
+      "relationship": "informs",
+      "rationale": "Data sensitivity shapes the wider Effect of compromise."
+    },
+    {
+      "sharedControlId": "SC-IDN-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-01",
+      "relationship": "satisfies",
+      "rationale": "Identifies, validates, and records vulnerabilities."
+    },
+    {
+      "sharedControlId": "SC-IDN-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-02",
+      "relationship": "supports",
+      "rationale": "Remediation maintains software commensurate with risk."
+    },
+    {
+      "sharedControlId": "SC-IDN-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-V",
+      "relationship": "informs",
+      "rationale": "Open critical vulnerabilities raise the cyber Vulnerability of a target system."
+    },
+    {
+      "sharedControlId": "SC-IDN-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-03",
+      "relationship": "satisfies",
+      "rationale": "Identifies and records threats."
+    },
+    {
+      "sharedControlId": "SC-IDN-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-04",
+      "relationship": "satisfies",
+      "rationale": "Records impacts and likelihoods."
+    },
+    {
+      "sharedControlId": "SC-IDN-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-05",
+      "relationship": "supports",
+      "rationale": "Assessment informs response prioritization."
+    },
+    {
+      "sharedControlId": "SC-IDN-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-02",
+      "relationship": "supports",
+      "rationale": "Threat intelligence sources are received."
+    },
+    {
+      "sharedControlId": "SC-PRT-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-03",
+      "relationship": "satisfies",
+      "rationale": "Authenticates users with MFA."
+    },
+    {
+      "sharedControlId": "SC-PRT-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "MFA reduces remote accessibility of target systems."
+    },
+    {
+      "sharedControlId": "SC-PRT-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-05",
+      "relationship": "satisfies",
+      "rationale": "Reviews permissions with least privilege."
+    },
+    {
+      "sharedControlId": "SC-PRT-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Manages identities and credentials."
+    },
+    {
+      "sharedControlId": "SC-PRT-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-02",
+      "relationship": "satisfies",
+      "rationale": "Maintains and replaces software commensurate with risk."
+    },
+    {
+      "sharedControlId": "SC-PRT-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-03",
+      "relationship": "supports",
+      "rationale": "Unsupported platforms indicate hardware and platforms past their life."
+    },
+    {
+      "sharedControlId": "SC-PRT-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-01",
+      "relationship": "satisfies",
+      "rationale": "Applies configuration management."
+    },
+    {
+      "sharedControlId": "SC-PRT-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-05",
+      "relationship": "satisfies",
+      "rationale": "Prevents unauthorized software."
+    },
+    {
+      "sharedControlId": "SC-PRT-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-01",
+      "relationship": "satisfies",
+      "rationale": "Protects networks from unauthorized logical access."
+    },
+    {
+      "sharedControlId": "SC-PRT-005",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-A",
+      "relationship": "informs",
+      "rationale": "Segmentation lowers logical accessibility of a target."
+    },
+    {
+      "sharedControlId": "SC-PRT-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AT-01",
+      "relationship": "satisfies",
+      "rationale": "General awareness training."
+    },
+    {
+      "sharedControlId": "SC-PRT-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AT-02",
+      "relationship": "satisfies",
+      "rationale": "Specialized role training."
+    },
+    {
+      "sharedControlId": "SC-PRT-007",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-02",
+      "relationship": "satisfies",
+      "rationale": "Protects technology assets from environmental threats."
+    },
+    {
+      "sharedControlId": "SC-PRT-007",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.IR-03",
+      "relationship": "supports",
+      "rationale": "UPS supports resilience in adverse situations."
+    },
+    {
+      "sharedControlId": "SC-PRT-007",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-05",
+      "relationship": "supports",
+      "rationale": "'Server room environmental protection' provides partial evidence toward the Physical Security requirement 'Restricted areas segregated'."
+    },
+    {
+      "sharedControlId": "SC-PRT-007",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-REC",
+      "relationship": "informs",
+      "rationale": "Environmental protection affects how quickly the room can recover from damage."
+    },
+    {
+      "sharedControlId": "SC-DET-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-04",
+      "relationship": "satisfies",
+      "rationale": "Generates logs and makes them available for monitoring."
+    },
+    {
+      "sharedControlId": "SC-DET-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-09",
+      "relationship": "supports",
+      "rationale": "Logs support monitoring of computing hardware and software."
+    },
+    {
+      "sharedControlId": "SC-DET-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-01",
+      "relationship": "satisfies",
+      "rationale": "Monitors networks for adverse events."
+    },
+    {
+      "sharedControlId": "SC-DET-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-02",
+      "relationship": "satisfies",
+      "rationale": "Analyzes adverse events."
+    },
+    {
+      "sharedControlId": "SC-DET-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-06",
+      "relationship": "supports",
+      "rationale": "Provides adverse event information to authorized staff."
+    },
+    {
+      "sharedControlId": "SC-DET-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-06",
+      "relationship": "supports",
+      "rationale": "Managed provider monitoring covers external service activity where contracted."
+    },
+    {
+      "sharedControlId": "SC-DET-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-09",
+      "relationship": "satisfies",
+      "rationale": "Monitors computing hardware and software."
+    },
+    {
+      "sharedControlId": "SC-DET-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-03",
+      "relationship": "supports",
+      "rationale": "EDR correlates information from many endpoints."
+    },
+    {
+      "sharedControlId": "SC-DET-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.CM-02",
+      "relationship": "satisfies",
+      "rationale": "Monitors the physical environment for adverse events."
+    },
+    {
+      "sharedControlId": "SC-DET-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-03",
+      "relationship": "supports",
+      "rationale": "Correlates physical and cyber sources."
+    },
+    {
+      "sharedControlId": "SC-DET-004",
+      "frameworkId": "physical-general",
+      "requirementCode": "SA-PHY-ACC-04",
+      "relationship": "supports",
+      "rationale": "'Physical and cyber event correlation' provides partial evidence toward the Physical Security requirement 'Door status monitored'."
+    },
+    {
+      "sharedControlId": "SC-DET-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-08",
+      "relationship": "satisfies",
+      "rationale": "Incidents are declared when criteria are met."
+    },
+    {
+      "sharedControlId": "SC-DET-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "DE.AE-04",
+      "relationship": "supports",
+      "rationale": "Severity levels require estimating impact and scope."
+    },
+    {
+      "sharedControlId": "SC-RSP-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.IM-04",
+      "relationship": "satisfies",
+      "rationale": "Establishes and maintains the incident response plan."
+    },
+    {
+      "sharedControlId": "SC-RSP-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-01",
+      "relationship": "supports",
+      "rationale": "Plan coordinates with third parties during execution."
+    },
+    {
+      "sharedControlId": "SC-RSP-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-08",
+      "relationship": "supports",
+      "rationale": "Suppliers included in incident planning."
+    },
+    {
+      "sharedControlId": "SC-RSP-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-02",
+      "relationship": "satisfies",
+      "rationale": "Triages and validates reports."
+    },
+    {
+      "sharedControlId": "SC-RSP-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-03",
+      "relationship": "satisfies",
+      "rationale": "Categorizes and prioritizes."
+    },
+    {
+      "sharedControlId": "SC-RSP-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MA-04",
+      "relationship": "satisfies",
+      "rationale": "Escalates as needed."
+    },
+    {
+      "sharedControlId": "SC-RSP-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.AN-07",
+      "relationship": "satisfies",
+      "rationale": "Preserves incident data integrity and provenance."
+    },
+    {
+      "sharedControlId": "SC-RSP-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.AN-06",
+      "relationship": "satisfies",
+      "rationale": "Records investigation actions."
+    },
+    {
+      "sharedControlId": "SC-RSP-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.AN-03",
+      "relationship": "supports",
+      "rationale": "Root-cause analysis establishes what happened."
+    },
+    {
+      "sharedControlId": "SC-RSP-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.CO-02",
+      "relationship": "satisfies",
+      "rationale": "Notifies stakeholders of incidents."
+    },
+    {
+      "sharedControlId": "SC-RSP-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.CO-03",
+      "relationship": "supports",
+      "rationale": "Shares information with designated stakeholders."
+    },
+    {
+      "sharedControlId": "SC-RSP-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.OC-03",
+      "relationship": "supports",
+      "rationale": "Notification deadlines reflect legal obligations."
+    },
+    {
+      "sharedControlId": "SC-RSP-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MI-01",
+      "relationship": "satisfies",
+      "rationale": "Contains incidents."
+    },
+    {
+      "sharedControlId": "SC-RSP-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RS.MI-02",
+      "relationship": "satisfies",
+      "rationale": "Eradicates incidents."
+    },
+    {
+      "sharedControlId": "SC-RCV-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-11",
+      "relationship": "satisfies",
+      "rationale": "Creates, protects, and tests backups."
+    },
+    {
+      "sharedControlId": "SC-RCV-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-03",
+      "relationship": "supports",
+      "rationale": "Restore testing verifies backup integrity."
+    },
+    {
+      "sharedControlId": "SC-RCV-001",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-REC",
+      "relationship": "informs",
+      "rationale": "Tested backups shorten the time to recover a target system."
+    },
+    {
+      "sharedControlId": "SC-RCV-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-01",
+      "relationship": "satisfies",
+      "rationale": "Executes the recovery portion of the plan."
+    },
+    {
+      "sharedControlId": "SC-RCV-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-02",
+      "relationship": "satisfies",
+      "rationale": "Selects and prioritizes recovery actions."
+    },
+    {
+      "sharedControlId": "SC-RCV-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-04",
+      "relationship": "supports",
+      "rationale": "Critical functions shape operational norms."
+    },
+    {
+      "sharedControlId": "SC-RCV-002",
+      "frameworkId": "carver",
+      "requirementCode": "SA-CARVER-REC",
+      "relationship": "informs",
+      "rationale": "RTOs quantify Recuperability."
+    },
+    {
+      "sharedControlId": "SC-RCV-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-05",
+      "relationship": "satisfies",
+      "rationale": "Verifies restored assets."
+    },
+    {
+      "sharedControlId": "SC-RCV-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.RP-06",
+      "relationship": "satisfies",
+      "rationale": "Declares the end of recovery."
+    },
+    {
+      "sharedControlId": "SC-RCV-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.CO-03",
+      "relationship": "satisfies",
+      "rationale": "Communicates recovery progress."
+    },
+    {
+      "sharedControlId": "SC-RCV-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "RC.CO-04",
+      "relationship": "satisfies",
+      "rationale": "Shares public updates with approved messaging."
+    },
+    {
+      "sharedControlId": "SC-CRY-001",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-INV-01",
+      "relationship": "satisfies",
+      "rationale": "'Cryptographic inventory' directly verifies the PQC Readiness requirement 'Inventory of cryptographic use'."
+    },
+    {
+      "sharedControlId": "SC-CRY-001",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-INV-02",
+      "relationship": "supports",
+      "rationale": "'Cryptographic inventory' provides partial evidence toward the PQC Readiness requirement 'Inventory covers products and embedded systems'."
+    },
+    {
+      "sharedControlId": "SC-CRY-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-02",
+      "relationship": "supports",
+      "rationale": "The crypto inventory extends the software and systems inventory."
+    },
+    {
+      "sharedControlId": "SC-CRY-001",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-08",
+      "relationship": "supports",
+      "rationale": "Tracking crypto use manages systems through their life cycle."
+    },
+    {
+      "sharedControlId": "SC-CRY-002",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-VUL-01",
+      "relationship": "satisfies",
+      "rationale": "'Quantum-vulnerable algorithm identification' directly verifies the PQC Readiness requirement 'Quantum-vulnerable public-key use identified'."
+    },
+    {
+      "sharedControlId": "SC-CRY-002",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-01",
+      "relationship": "supports",
+      "rationale": "Quantum-vulnerable algorithms are recorded vulnerabilities in assets."
+    },
+    {
+      "sharedControlId": "SC-CRY-003",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-DATA-01",
+      "relationship": "satisfies",
+      "rationale": "'Data longevity and harvest-now-decrypt-later exposure' directly verifies the PQC Readiness requirement 'Confidentiality lifetime recorded per data class'."
+    },
+    {
+      "sharedControlId": "SC-CRY-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.AM-07",
+      "relationship": "supports",
+      "rationale": "Adds confidentiality lifetime metadata to the data inventory."
+    },
+    {
+      "sharedControlId": "SC-CRY-003",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-02",
+      "relationship": "supports",
+      "rationale": "Identifies data in transit at future risk."
+    },
+    {
+      "sharedControlId": "SC-CRY-004",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-01",
+      "relationship": "satisfies",
+      "rationale": "Protects data at rest."
+    },
+    {
+      "sharedControlId": "SC-CRY-004",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-VUL-02",
+      "relationship": "supports",
+      "rationale": "'Encryption of data at rest' provides partial evidence toward the PQC Readiness requirement 'Symmetric and hash strength reviewed'."
+    },
+    {
+      "sharedControlId": "SC-CRY-005",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-02",
+      "relationship": "satisfies",
+      "rationale": "Protects data in transit."
+    },
+    {
+      "sharedControlId": "SC-CRY-005",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-AGL-01",
+      "relationship": "supports",
+      "rationale": "'Encryption of data in transit' provides partial evidence toward the PQC Readiness requirement 'Algorithms are configurable'."
+    },
+    {
+      "sharedControlId": "SC-CRY-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.DS-01",
+      "relationship": "supports",
+      "rationale": "Protected keys keep encrypted data at rest protected."
+    },
+    {
+      "sharedControlId": "SC-CRY-006",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.AA-01",
+      "relationship": "supports",
+      "rationale": "Machine certificates are credentials for services and hardware."
+    },
+    {
+      "sharedControlId": "SC-CRY-006",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-INV-01",
+      "relationship": "supports",
+      "rationale": "'Key and certificate management' provides partial evidence toward the PQC Readiness requirement 'Inventory of cryptographic use'."
+    },
+    {
+      "sharedControlId": "SC-CRY-007",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-AGL-01",
+      "relationship": "satisfies",
+      "rationale": "'Crypto agility' directly verifies the PQC Readiness requirement 'Algorithms are configurable'."
+    },
+    {
+      "sharedControlId": "SC-CRY-007",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "PR.PS-01",
+      "relationship": "supports",
+      "rationale": "Algorithm configuration is a configuration management practice."
+    },
+    {
+      "sharedControlId": "SC-CRY-008",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-VND-01",
+      "relationship": "satisfies",
+      "rationale": "'Vendor PQC roadmaps' directly verifies the PQC Readiness requirement 'Vendor PQC roadmaps obtained'."
+    },
+    {
+      "sharedControlId": "SC-CRY-008",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-05",
+      "relationship": "supports",
+      "rationale": "PQC requirements in contracts."
+    },
+    {
+      "sharedControlId": "SC-CRY-008",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.SC-07",
+      "relationship": "supports",
+      "rationale": "Tracks supplier product risk over the relationship."
+    },
+    {
+      "sharedControlId": "SC-CRY-009",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-MIG-01",
+      "relationship": "satisfies",
+      "rationale": "'PQC migration plan' directly verifies the PQC Readiness requirement 'Prioritized migration roadmap'."
+    },
+    {
+      "sharedControlId": "SC-CRY-009",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-MIG-02",
+      "relationship": "satisfies",
+      "rationale": "'PQC migration plan' directly verifies the PQC Readiness requirement 'Key establishment target uses ML-KEM'."
+    },
+    {
+      "sharedControlId": "SC-CRY-009",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-MIG-03",
+      "relationship": "satisfies",
+      "rationale": "'PQC migration plan' directly verifies the PQC Readiness requirement 'Signature target uses ML-DSA or SLH-DSA'."
+    },
+    {
+      "sharedControlId": "SC-CRY-009",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.RA-06",
+      "relationship": "supports",
+      "rationale": "The roadmap plans and tracks the risk response."
+    },
+    {
+      "sharedControlId": "SC-CRY-009",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "GV.RM-04",
+      "relationship": "supports",
+      "rationale": "Sets strategic direction for the quantum risk response."
+    },
+    {
+      "sharedControlId": "SC-CRY-010",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-TST-01",
+      "relationship": "satisfies",
+      "rationale": "'Hybrid deployment and PQC testing' directly verifies the PQC Readiness requirement 'Interoperability and performance tested'."
+    },
+    {
+      "sharedControlId": "SC-CRY-010",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-HYB-01",
+      "relationship": "satisfies",
+      "rationale": "'Hybrid deployment and PQC testing' directly verifies the PQC Readiness requirement 'Hybrid key establishment where used is documented'."
+    },
+    {
+      "sharedControlId": "SC-CRY-010",
+      "frameworkId": "pqc-readiness",
+      "requirementCode": "SA-PQC-TST-02",
+      "relationship": "satisfies",
+      "rationale": "'Hybrid deployment and PQC testing' directly verifies the PQC Readiness requirement 'Validated implementations used'."
+    },
+    {
+      "sharedControlId": "SC-CRY-010",
+      "frameworkId": "nist-csf-2",
+      "requirementCode": "ID.IM-02",
+      "relationship": "supports",
+      "rationale": "Tests identify improvements."
+    }
+  ]
+}

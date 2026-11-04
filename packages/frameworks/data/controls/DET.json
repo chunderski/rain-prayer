@@ -1,0 +1,208 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "DET",
+  "controls": [
+    {
+      "id": "SC-DET-001",
+      "domain": "DET",
+      "title": "Centralized logging",
+      "objective": "Security logs from critical systems are collected centrally and retained for a defined period.",
+      "assetTypes": [
+        "server",
+        "application",
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Log source list and retention settings"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-DET-001-01",
+          "text": "Days of security log retention in the central log platform",
+          "answerType": "number",
+          "unit": "days",
+          "guidance": "Check retention settings and the oldest available event.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-DET-001-02",
+          "text": "Percentage of critical systems sending logs to the central platform",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Compare the log source list with the critical system inventory.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-DET-002",
+      "domain": "DET",
+      "title": "Security alert monitoring",
+      "objective": "Security alerts are monitored around the clock and triaged within defined times.",
+      "assetTypes": [
+        "server",
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "SOC or MDR contract and SLA"
+        },
+        {
+          "type": "log",
+          "description": "Alert triage metrics"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-DET-002-01",
+          "text": "Are security alerts monitored 24 hours a day, by in-house staff or a managed provider?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: business hours only.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-DET-002-02",
+          "text": "Median time from a high-severity alert to analyst triage over the last 30 days",
+          "answerType": "number",
+          "unit": "minutes",
+          "guidance": "Use SOC metrics.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-DET-003",
+      "domain": "DET",
+      "title": "Endpoint detection and response",
+      "objective": "Endpoints and servers run EDR that reports to monitored tooling.",
+      "assetTypes": [
+        "endpoint",
+        "server"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "EDR console coverage report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-DET-003-01",
+          "text": "Percentage of endpoints and servers with an active, reporting EDR agent",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Compare EDR console count with the hardware inventory.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-DET-004",
+      "domain": "DET",
+      "title": "Physical and cyber event correlation",
+      "objective": "Physical security events (access denials, door forced, camera loss) reach the team that analyzes cyber events.",
+      "assetTypes": [
+        "card_reader",
+        "camera",
+        "alarm_panel"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Integration between access control or video and the SIEM"
+        },
+        {
+          "type": "interview",
+          "description": "SOC lead"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-DET-004-01",
+          "text": "Are access control and video system events (door forced, repeated denials, camera offline) forwarded to the SIEM or reviewed by the security operations team?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: reviewed manually but not integrated.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-DET-005",
+      "domain": "DET",
+      "title": "Incident declaration criteria",
+      "objective": "Criteria for declaring an incident are defined and applied.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Incident classification criteria"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-DET-005-01",
+          "text": "Are there written criteria for when an adverse event is declared an incident, including severity levels?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: informal criteria only.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

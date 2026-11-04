@@ -1,0 +1,273 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "IDS",
+  "controls": [
+    {
+      "id": "SC-IDS-001",
+      "domain": "IDS",
+      "title": "Exterior opening detection",
+      "objective": "Every exterior door and accessible ground-floor window is covered by an intrusion sensor.",
+      "assetTypes": [
+        "sensor",
+        "door",
+        "window"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each uncovered opening"
+        },
+        {
+          "type": "document",
+          "description": "Alarm zone list"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-001-01",
+          "text": "Is every exterior door fitted with a contact or covered by a detector that is armed after hours?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Compare the zone list with doors on site. Partial: some doors covered.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-IDS-001-02",
+          "text": "Are accessible ground-floor windows and roof hatches covered by contacts, glass-break, or motion detection?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Accessible means reachable from grade or a climbable feature without a ladder.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "NFPA 731, Installation of Electronic Premises Security Systems",
+          "section": "Intrusion detection",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDS-002",
+      "domain": "IDS",
+      "title": "Interior detection of high-value areas",
+      "objective": "High-value interior areas are covered by interior detection independent of perimeter sensors.",
+      "assetTypes": [
+        "sensor",
+        "server_room"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Zone list showing interior zones"
+        },
+        {
+          "type": "photo",
+          "description": "Photo of detectors and their coverage"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-002-01",
+          "text": "Are server rooms, cash rooms, and other high-value rooms covered by an interior detector on a separate zone?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check detector placement covers the entry path into the room.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "NFPA 731, Installation of Electronic Premises Security Systems",
+          "section": "Intrusion detection",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDS-003",
+      "domain": "IDS",
+      "title": "Alarm monitoring and response",
+      "objective": "Alarms are monitored around the clock by a certified central station or staffed console, with a documented response.",
+      "assetTypes": [
+        "alarm_panel"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Monitoring contract and central station certificate"
+        },
+        {
+          "type": "test",
+          "description": "Timed test signal"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-003-01",
+          "text": "Is the intrusion system monitored 24 hours a day by a central station with a current UL listing or certificate (or regional equivalent), or by an on-site console staffed at all times?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the certificate. Partial: monitored but certificate not available.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDS-003-02",
+          "text": "Measured time from sending a test alarm to operator acknowledgement",
+          "answerType": "number",
+          "unit": "seconds",
+          "guidance": "Coordinate a test with the monitoring center. Record the time to acknowledgement and to callback.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDS-003-03",
+          "text": "Is there a written alarm response procedure naming who responds and within what time?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: response exists but not written.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "UL 2050 and UL 681 (alarm monitoring and installation)",
+          "section": "Monitoring and installation",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDS-004",
+      "domain": "IDS",
+      "title": "Alarm system testing",
+      "objective": "The intrusion system is tested end to end on a defined schedule and faults are corrected.",
+      "assetTypes": [
+        "alarm_panel",
+        "sensor"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Last test and inspection report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-004-01",
+          "text": "Months since the last documented end-to-end test of every sensor",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the date on the last inspection report. Many standards require at least annual testing; record the number.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDS-004-02",
+          "text": "Number of open faults or troubles shown on the panel or monitoring account",
+          "answerType": "number",
+          "unit": "faults",
+          "guidance": "View the panel and monitoring account history.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NFPA 731, Installation of Electronic Premises Security Systems",
+          "section": "Intrusion detection",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDS-005",
+      "domain": "IDS",
+      "title": "Duress and panic alarms",
+      "objective": "Duress or panic alarms are installed where staff face threats and are tested.",
+      "assetTypes": [
+        "sensor",
+        "alarm_panel"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of duress button locations"
+        },
+        {
+          "type": "document",
+          "description": "Last test record"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-005-01",
+          "text": "Are panic or duress buttons installed at reception and cash-handling positions, and tested in the last 12 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: installed but not tested in 12 months.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "NFPA 731, Installation of Electronic Premises Security Systems",
+          "section": "Intrusion detection",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDS-006",
+      "domain": "IDS",
+      "title": "Alarm panel protection and communication",
+      "objective": "The alarm panel is protected against tamper and loss of power or communication, and reports those conditions.",
+      "assetTypes": [
+        "alarm_panel"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of the panel location and enclosure"
+        },
+        {
+          "type": "configuration",
+          "description": "Communicator configuration"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDS-006-01",
+          "text": "Is the control panel inside a protected zone, with an enclosure tamper switch and a standby battery?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: one of the three missing.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-IDS-006-02",
+          "text": "Does the panel report loss of its primary communication path, using a second path (cellular or network) as backup?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the communicator configuration or monitoring account details.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NFPA 731, Installation of Electronic Premises Security Systems",
+          "section": "Intrusion detection",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

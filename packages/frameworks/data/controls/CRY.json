@@ -1,0 +1,515 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "CRY",
+  "controls": [
+    {
+      "id": "SC-CRY-001",
+      "domain": "CRY",
+      "title": "Cryptographic inventory",
+      "objective": "A maintained inventory records algorithms, key sizes, protocols, libraries, certificates, and owners for each system, including vendor products.",
+      "assetTypes": [
+        "cryptographic_asset",
+        "application",
+        "server"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Cryptographic inventory or CBOM export"
+        },
+        {
+          "type": "test",
+          "description": "Sample scan of TLS endpoints and code dependencies"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-001-01",
+          "text": "Which best describes the cryptographic inventory?",
+          "answerType": "scale",
+          "scale": {
+            "min": 0,
+            "max": 3,
+            "anchors": [
+              {
+                "value": 0,
+                "label": "None",
+                "description": "No inventory of cryptographic use."
+              },
+              {
+                "value": 1,
+                "label": "Partial",
+                "description": "Certificates or TLS endpoints listed, but algorithms, libraries, and owners are not recorded."
+              },
+              {
+                "value": 2,
+                "label": "System level",
+                "description": "Every critical system lists its algorithms, key sizes, protocols, libraries, and owner."
+              },
+              {
+                "value": 3,
+                "label": "Complete",
+                "description": "System-level inventory also covers vendor products, embedded and OT devices, and is updated at least every 6 months."
+              }
+            ]
+          },
+          "guidance": "Ask for the inventory and check 3 systems against a scan.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-001-02",
+          "text": "Percentage of critical systems with algorithms and key sizes recorded in the inventory",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Compare the inventory with the critical system list.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography, August 2023",
+          "section": "Roadmap, inventory, vendor engagement",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-002",
+      "domain": "CRY",
+      "title": "Quantum-vulnerable algorithm identification",
+      "objective": "Every use of RSA, elliptic curve, and finite-field Diffie-Hellman for key establishment or signatures is identified and recorded as quantum-vulnerable.",
+      "assetTypes": [
+        "cryptographic_asset"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "List of quantum-vulnerable uses by system"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-002-01",
+          "text": "Has each use of RSA, ECDSA, EdDSA, DH, and ECDH been identified and flagged as quantum-vulnerable, by system?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: identified for TLS only, not for code signing, VPN, SSH, or stored data.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-002-02",
+          "text": "Number of critical systems that rely on quantum-vulnerable public-key algorithms",
+          "answerType": "number",
+          "unit": "systems",
+          "guidance": "Count from the inventory.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards, November 2024",
+          "section": "Transition timeline",
+          "verified": false,
+          "note": "initial public draft; check for final version"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-003",
+      "domain": "CRY",
+      "title": "Data longevity and harvest-now-decrypt-later exposure",
+      "objective": "Each data class has a recorded confidentiality lifetime, and classes exposed to harvest-now-decrypt-later collection are flagged.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Data classification with retention and confidentiality periods"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-003-01",
+          "text": "Does each data class have a recorded number of years it must stay confidential?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: retention periods exist but confidentiality lifetime is not stated.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-003-02",
+          "text": "Number of data classes that must stay confidential for 10 years or more and travel over networks protected only by quantum-vulnerable key exchange",
+          "answerType": "number",
+          "unit": "data classes",
+          "guidance": "Combine the data classification with the inventory of protocols used to transmit each class.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography, August 2023",
+          "section": "Roadmap, inventory, vendor engagement",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-004",
+      "domain": "CRY",
+      "title": "Encryption of data at rest",
+      "objective": "Sensitive data at rest is encrypted with approved algorithms and managed keys.",
+      "assetTypes": [
+        "server",
+        "endpoint",
+        "cryptographic_asset"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Disk, database, and backup encryption settings"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-004-01",
+          "text": "Percentage of endpoints, servers, and backup stores holding sensitive data that use full-disk or storage encryption",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Use management console reports.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-004-02",
+          "text": "Is AES with 256-bit keys used for data that must stay confidential for 10 years or more?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: AES-128 used. AES-256 is CNSA 2.0 practice (unverified for commercial targets).",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-005",
+      "domain": "CRY",
+      "title": "Encryption of data in transit",
+      "objective": "Data in transit uses current protocol versions with strong cipher suites.",
+      "assetTypes": [
+        "application",
+        "network_device",
+        "cryptographic_asset"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "TLS scan of external and internal endpoints"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-005-01",
+          "text": "Number of endpoints that accept TLS 1.0, TLS 1.1, SSL, or cipher suites without forward secrecy",
+          "answerType": "number",
+          "unit": "endpoints",
+          "guidance": "Use a TLS scanner on in-scope endpoints.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-005-02",
+          "text": "Is TLS 1.3 enabled on externally facing services?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "TLS 1.3 is the version where hybrid post-quantum key exchange is being deployed; partial: some services.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-006",
+      "domain": "CRY",
+      "title": "Key and certificate management",
+      "objective": "Keys and certificates have owners, are stored in protected key stores, and are rotated and revoked under a defined process.",
+      "assetTypes": [
+        "cryptographic_asset"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Key management procedure"
+        },
+        {
+          "type": "configuration",
+          "description": "Certificate inventory with expiry dates"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-006-01",
+          "text": "Are private keys for critical services held in an HSM or managed key vault rather than in files on servers?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: some services.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-006-02",
+          "text": "Number of certificates found expired or expiring within 30 days without a renewal ticket",
+          "answerType": "number",
+          "unit": "certificates",
+          "guidance": "Use the certificate inventory or a scan.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-007",
+      "domain": "CRY",
+      "title": "Crypto agility",
+      "objective": "Algorithms and parameters are selected by configuration or central libraries so that they can be changed without code changes in each application.",
+      "assetTypes": [
+        "application",
+        "cryptographic_asset"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "interview",
+          "description": "Architects and developers"
+        },
+        {
+          "type": "document",
+          "description": "Crypto library standards"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-007-01",
+          "text": "How are cryptographic algorithms selected in the organization's critical applications?",
+          "answerType": "scale",
+          "scale": {
+            "min": 0,
+            "max": 3,
+            "anchors": [
+              {
+                "value": 0,
+                "label": "Hard-coded",
+                "description": "Algorithms are hard-coded in each application."
+              },
+              {
+                "value": 1,
+                "label": "Mixed",
+                "description": "Some applications use configuration or a central library; others are hard-coded."
+              },
+              {
+                "value": 2,
+                "label": "Configurable",
+                "description": "All critical applications select algorithms by configuration or a central library."
+              },
+              {
+                "value": 3,
+                "label": "Proven",
+                "description": "Configurable, and an algorithm change has been carried out in at least one application in the last 24 months."
+              }
+            ]
+          },
+          "guidance": "Ask for an example of how a change of algorithm would be made.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards, November 2024",
+          "section": "Transition timeline",
+          "verified": false,
+          "note": "initial public draft; check for final version"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-008",
+      "domain": "CRY",
+      "title": "Vendor PQC roadmaps",
+      "objective": "Critical vendors have provided written plans for supporting ML-KEM, ML-DSA, or SLH-DSA, and these are tracked.",
+      "assetTypes": [
+        "document",
+        "application"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Vendor responses and tracker"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-008-01",
+          "text": "Percentage of critical vendors using public-key cryptography that have provided a written PQC roadmap with dates",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Use the vendor tracker.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-008-02",
+          "text": "Do new contracts for products that use public-key cryptography require support for FIPS 203, 204, or 205 by a stated date?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: requirement in some contracts.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography, August 2023",
+          "section": "Roadmap, inventory, vendor engagement",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-009",
+      "domain": "CRY",
+      "title": "PQC migration plan",
+      "objective": "A risk-prioritized roadmap with owners and dates moves systems to ML-KEM and ML-DSA or SLH-DSA, aligned to the NIST transition timeline.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "PQC migration roadmap"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-009-01",
+          "text": "Is there a PQC migration roadmap with named owners and target dates, prioritized by data longevity and system criticality?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: roadmap without owners or dates.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-009-02",
+          "text": "Do the roadmap's target dates finish moving critical systems off quantum-vulnerable algorithms by 2035, the disallowance date in the IR 8547 draft?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check against the current version of IR 8547 (draft dates: deprecate 2030, disallow 2035; unverified).",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-009-03",
+          "text": "Does the target state name ML-KEM for key establishment and ML-DSA or SLH-DSA for signatures, with parameter sets chosen?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: algorithms named without parameter sets.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards, November 2024",
+          "section": "Transition timeline",
+          "verified": false,
+          "note": "initial public draft; check for final version"
+        },
+        {
+          "source": "NIST FIPS 203 (ML-KEM), August 13, 2024",
+          "section": "Parameter sets",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-CRY-010",
+      "domain": "CRY",
+      "title": "Hybrid deployment and PQC testing",
+      "objective": "Hybrid or post-quantum deployments are documented and tested for interoperability and performance using validated implementations.",
+      "assetTypes": [
+        "cryptographic_asset",
+        "application"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Test reports and hybrid configuration records"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-CRY-010-01",
+          "text": "Has at least one PQC or hybrid (classical plus ML-KEM) configuration been tested for interoperability and performance, with results recorded?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: tested in a lab without recorded results.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-010-02",
+          "text": "Where hybrid key establishment is deployed, is the combination and the plan to retire the classical part documented?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Answer N/A if no hybrid is deployed.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-CRY-010-03",
+          "text": "Are PQC implementations in use drawn from libraries or modules with NIST algorithm validation (CAVP) or FIPS 140-3 validation where required?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for certificate numbers.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST FIPS 203 (ML-KEM), August 13, 2024",
+          "section": "Parameter sets",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        },
+        {
+          "source": "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards, November 2024",
+          "section": "Transition timeline",
+          "verified": false,
+          "note": "initial public draft; check for final version"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

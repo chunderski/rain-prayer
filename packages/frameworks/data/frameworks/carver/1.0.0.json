@@ -1,0 +1,300 @@
+{
+  "version": "1.0.0",
+  "levels": [
+    "criterion"
+  ],
+  "requirements": [
+    {
+      "code": "SA-CARVER-C",
+      "title": "Criticality",
+      "text": "How much the loss or disruption of the target would affect the organization's mission or operations.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Criticality",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "Loss has no significant effect on operations."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Loss causes minor disruption; operations continue with workarounds for days or more."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Loss reduces a key function for several days, or causes about a third of output to be lost."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Loss halts a key function within about a day, or causes most output to be lost."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Loss immediately halts the mission or a life-safety function."
+          }
+        ]
+      }
+    },
+    {
+      "code": "SA-CARVER-A",
+      "title": "Accessibility",
+      "text": "How easily an adversary can reach the target, get to it, act on it, and leave.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Accessibility",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "Not reachable without defeating multiple layers of detection and delay, with response assured before the target is reached."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Reachable only through controlled, monitored layers that delay entry and alarm."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Inside a perimeter, but in an area that is weakly controlled or monitored."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Outside the main security perimeter or reachable through routinely open entrances."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Openly reachable by the public with no barrier, control, or monitoring."
+          }
+        ]
+      }
+    },
+    {
+      "code": "SA-CARVER-REC",
+      "title": "Recuperability",
+      "text": "How long it would take to replace, repair, or bypass the target after it is damaged or lost.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Recuperability",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "Restored the same day, for example from spares or redundancy."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Restored within 1 to 3 days."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Restored within 3 days to 1 week."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Restored within 1 week to 1 month."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Restoration takes more than 1 month, or the target cannot be replaced."
+          }
+        ]
+      }
+    },
+    {
+      "code": "SA-CARVER-V",
+      "title": "Vulnerability",
+      "text": "How easily an adversary who reaches the target could damage, disable, or compromise it with the means likely available to them.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Vulnerability",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "Hardened; damage requires specialized means and extended time, and is very likely to be detected first."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Damage requires specialized tools or knowledge and significant time."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Damage possible with common tools and moderate time."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Damage possible quickly with common tools or simple methods."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Damage or compromise possible almost immediately with no special tools or knowledge."
+          }
+        ]
+      }
+    },
+    {
+      "code": "SA-CARVER-E",
+      "title": "Effect",
+      "text": "The wider impact of an attack on the target: people, community, reputation, economy, and dependent organizations.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Effect",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "No meaningful effect beyond the target itself."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Limited local or internal effect."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Moderate effect on people, customers, or the local community."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Serious effect on people, the community, or dependent organizations."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Severe effect, such as loss of life, regional disruption, or lasting loss of public trust."
+          }
+        ]
+      }
+    },
+    {
+      "code": "SA-CARVER-RCG",
+      "title": "Recognizability",
+      "text": "How easily an adversary can identify the target and its critical parts without inside knowledge.",
+      "level": "criterion",
+      "citation": {
+        "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+        "section": "Recognizability",
+        "verified": false,
+        "note": "anchors are a Sentinel paraphrase adapted for facility assessments from the military CARVER matrix and the FDA CARVER + Shock adaptation; source tables not checked"
+      },
+      "status": "needs_review",
+      "scale": {
+        "min": 1,
+        "max": 10,
+        "anchors": [
+          {
+            "value": 1,
+            "label": "1 to 2",
+            "description": "Cannot be identified without inside knowledge or expert help."
+          },
+          {
+            "value": 3,
+            "label": "3 to 4",
+            "description": "Hard to identify; easily confused with other areas or equipment."
+          },
+          {
+            "value": 5,
+            "label": "5 to 6",
+            "description": "Identifiable with some research or a site visit."
+          },
+          {
+            "value": 7,
+            "label": "7 to 8",
+            "description": "Easily identified from public information or a casual visit."
+          },
+          {
+            "value": 9,
+            "label": "9 to 10",
+            "description": "Identified at once by anyone, for example by signs, directories, or distinctive appearance."
+          }
+        ]
+      }
+    }
+  ],
+  "id": "carver",
+  "name": "CARVER Target Analysis",
+  "shortName": "CARVER",
+  "sourceEdition": "Sentinel model 1.0 adapted from US special operations doctrine and FDA CARVER + Shock",
+  "publisher": "Sentinel Assess (adapted from US Army doctrine and FDA guidance)",
+  "kind": "target_analysis",
+  "category": "physical",
+  "description": "CARVER scores each target (asset, area, or process) on six criteria from 1 (least attractive to an adversary) to 10 (most attractive). Shared controls inform the Accessibility, Vulnerability, and Recognizability scores rather than satisfying them (see decision D-007). The anchors are Sentinel paraphrases adapted for facility security.",
+  "sources": [
+    {
+      "source": "US Army FM 34-36, Special Operations Forces Intelligence and Electronic Warfare Operations (1991), Appendix D, Target Analysis Process",
+      "section": "Appendix D, CARVER matrix",
+      "verified": false,
+      "note": "doctrine superseded; cited for lineage; not checked"
+    },
+    {
+      "source": "US Army ATP 3-05.20, Special Forces Intelligence (current doctrine lineage for CARVER)",
+      "section": "Target analysis (CARVER)",
+      "verified": false,
+      "note": "edition and section to be confirmed"
+    },
+    {
+      "source": "US FDA and USDA, CARVER + Shock Primer, An Overview of the CARVER Plus Shock Method for Food Sector Vulnerability Assessments (2007)",
+      "section": "CARVER criteria and scales",
+      "verified": false,
+      "note": "food-sector adaptation; not checked"
+    }
+  ]
+}

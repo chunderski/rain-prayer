@@ -1,0 +1,255 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "LCK",
+  "controls": [
+    {
+      "id": "SC-LCK-001",
+      "domain": "LCK",
+      "title": "Exterior lock hardware grade",
+      "objective": "Exterior and restricted-area doors use commercial-grade locks in working order.",
+      "assetTypes": [
+        "lock",
+        "door"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each substandard or failed lock"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-001-01",
+          "text": "Are exterior and restricted-area doors fitted with ANSI/BHMA Grade 1 (or equivalent) locksets or exit devices in working order?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check markings on the lock or the hardware schedule. Partial: Grade 2 found on some doors. Photograph residential-grade hardware.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-LCK-001-02",
+          "text": "Number of exterior or restricted-area doors that fail to latch and lock when closed by their own closer",
+          "answerType": "number",
+          "unit": "doors",
+          "guidance": "Let each door close from fully open and check it latches.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ANSI/BHMA A156 series",
+          "section": "Lock grades",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LCK-002",
+      "domain": "LCK",
+      "title": "Key control",
+      "objective": "Keys are registered, issued on authorization, recovered at separation, and master keys use a restricted keyway.",
+      "assetTypes": [
+        "lock"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Key register"
+        },
+        {
+          "type": "interview",
+          "description": "Key control custodian"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-002-01",
+          "text": "Is there a current key register listing each issued key, its holder, and authorization date?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: register exists but not updated in the last 12 months.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-LCK-002-02",
+          "text": "Number of issued master or grand master keys that cannot be accounted for",
+          "answerType": "number",
+          "unit": "keys",
+          "guidance": "Reconcile the register with holders. Any unaccounted master key normally triggers a rekey.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-LCK-002-03",
+          "text": "Do master keys use a restricted or patented keyway that cannot be duplicated without authorization?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check the key marking or the locksmith's documentation.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LCK-003",
+      "domain": "LCK",
+      "title": "Door and frame hardening",
+      "objective": "Exterior door hinges, latches, and frames resist removal, shimming, and prying.",
+      "assetTypes": [
+        "door"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of exposed hinge pins or unprotected latches"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-003-01",
+          "text": "Are out-swinging exterior doors fitted with non-removable hinge pins or security studs?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Inspect from outside. Photograph exposed removable pins.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-LCK-003-02",
+          "text": "Is each exterior latch protected by a latch guard, or is the door-to-frame gap at the latch 1/8 in (3 mm) or less?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Measure the gap at the latch with a feeler gauge or ruler.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+          "section": "Planning and standoff",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LCK-004",
+      "domain": "LCK",
+      "title": "Accessible window security",
+      "objective": "Ground-floor and other accessible windows have working locks and are closed when unattended.",
+      "assetTypes": [
+        "window"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each unlocked or broken window lock"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-004-01",
+          "text": "Are all accessible windows fitted with working locks and found closed and locked when the room is unattended?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Accessible means reachable from grade or a climbable feature. Partial: locks present but some found open.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+          "section": "Planning and standoff",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LCK-005",
+      "domain": "LCK",
+      "title": "Equipment rack and cabinet locks",
+      "objective": "Network racks and cabinets holding live equipment are locked and their keys are controlled.",
+      "assetTypes": [
+        "lock",
+        "network_device",
+        "server_room"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each unlocked rack or cabinet"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-005-01",
+          "text": "Are network racks, patch cabinets, and wall-mounted enclosures with live equipment locked, with keys held by named people?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check every rack and closet visited. Partial: locked but keys left in the lock or unlabeled.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-LCK-006",
+      "domain": "LCK",
+      "title": "Combination and code changes",
+      "objective": "Safe combinations and keypad codes are changed when a person who knows them leaves or a compromise is suspected.",
+      "assetTypes": [
+        "lock"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Combination change log"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-LCK-006-01",
+          "text": "Were safe combinations and keypad codes changed after the most recent departure of a person who knew them?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Compare the change log with recent departures. Partial: changed, but more than 30 days after departure.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-LCK-006-02",
+          "text": "Months since keypad and safe codes were last changed",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the change log.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

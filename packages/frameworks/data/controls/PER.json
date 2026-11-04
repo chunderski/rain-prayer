@@ -1,0 +1,275 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "PER",
+  "controls": [
+    {
+      "id": "SC-PER-001",
+      "domain": "PER",
+      "title": "Perimeter fence height and condition",
+      "objective": "Perimeter fencing meets the site's specified height and has no holes, cuts, or ground gaps that allow passage.",
+      "assetTypes": [
+        "fence"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each breach, gap, or damaged section with a scale reference"
+        },
+        {
+          "type": "observation",
+          "description": "Walk of the full fence line"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-001-01",
+          "text": "Measured fence height at the lowest point along the run, including any top guard",
+          "answerType": "number",
+          "unit": "ft",
+          "guidance": "Measure from finished grade to the top of the fabric or top guard at the lowest section found. Record in feet (1 ft = 0.305 m). Compare against the site specification; DoD sites commonly specify 7 ft fabric plus top guard (UFC 4-022-03, unverified).",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-001-02",
+          "text": "Is the fence fabric free of holes, cuts, or separations larger than 2 in (5 cm) along the full run?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Yes: no openings over 2 in found. Partial: openings found but all on a run under 10 percent of the perimeter. No: any opening a person could pass through. Photograph each opening with a tape measure in frame.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-001-03",
+          "text": "Is the gap between the bottom of the fence and grade 2 in (5 cm) or less along the full run, including at washouts?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check low points, swales, and drainage paths where erosion creates gaps. Photograph and measure the largest gap found.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-022-03, Security Fencing and Gates",
+          "section": "Fencing and gates",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-002",
+      "domain": "PER",
+      "title": "Perimeter clear zone",
+      "objective": "Clear zones on both sides of the perimeter barrier are free of climb aids and concealment.",
+      "assetTypes": [
+        "fence",
+        "landscaping"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each climb aid or obstruction in the clear zone"
+        },
+        {
+          "type": "observation",
+          "description": "Walk both sides of the fence line where accessible"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-002-01",
+          "text": "Narrowest measured width of the outside clear zone free of vegetation taller than 8 in, structures, and stored material",
+          "answerType": "number",
+          "unit": "ft",
+          "guidance": "Measure from the fence line outward at the narrowest point. Record 0 if objects touch the fence. Site specification governs; UFC 4-022-03 discusses clear zones (unverified).",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-002-02",
+          "text": "Are climb aids (trees, poles, stacked material, vehicles, utility boxes) absent within 6 ft (1.8 m) of either side of the fence?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Yes: none within 6 ft. Partial: climb aids present only where the fence also has an intact top guard. No: any climb aid next to fabric without top guard. Photograph each one.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-022-03, Security Fencing and Gates",
+          "section": "Fencing and gates",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-003",
+      "domain": "PER",
+      "title": "Perimeter gate control",
+      "objective": "Perimeter gates are secured or staffed whenever open and resist bypass to the same degree as the adjoining fence.",
+      "assetTypes": [
+        "gate"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each unsecured gate or bypass gap"
+        },
+        {
+          "type": "observation",
+          "description": "Check every vehicle and pedestrian gate"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-003-01",
+          "text": "At the time of inspection, was every perimeter gate either closed and locked, or under direct observation by staff or an operator?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Count gates first. Partial: at most one gate open and unattended for a documented operational reason. Photograph unsecured gates.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-003-02",
+          "text": "Do gates match the fence height with no gap over 2 in (5 cm) at hinges, between leaves, or under the gate?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Inspect hinge side, latch side, and bottom. Photograph and measure gaps.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-022-03, Security Fencing and Gates",
+          "section": "Fencing and gates",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-004",
+      "domain": "PER",
+      "title": "Vehicle approach and standoff",
+      "objective": "Vehicle approaches to occupied buildings and critical assets are interrupted by barriers, and standoff meets the site's design basis.",
+      "assetTypes": [
+        "barrier",
+        "parking"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each unobstructed straight-line vehicle approach"
+        },
+        {
+          "type": "document",
+          "description": "Site plan with standoff distances, if available"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-004-01",
+          "text": "Is every straight-line vehicle approach longer than 100 ft (30 m) toward a building entrance or critical asset interrupted by a barrier (bollards, planters, berm, wall, or curve)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Walk each road and lot aisle that points at the building. Partial: approaches interrupted but barrier spacing over 5 ft (1.5 m) allows a vehicle through. Photograph each open approach.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-004-02",
+          "text": "Shortest measured distance from an uncontrolled vehicle area (street, visitor parking) to the occupied building facade",
+          "answerType": "number",
+          "unit": "ft",
+          "guidance": "Measure or scale from the site plan. Compare to the site's design basis threat; UFC 4-010-01 defines DoD minimum standoff (unverified, cite only if DoD).",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-020-01, DoD Security Engineering Facilities Planning Manual",
+          "section": "Planning and standoff",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-005",
+      "domain": "PER",
+      "title": "Perimeter openings and penetrations",
+      "objective": "Culverts, drainage openings, and utility penetrations through the perimeter cannot be used to bypass it.",
+      "assetTypes": [
+        "fence",
+        "barrier"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each unprotected opening with a scale reference"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-005-01",
+          "text": "Are all perimeter openings larger than 96 sq in (620 sq cm) with any side over 6 in (15 cm) protected by grilles, bars, or equal barriers?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Include culverts, drainage ditches, and utility tunnels. The 96 sq in threshold follows common DoD practice (UFC 4-022-03, unverified). Photograph each opening.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "UFC 4-022-03, Security Fencing and Gates",
+          "section": "Fencing and gates",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-006",
+      "domain": "PER",
+      "title": "Perimeter signage",
+      "objective": "Entry points and the perimeter are posted with signs that state the boundary and access rules without revealing what is protected.",
+      "assetTypes": [
+        "signage",
+        "fence"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each entry point showing signage or its absence"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-PER-006-01",
+          "text": "Is a sign stating restricted access or no trespassing posted at every perimeter gate and entry point?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Yes: every entry point posted. Partial: most posted. No: none or few. Check that signs are legible from 30 ft (9 m) in daylight.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-006-02",
+          "text": "Is perimeter signage free of wording that names critical assets or functions behind it (for example 'chemical storage' or 'data center')?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Signs should state rules, not contents. Hazard signage required by code is exempt; note it instead.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ISO 22341:2021, Guidelines for CPTED",
+          "section": "CPTED strategies",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

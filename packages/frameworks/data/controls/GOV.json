@@ -1,0 +1,244 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "GOV",
+  "controls": [
+    {
+      "id": "SC-GOV-001",
+      "domain": "GOV",
+      "title": "Cybersecurity policy",
+      "objective": "A cybersecurity policy is approved by leadership, communicated to staff, and reviewed at least every 12 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Policy with approval and review dates"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-001-01",
+          "text": "Is there a cybersecurity policy approved by leadership and reviewed in the last 12 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: approved but last reviewed more than 12 months ago.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GOV-001-02",
+          "text": "Is the policy communicated to all staff, with acknowledgement recorded?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for acknowledgement records.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GOV-002",
+      "domain": "GOV",
+      "title": "Roles and accountability",
+      "objective": "A named executive is accountable for cybersecurity risk and roles are documented.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Organization chart and role descriptions"
+        },
+        {
+          "type": "interview",
+          "description": "Accountable executive"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-002-01",
+          "text": "Is a named executive accountable for cybersecurity risk, with documented cybersecurity roles and responsibilities?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: roles documented but no named accountable executive.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GOV-003",
+      "domain": "GOV",
+      "title": "Risk management strategy",
+      "objective": "Risk appetite is documented and risks are recorded in a register using a standard scoring method.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Risk appetite statement and risk register"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-003-01",
+          "text": "Is there a documented risk appetite or tolerance statement approved by leadership?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: draft only.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GOV-003-02",
+          "text": "Is there a risk register that scores cybersecurity risks with a defined method and was updated in the last 6 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: register exists but stale or without a scoring method.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GOV-004",
+      "domain": "GOV",
+      "title": "Supplier security requirements",
+      "objective": "Suppliers are inventoried and ranked by criticality, and contracts with critical suppliers include security requirements.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Supplier list with criticality and sample contracts"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-004-01",
+          "text": "Is there a supplier inventory ranked by criticality?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: list exists without criticality.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GOV-004-02",
+          "text": "Percentage of critical supplier contracts that include security requirements (breach notification, right to assess, data handling)",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Sample critical supplier contracts.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GOV-005",
+      "domain": "GOV",
+      "title": "Legal and regulatory requirements register",
+      "objective": "Cybersecurity and privacy legal, regulatory, and contractual obligations are recorded with owners.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Obligations register"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-005-01",
+          "text": "Is there a register of cybersecurity and privacy obligations (laws, regulations, contracts) with an owner for each?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: list exists without owners or not updated in 12 months.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GOV-006",
+      "domain": "GOV",
+      "title": "Security program oversight",
+      "objective": "Leadership reviews security risk and program performance at least every 6 months and records decisions.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Board or committee minutes"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GOV-006-01",
+          "text": "Months since leadership last reviewed cybersecurity risk and program performance, per minutes",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the date of the last minutes that cover the review.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GOV-006-02",
+          "text": "Do the review minutes record decisions or adjustments to the security strategy?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: review recorded without decisions.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

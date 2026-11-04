@@ -1,0 +1,341 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "ACC",
+  "controls": [
+    {
+      "id": "SC-ACC-001",
+      "domain": "ACC",
+      "title": "Controlled entry points",
+      "objective": "Every exterior door and every door into a restricted area is controlled by an access control device or by staff.",
+      "assetTypes": [
+        "door",
+        "card_reader"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each uncontrolled or propped door"
+        },
+        {
+          "type": "observation",
+          "description": "Try every exterior door from outside"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-001-01",
+          "text": "Is every exterior door controlled by a card reader, keypad, lock, or a staffed post, with none found propped or unlocked without staff present?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Try each door from outside. Partial: one door found unlocked with a documented reason. Photograph propped doors and the object used.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-001-02",
+          "text": "Number of exterior or restricted-area doors found unlocked and unattended during the walk-through",
+          "answerType": "number",
+          "unit": "doors",
+          "guidance": "Count only doors that should be secured at the time of the walk. 0 is the expected result.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-002",
+      "domain": "ACC",
+      "title": "Credential lifecycle",
+      "objective": "Access credentials are issued on documented authorization, reviewed periodically, and revoked promptly at separation.",
+      "assetTypes": [
+        "card_reader"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Sample of separation records and access control system deactivation logs"
+        },
+        {
+          "type": "interview",
+          "description": "Access control administrator"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-002-01",
+          "text": "Longest time from separation to credential deactivation across the last 5 separations sampled",
+          "answerType": "number",
+          "unit": "hours",
+          "guidance": "Compare HR separation time with the access system audit log. Many organizations target same day (24 hours or less); record the measured maximum.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-ACC-002-02",
+          "text": "Was a review of all active credentials against current staff lists completed in the last 6 months, with a dated record?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: review done but more than 6 and less than 12 months ago, or done without a record.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-ACC-002-03",
+          "text": "Number of active credentials that do not match a current employee, contractor, or approved visitor",
+          "answerType": "number",
+          "unit": "credentials",
+          "guidance": "Reconcile an export of active cards against the HR or contractor roster.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-003",
+      "domain": "ACC",
+      "title": "Visitor management",
+      "objective": "Visitors are identified, recorded, visibly badged, and escorted in restricted areas, and badges are recovered.",
+      "assetTypes": [
+        "door"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "observation",
+          "description": "Sign in as a visitor and observe the process"
+        },
+        {
+          "type": "document",
+          "description": "Visitor log for the last 30 days"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-003-01",
+          "text": "Are visitors required to show identification, sign in, and wear a badge visibly different from staff badges?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Test by arriving as a visitor. Partial: sign-in without identification check, or badges indistinct from staff badges.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-003-02",
+          "text": "Are visitors escorted at all times inside restricted areas, per written procedure and as observed?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Observe at least one visitor movement if possible. Partial: procedure exists but escort not observed in practice.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-ACC-003-03",
+          "text": "Are unreturned visitor badges reconciled at least daily, with temporary badges invalidated at sign-out?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check the visitor log against returned badges for one recent day.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-004",
+      "domain": "ACC",
+      "title": "Door forced and held-open alarms",
+      "objective": "Controlled doors report forced-open and held-open conditions to a staffed monitoring point.",
+      "assetTypes": [
+        "door",
+        "card_reader",
+        "alarm_panel"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "Hold a controlled door open and observe the alarm"
+        },
+        {
+          "type": "log",
+          "description": "Access control alarm history"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-004-01",
+          "text": "When a controlled door is forced or held open, does an alarm annunciate at a monitoring point staffed at that time?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Test at least one exterior door with the operator's permission. Partial: alarm generated but only logged, not annunciated to a person.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-004-02",
+          "text": "Measured time from holding a controlled door open until the held-open alarm is raised",
+          "answerType": "number",
+          "unit": "seconds",
+          "guidance": "Use a stopwatch. Many sites set 30 to 60 seconds; record the measured value.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-005",
+      "domain": "ACC",
+      "title": "Restricted area segregation",
+      "objective": "Server rooms, network closets, cash rooms, and other restricted rooms have separate access rights limited to named people.",
+      "assetTypes": [
+        "server_room",
+        "door",
+        "card_reader"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Access group membership for each restricted room"
+        },
+        {
+          "type": "photo",
+          "description": "Photo of restricted room doors and their locking hardware"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-005-01",
+          "text": "Is each server room and network closet locked and on an access group or key list limited to named people?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: room locked but access group includes broad groups such as 'all staff' or facilities contractors without need.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-005-02",
+          "text": "Number of people with access to the main server or equipment room",
+          "answerType": "number",
+          "unit": "people",
+          "guidance": "Count from the access control system or key register. Compare with the list of people whose duties require entry.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-006",
+      "domain": "ACC",
+      "title": "Anti-tailgating at main entry",
+      "objective": "Main controlled entries prevent or detect more than one person entering on one authorization.",
+      "assetTypes": [
+        "door",
+        "card_reader",
+        "barrier"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "observation",
+          "description": "15-minute observation at the main entry at peak time"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-006-01",
+          "text": "At the main controlled entry, is there a measure against tailgating (turnstile, mantrap, staffed post, or anti-passback with tailgate detection)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: signage or policy only, with no physical or technical measure.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-006-02",
+          "text": "Number of tailgating entries observed during a 15-minute observation at the main entry at peak arrival time",
+          "answerType": "number",
+          "unit": "entries",
+          "guidance": "Count people who entered without presenting a credential. Record the time window used.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-ACC-007",
+      "domain": "ACC",
+      "title": "Loading dock and receiving control",
+      "objective": "Loading docks are secured when not in active use and receiving is separated from interior areas by a controlled door.",
+      "assetTypes": [
+        "door",
+        "parking"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of the dock door and the interior door from receiving"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-ACC-007-01",
+          "text": "Are dock doors closed and secured when no delivery is in progress?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Observe for the period on site. Partial: closed but not locked.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-ACC-007-02",
+          "text": "Is the receiving area separated from the rest of the building by a door that is locked or controlled?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Photograph the separating door and its hardware.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

@@ -1,0 +1,265 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "POL",
+  "controls": [
+    {
+      "id": "SC-POL-001",
+      "domain": "POL",
+      "title": "Physical security policy",
+      "objective": "A written physical security policy is approved by management and reviewed at least every 24 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Policy with approval and review dates"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-001-01",
+          "text": "Is there a written physical security policy approved by management and reviewed within the last 24 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: policy exists but approval or review is older than 24 months.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-002",
+      "domain": "POL",
+      "title": "Site security risk assessment",
+      "objective": "A documented security risk assessment for the site was completed within the last 36 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Most recent risk assessment report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-002-01",
+          "text": "Has a documented security risk assessment covering this site been completed in the last 36 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: completed but older than 36 months, or not site specific.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-POL-002-02",
+          "text": "Were the recommendations from that assessment tracked to closure with owners and dates?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the remediation tracker.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-003",
+      "domain": "POL",
+      "title": "Emergency plans and drills",
+      "objective": "Emergency action plans cover evacuation, shelter, and lockdown, and are exercised at least every 12 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Emergency action plan and drill records"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-003-01",
+          "text": "Is there a documented emergency action plan covering evacuation, shelter in place, and lockdown?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: one or more scenarios missing.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-POL-003-02",
+          "text": "Months since the last drill or exercise of the emergency action plan",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the drill record date.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "CISA physical security guidance",
+          "section": "Emergency action planning",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-004",
+      "domain": "POL",
+      "title": "Security awareness training",
+      "objective": "Staff receive security awareness training covering physical threats at least every 12 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Training completion report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-004-01",
+          "text": "Percentage of staff who completed security awareness training covering tailgating, visitor challenge, and reporting in the last 12 months",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Use the learning system report.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-005",
+      "domain": "POL",
+      "title": "Personnel screening",
+      "objective": "Staff and contractors with unescorted access are screened before access, consistent with local law.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Screening policy and a sample of records"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-005-01",
+          "text": "Are background checks completed before unescorted access is granted to staff and contractors, as allowed by local law?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Sample 5 recent hires or contractors. Partial: staff screened but contractors not.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-006",
+      "domain": "POL",
+      "title": "Document and media destruction",
+      "objective": "Sensitive documents and media are destroyed by cross-cut shredding or certified destruction, with records.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of unsecured disposal bins"
+        },
+        {
+          "type": "document",
+          "description": "Destruction certificates"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-006-01",
+          "text": "Are sensitive documents and media placed in locked bins and destroyed by cross-cut shredding or a certified service with destruction certificates?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: shredding without certificates, or open bins. Photograph open bins holding sensitive material.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-POL-007",
+      "domain": "POL",
+      "title": "Critical areas not advertised",
+      "objective": "Signs, directories, and door labels do not identify critical rooms to the public.",
+      "assetTypes": [
+        "signage",
+        "door"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each sign identifying a critical area"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-POL-007-01",
+          "text": "Are public directories, signs, and door labels free of wording that identifies critical rooms (server room, cash room, chemical storage, security office)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Code-required hazard signage is exempt; note it. Photograph each revealing sign.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

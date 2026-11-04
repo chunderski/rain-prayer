@@ -1,0 +1,269 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "GRD",
+  "controls": [
+    {
+      "id": "SC-GRD-001",
+      "domain": "GRD",
+      "title": "Post orders",
+      "objective": "Each security post has current written post orders that the officer on duty has read.",
+      "assetTypes": [
+        "guard_post",
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Post orders at each post"
+        },
+        {
+          "type": "interview",
+          "description": "Officer on duty"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-001-01",
+          "text": "Are written post orders present at each post, dated within the last 12 months, and signed as read by the officer on duty?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check each post. Partial: present but outdated or unsigned. Photograph the cover page.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-GRD-001-02",
+          "text": "When asked, how accurately can the officer on duty describe the response to an alarm at their post?",
+          "answerType": "scale",
+          "scale": {
+            "min": 0,
+            "max": 2,
+            "anchors": [
+              {
+                "value": 0,
+                "label": "None",
+                "description": "Cannot describe a response."
+              },
+              {
+                "value": 1,
+                "label": "Partial",
+                "description": "Describes some steps but misses notification or escalation."
+              },
+              {
+                "value": 2,
+                "label": "Complete",
+                "description": "Describes assessment, notification, and escalation matching the post orders."
+              }
+            ]
+          },
+          "guidance": "Ask one open question and compare the answer to the post orders.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GRD-002",
+      "domain": "GRD",
+      "title": "Patrol verification",
+      "objective": "Patrols are scheduled and completion is verified by an electronic tour system or logged checkpoints.",
+      "assetTypes": [
+        "guard_post"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "log",
+          "description": "Guard tour reports for the last 30 days"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-002-01",
+          "text": "Are patrols verified by an electronic guard tour system or checkpoint log?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: handwritten log only.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GRD-002-02",
+          "text": "Percentage of scheduled checkpoint scans completed over the last 30 days",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Take the guard tour report total completed divided by scheduled.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GRD-003",
+      "domain": "GRD",
+      "title": "Officer licensing and training",
+      "objective": "Every officer on the roster holds required licenses and documented site training.",
+      "assetTypes": [
+        "guard_post"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Roster with license numbers and training records"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-003-01",
+          "text": "Number of officers on the current roster without a current license (where required) or a documented site orientation",
+          "answerType": "number",
+          "unit": "officers",
+          "guidance": "Sample the roster against license records and training sign-offs.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GRD-004",
+      "domain": "GRD",
+      "title": "Officer communications",
+      "objective": "Each officer on duty can reach the supervisor and the monitoring point at all times.",
+      "assetTypes": [
+        "guard_post"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "Test call or radio check"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-004-01",
+          "text": "Does each officer on duty carry a radio or phone that was tested at the start of the shift and reaches the supervisor and monitoring point?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask to see the shift check. Partial: device carried but no test record.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GRD-004-02",
+          "text": "Measured time for the supervisor or monitoring point to answer a test call from the post",
+          "answerType": "number",
+          "unit": "seconds",
+          "guidance": "Place a test call with permission.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GRD-005",
+      "domain": "GRD",
+      "title": "Post staffing",
+      "objective": "Required posts are staffed for their scheduled hours.",
+      "assetTypes": [
+        "guard_post"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "log",
+          "description": "Shift schedules and time records for the last 30 days"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-005-01",
+          "text": "Hours in the last 30 days in which a required post was unstaffed",
+          "answerType": "number",
+          "unit": "hours",
+          "guidance": "Compare scheduled coverage with time records.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-GRD-006",
+      "domain": "GRD",
+      "title": "Incident logging and review",
+      "objective": "Security incidents are logged with time, location, description, and action, and reviewed by a supervisor.",
+      "assetTypes": [
+        "guard_post",
+        "document"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "log",
+          "description": "Incident log for the last 30 days"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-GRD-006-01",
+          "text": "Are incidents recorded with time, location, description, and action taken, and reviewed by a supervisor within 24 hours?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Sample 5 entries. Partial: entries complete but not reviewed.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GRD-006-02",
+          "text": "Are physical incidents that could affect information systems (for example a forced server room door) reported to IT security?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the procedure or a recent example.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "ASIS PAP.1-2012, Physical Asset Protection",
+          "section": "Physical protection measures",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

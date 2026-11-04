@@ -1,0 +1,328 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "VSS",
+  "controls": [
+    {
+      "id": "SC-VSS-001",
+      "domain": "VSS",
+      "title": "Entrance identification coverage",
+      "objective": "Every exterior entrance has a camera view that can identify a person entering.",
+      "assetTypes": [
+        "camera",
+        "door"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Screenshot or photo of each entrance view"
+        },
+        {
+          "type": "test",
+          "description": "Pixel density test with a person or target at the door"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-001-01",
+          "text": "Does every exterior entrance have a camera view that captures the full face of a person passing through?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Review live views with the operator. Partial: view exists but at an angle that shows the top of the head only.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-VSS-001-02",
+          "text": "Pixel density on target at the entrance threshold, measured or calculated",
+          "answerType": "number",
+          "unit": "px/m",
+          "guidance": "Use a test target or calculate from resolution, lens, and distance. IEC 62676-4 DORI guidance: about 250 px/m to identify, 125 to recognize (unverified).",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-002",
+      "domain": "VSS",
+      "title": "Perimeter and parking camera coverage",
+      "objective": "Camera fields of view cover the perimeter line and parking areas with no unplanned blind spots.",
+      "assetTypes": [
+        "camera",
+        "fence",
+        "parking"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo of each blind spot from ground level"
+        },
+        {
+          "type": "document",
+          "description": "Camera layout drawing if available"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-002-01",
+          "text": "Do camera views cover the full perimeter line and all parking areas, with adjacent views overlapping and no blind spots?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Compare the camera layout with a walk of the perimeter. Photograph each blind spot.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-VSS-002-02",
+          "text": "Pixel density at the far edge of the perimeter detection zone",
+          "answerType": "number",
+          "unit": "px/m",
+          "guidance": "IEC 62676-4 DORI: about 25 px/m to detect, 62 to observe (unverified). Record the lowest value across perimeter cameras.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-003",
+      "domain": "VSS",
+      "title": "Video recording and retention",
+      "objective": "Video from every camera is recorded and kept for at least the period set by policy or regulation.",
+      "assetTypes": [
+        "camera"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Recorder retention settings"
+        },
+        {
+          "type": "test",
+          "description": "Retrieve the oldest available footage"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-003-01",
+          "text": "Days of recorded video available, measured by retrieving the oldest footage on the recorder",
+          "answerType": "number",
+          "unit": "days",
+          "guidance": "Retrieve footage, do not rely on settings alone. Compare with policy; 30 days is a common target.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-VSS-003-02",
+          "text": "Is every camera recording (continuously, or on motion with a pre-event buffer of at least 5 seconds)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check the recorder's camera list for recording status. Partial: some cameras not recording.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-004",
+      "domain": "VSS",
+      "title": "Camera health and tamper",
+      "objective": "All cameras are online, focused, unobstructed, and monitored for failure.",
+      "assetTypes": [
+        "camera"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Photo or screenshot of each failed or obstructed view"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-004-01",
+          "text": "Number of cameras offline, out of focus, obstructed, or pointed away from their intended view",
+          "answerType": "number",
+          "unit": "cameras",
+          "guidance": "Check every view on the recorder against its intended target.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-VSS-004-02",
+          "text": "Does the video system send an alert to a monitored point when a camera goes offline or is tampered with?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask the operator to show an alert or the configuration.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-005",
+      "domain": "VSS",
+      "title": "Night and glare performance",
+      "objective": "Exterior cameras produce usable images at night without washout from glare or loss in darkness.",
+      "assetTypes": [
+        "camera",
+        "lighting"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "photo",
+          "description": "Night screenshot of each failing view"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-005-01",
+          "text": "At night, does each exterior camera show a person in its target zone at its required DORI level, with no washout from lights in the view?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Review at night or from recorded night footage. Partial: some views fail. Photograph failing views.",
+          "photoOnDeficiency": true
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        },
+        {
+          "source": "ANSI/IES G-1 and ANSI/IES RP-20",
+          "section": "Security and parking lighting",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-006",
+      "domain": "VSS",
+      "title": "Video system cybersecurity",
+      "objective": "Cameras and recorders have no default credentials, run supported firmware, and sit on a segmented network.",
+      "assetTypes": [
+        "camera",
+        "network_device",
+        "server"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Account list and network diagram for the video system"
+        },
+        {
+          "type": "interview",
+          "description": "Integrator or IT administrator"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-006-01",
+          "text": "Have default passwords been changed on every camera, recorder, and video management account?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the account list and test one device's default login with permission. Partial: changed on recorder but not on cameras.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-VSS-006-02",
+          "text": "Is the video system on a network segment separated from the general business network by a firewall or VLAN with access rules?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Review the network diagram or switch configuration.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-VSS-006-03",
+          "text": "Number of cameras or recorders running firmware with no vendor support or with known critical vulnerabilities",
+          "answerType": "number",
+          "unit": "devices",
+          "guidance": "Compare firmware versions with vendor support status.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "CISA physical security guidance (video surveillance system cybersecurity)",
+          "section": "Video surveillance system cybersecurity",
+          "verified": false,
+          "note": "paraphrase; source not checked from the build container"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-VSS-007",
+      "domain": "VSS",
+      "title": "Video time accuracy and evidence export",
+      "objective": "Recorded video carries accurate time and can be exported with integrity protection for investigations.",
+      "assetTypes": [
+        "camera",
+        "server"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "test",
+          "description": "Compare recorder time with a reference clock; export a test clip"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-VSS-007-01",
+          "text": "Difference between the recorder clock and a reference time source",
+          "answerType": "number",
+          "unit": "seconds",
+          "guidance": "Compare with a phone synced to network time. Record the absolute difference.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-VSS-007-02",
+          "text": "Can an authorized operator export a clip with a hash, watermark, or signed export that shows it was not altered?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask the operator to demonstrate an export.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "IEC 62676-4, Video surveillance systems, Application guidelines",
+          "section": "DORI pixel densities",
+          "verified": false,
+          "note": "paraphrase; paywalled source not checked"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

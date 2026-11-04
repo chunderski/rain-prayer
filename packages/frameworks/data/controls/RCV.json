@@ -1,0 +1,163 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "RCV",
+  "controls": [
+    {
+      "id": "SC-RCV-001",
+      "domain": "RCV",
+      "title": "Protected and tested backups",
+      "objective": "Backups of critical data are protected from tampering (offline or immutable) and restores are tested.",
+      "assetTypes": [
+        "server",
+        "application"
+      ],
+      "defaultSeverity": "critical",
+      "evidence": [
+        {
+          "type": "configuration",
+          "description": "Backup job and immutability settings"
+        },
+        {
+          "type": "document",
+          "description": "Last restore test report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RCV-001-01",
+          "text": "Is at least one copy of critical backups offline or immutable, and separated from production credentials?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: backups exist but all reachable with domain admin credentials.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RCV-001-02",
+          "text": "Months since the last successful test restore of a critical system",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the restore test report.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RCV-002",
+      "domain": "RCV",
+      "title": "Recovery plan and objectives",
+      "objective": "Recovery procedures and recovery time objectives are defined for critical services.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Disaster recovery plan with RTOs"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RCV-002-01",
+          "text": "Are recovery time objectives defined for each critical service and recovery procedures documented?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: RTOs defined without procedures.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RCV-002-02",
+          "text": "Measured recovery time of a critical service in the last recovery test, as a percentage of its RTO",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "100 percent or less means the RTO was met.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RCV-003",
+      "domain": "RCV",
+      "title": "Restoration verification and closure",
+      "objective": "Restored systems are verified before return to service and recovery closure is documented.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Recovery checklist and closure record"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RCV-003-01",
+          "text": "Does the recovery procedure require integrity checks of restored systems and a documented declaration that recovery has ended?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: one of the two.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RCV-004",
+      "domain": "RCV",
+      "title": "Recovery communications",
+      "objective": "Recovery progress is communicated internally and publicly through approved channels.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "low",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Communication templates and approvals"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RCV-004-01",
+          "text": "Are there pre-approved internal and public communication templates and a named spokesperson for recovery updates?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: templates without approval or spokesperson.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

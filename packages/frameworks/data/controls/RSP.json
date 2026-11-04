@@ -1,0 +1,199 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "RSP",
+  "controls": [
+    {
+      "id": "SC-RSP-001",
+      "domain": "RSP",
+      "title": "Incident response plan",
+      "objective": "An incident response plan is documented, assigns roles, includes third parties, and is exercised at least every 12 months.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "IR plan and last exercise report"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RSP-001-01",
+          "text": "Is there an incident response plan with named roles and third-party contacts (insurer, counsel, providers)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: plan exists without third-party contacts.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RSP-001-02",
+          "text": "Months since the last tabletop or live exercise of the incident response plan",
+          "answerType": "number",
+          "unit": "months",
+          "guidance": "Use the exercise report date.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RSP-002",
+      "domain": "RSP",
+      "title": "Incident triage and escalation",
+      "objective": "Incident reports are triaged, categorized, prioritized, and escalated per defined paths.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "log",
+          "description": "Sample incident tickets"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RSP-002-01",
+          "text": "Do the last 5 incident tickets show triage, category, priority, and escalation recorded?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: some fields missing.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RSP-003",
+      "domain": "RSP",
+      "title": "Forensic evidence preservation",
+      "objective": "Incident data and investigation actions are recorded with integrity and provenance preserved.",
+      "assetTypes": [
+        "document",
+        "server"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Evidence handling procedure"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RSP-003-01",
+          "text": "Is there a procedure for collecting incident evidence (logs, images, video) with chain-of-custody records and hashes?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: procedure without chain of custody.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RSP-003-02",
+          "text": "Did the last significant incident include a documented root-cause analysis?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the post-incident report.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RSP-004",
+      "domain": "RSP",
+      "title": "Incident notification",
+      "objective": "Internal and external stakeholders, including regulators, are notified within required times.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Notification matrix with deadlines"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RSP-004-01",
+          "text": "Is there a notification matrix listing who must be notified (leadership, regulators, customers, law enforcement) and the deadline for each?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: list without deadlines.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-RSP-005",
+      "domain": "RSP",
+      "title": "Containment and eradication",
+      "objective": "Playbooks define containment and eradication steps for the main incident types.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Response playbooks"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-RSP-005-01",
+          "text": "Are there containment and eradication playbooks for ransomware, account compromise, and data exfiltration?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: one or two of the three.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RSP-005-02",
+          "text": "Can the response team isolate an endpoint or disable an account within 15 minutes, shown by test or a past ticket?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for a demonstration or ticket timestamps.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

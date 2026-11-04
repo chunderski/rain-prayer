@@ -1,0 +1,356 @@
+{
+  "version": "1.0.0",
+  "levels": [
+    "pillar",
+    "requirement"
+  ],
+  "requirements": [
+    {
+      "code": "SA-PQC-INV",
+      "title": "Cryptographic inventory",
+      "text": "The organization knows where and how public-key cryptography is used across its systems, products, and suppliers.",
+      "level": "pillar",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Prepare a cryptographic inventory",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-INV-01",
+      "title": "Inventory of cryptographic use",
+      "text": "A maintained inventory records, for each system: the algorithms, key sizes or parameter sets, protocols, cryptographic libraries or modules, certificates, and the owning team.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-INV",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Prepare a cryptographic inventory",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-INV-02",
+      "title": "Inventory covers products and embedded systems",
+      "text": "The inventory includes cryptography inside purchased products, cloud services, embedded devices, and operational technology, not only in-house software.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-INV",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Prepare a cryptographic inventory; engage with technology vendors",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-VUL",
+      "title": "Quantum-vulnerable algorithm identification",
+      "text": "Uses of algorithms that a cryptographically relevant quantum computer could break are identified and recorded.",
+      "level": "pillar",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Quantum-vulnerable digital signature and key-establishment algorithms",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-VUL-01",
+      "title": "Quantum-vulnerable public-key use identified",
+      "text": "Every use of RSA, ECDSA, EdDSA, finite-field DH, and ECDH for key establishment or digital signatures is identified, linked to the systems that depend on it, and recorded as quantum-vulnerable.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-VUL",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Quantum-vulnerable algorithms (RSA, ECC, DH families)",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-VUL-02",
+      "title": "Symmetric and hash strength reviewed",
+      "text": "Symmetric ciphers and hash functions are reviewed against the target security category; uses below the organization's chosen strength (for example AES-128 where AES-256 is required by policy) are recorded.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-VUL",
+      "citation": {
+        "source": "NSA, Commercial National Security Algorithm Suite 2.0 (CNSA 2.0) advisory, September 2022",
+        "section": "Symmetric and hash algorithm requirements",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; CNSA 2.0 specifies AES-256 and SHA-384 or SHA-512 for National Security Systems; commercial targets may differ"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-DATA",
+      "title": "Data longevity and harvest-now-decrypt-later exposure",
+      "text": "Data that must stay confidential beyond the expected arrival of quantum attacks is identified and prioritized.",
+      "level": "pillar",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Harvest-now-decrypt-later threat and long-lived data",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-DATA-01",
+      "title": "Confidentiality lifetime recorded per data class",
+      "text": "Each data class has a recorded confidentiality lifetime (years the data must stay secret), and data classes whose lifetime extends past the organization's quantum-risk horizon are flagged as exposed to harvest-now-decrypt-later collection.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-DATA",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Harvest-now-decrypt-later threat and long-lived data",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; the comparison of data lifetime plus migration time against a threat horizon is a Sentinel method (commonly attributed to Mosca), not a NIST requirement"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-AGL",
+      "title": "Crypto agility",
+      "text": "Systems can change cryptographic algorithms and parameters without major redesign.",
+      "level": "pillar",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Transition considerations",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-AGL-01",
+      "title": "Algorithms are configurable",
+      "text": "Cryptographic algorithms and parameter sets are selected through configuration or a central library, so a change of algorithm does not require application code changes in each system.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-AGL",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Transition considerations",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-VND",
+      "title": "Vendor and supplier roadmap",
+      "text": "Suppliers' plans for supporting the NIST post-quantum standards are known and tracked.",
+      "level": "pillar",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Engage with technology vendors",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-VND-01",
+      "title": "Vendor PQC roadmaps obtained",
+      "text": "For each critical product or service that uses public-key cryptography, the vendor's planned support for FIPS 203, 204, or 205 and the target date are obtained in writing and tracked.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-VND",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Engage with technology vendors",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-MIG",
+      "title": "Migration plan",
+      "text": "A risk-prioritized plan moves systems from quantum-vulnerable algorithms to NIST post-quantum standards.",
+      "level": "pillar",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Establish a quantum-readiness roadmap",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-MIG-01",
+      "title": "Prioritized migration roadmap",
+      "text": "A documented roadmap with named owners and target dates prioritizes systems by data longevity, exposure, and criticality, and its dates are checked against the IR 8547 transition timeline (and CNSA 2.0 where National Security Systems are in scope).",
+      "level": "requirement",
+      "parentCode": "SA-PQC-MIG",
+      "citation": {
+        "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+        "section": "Establish a quantum-readiness roadmap",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-MIG-02",
+      "title": "Key establishment target uses ML-KEM",
+      "text": "The target state for key establishment uses ML-KEM with a parameter set (ML-KEM-512, ML-KEM-768, or ML-KEM-1024) chosen for the required security category.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-MIG",
+      "citation": {
+        "source": "NIST FIPS 203, Module-Lattice-Based Key-Encapsulation Mechanism Standard (ML-KEM), August 13, 2024",
+        "url": "https://doi.org/10.6028/NIST.FIPS.203",
+        "section": "ML-KEM parameter sets",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; section number to be confirmed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-MIG-03",
+      "title": "Signature target uses ML-DSA or SLH-DSA",
+      "text": "The target state for digital signatures uses ML-DSA (ML-DSA-44, ML-DSA-65, or ML-DSA-87) or SLH-DSA, with the choice and parameter set recorded per use case (for example SLH-DSA for long-lived firmware signing roots).",
+      "level": "requirement",
+      "parentCode": "SA-PQC-MIG",
+      "citation": {
+        "source": "NIST FIPS 204, Module-Lattice-Based Digital Signature Standard (ML-DSA), August 13, 2024",
+        "url": "https://doi.org/10.6028/NIST.FIPS.204",
+        "section": "ML-DSA parameter sets; see also FIPS 205 SLH-DSA parameter sets",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; section numbers to be confirmed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-HYB",
+      "title": "Hybrid deployment",
+      "text": "Where interoperability or assurance requires it, post-quantum and classical algorithms are combined during the transition.",
+      "level": "pillar",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Hybrid solutions",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-HYB-01",
+      "title": "Hybrid key establishment where used is documented",
+      "text": "Where hybrid key establishment (a classical algorithm combined with ML-KEM) is deployed, the combination, the protocol, and the plan to retire the classical component are documented.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-HYB",
+      "citation": {
+        "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+        "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+        "section": "Hybrid solutions",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-TST",
+      "title": "Testing and validation",
+      "text": "Post-quantum implementations are tested for interoperability and performance and come from validated modules.",
+      "level": "pillar",
+      "citation": {
+        "source": "NIST FIPS 203, Module-Lattice-Based Key-Encapsulation Mechanism Standard (ML-KEM), August 13, 2024",
+        "url": "https://doi.org/10.6028/NIST.FIPS.203",
+        "section": "Implementation and conformance",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-TST-01",
+      "title": "Interoperability and performance tested",
+      "text": "Before production, post-quantum implementations are tested for interoperability with peers and for the effect of larger keys, ciphertexts, and signatures on handshakes, storage, and constrained devices; results are recorded.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-TST",
+      "citation": {
+        "source": "NIST FIPS 204, Module-Lattice-Based Digital Signature Standard (ML-DSA), August 13, 2024",
+        "url": "https://doi.org/10.6028/NIST.FIPS.204",
+        "section": "Key and signature sizes by parameter set",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; Sentinel testing requirement; size figures are in the parameter set tables of FIPS 203, 204, and 205"
+      },
+      "status": "needs_review"
+    },
+    {
+      "code": "SA-PQC-TST-02",
+      "title": "Validated implementations used",
+      "text": "Production implementations of ML-KEM, ML-DSA, and SLH-DSA are validated under the NIST Cryptographic Algorithm Validation Program and come from FIPS 140-3 validated modules where the organization requires validated cryptography.",
+      "level": "requirement",
+      "parentCode": "SA-PQC-TST",
+      "citation": {
+        "source": "NIST FIPS 205, Stateless Hash-Based Digital Signature Standard (SLH-DSA), August 13, 2024",
+        "url": "https://doi.org/10.6028/NIST.FIPS.205",
+        "section": "Conformance and validation",
+        "verified": false,
+        "note": "Sentinel requirement derived from the cited source; not text from it; CAVP and CMVP program references to be confirmed"
+      },
+      "status": "needs_review"
+    }
+  ],
+  "id": "pqc-readiness",
+  "name": "Post-Quantum Cryptography Readiness",
+  "shortName": "PQC Readiness",
+  "sourceEdition": "Sentinel model 1.0 based on FIPS 203, 204, 205 (August 13, 2024) and NIST IR 8547 ipd (November 2024)",
+  "publisher": "Sentinel Assess (derived from NIST, CISA, and NSA publications)",
+  "kind": "readiness_model",
+  "category": "cyber",
+  "description": "A readiness model for migrating from quantum-vulnerable public-key cryptography (RSA, elliptic curve, finite-field Diffie-Hellman) to the NIST post-quantum standards ML-KEM (FIPS 203), ML-DSA (FIPS 204), and SLH-DSA (FIPS 205). The requirements are Sentinel requirements derived from the standards and government guidance; they are not quoted from them.",
+  "sources": [
+    {
+      "source": "NIST FIPS 203, Module-Lattice-Based Key-Encapsulation Mechanism Standard (ML-KEM), August 13, 2024",
+      "url": "https://doi.org/10.6028/NIST.FIPS.203",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it"
+    },
+    {
+      "source": "NIST FIPS 204, Module-Lattice-Based Digital Signature Standard (ML-DSA), August 13, 2024",
+      "url": "https://doi.org/10.6028/NIST.FIPS.204",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it"
+    },
+    {
+      "source": "NIST FIPS 205, Stateless Hash-Based Digital Signature Standard (SLH-DSA), August 13, 2024",
+      "url": "https://doi.org/10.6028/NIST.FIPS.205",
+      "section": "Whole standard",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it"
+    },
+    {
+      "source": "NIST IR 8547 (Initial Public Draft), Transition to Post-Quantum Cryptography Standards, November 2024",
+      "url": "https://doi.org/10.6028/NIST.IR.8547.ipd",
+      "section": "Whole document",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it; IR 8547 was an initial public draft in Nov 2024; check whether a final version exists and whether the 2030 deprecation and 2035 disallowance dates changed"
+    },
+    {
+      "source": "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography (fact sheet), August 2023",
+      "section": "Whole document",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it"
+    },
+    {
+      "source": "NSA, Commercial National Security Algorithm Suite 2.0 (CNSA 2.0) advisory, September 2022",
+      "section": "Algorithm list and transition timeline",
+      "verified": false,
+      "note": "Sentinel requirement derived from the cited source; not text from it; applies to US National Security Systems; used here as a reference timeline only"
+    }
+  ]
+}

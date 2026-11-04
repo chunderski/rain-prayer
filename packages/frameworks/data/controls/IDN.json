@@ -1,0 +1,263 @@
+{
+  "libraryVersion": "1.0.0",
+  "domain": "IDN",
+  "controls": [
+    {
+      "id": "SC-IDN-001",
+      "domain": "IDN",
+      "title": "Hardware inventory",
+      "objective": "An inventory of hardware assets is maintained and matches what is found on the network.",
+      "assetTypes": [
+        "endpoint",
+        "server",
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Hardware inventory export"
+        },
+        {
+          "type": "test",
+          "description": "Comparison against a network discovery scan"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-001-01",
+          "text": "Percentage of devices found by a network discovery scan that are present in the hardware inventory",
+          "answerType": "number",
+          "unit": "percent",
+          "guidance": "Run or obtain a recent discovery scan and reconcile with the inventory.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDN-001-02",
+          "text": "Does the inventory record owner, location, and criticality for each device?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: some fields missing for more than 10 percent of devices.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDN-002",
+      "domain": "IDN",
+      "title": "Software and service inventory",
+      "objective": "An inventory of software, systems, and supplier services is maintained.",
+      "assetTypes": [
+        "application"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Software and SaaS inventory"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-002-01",
+          "text": "Is there an inventory of software, systems, and cloud or supplier services, updated in the last 6 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: inventory incomplete or stale.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDN-002-02",
+          "text": "Number of software titles found on a sample of 10 endpoints that are not in the inventory",
+          "answerType": "number",
+          "unit": "titles",
+          "guidance": "Compare installed software on sampled endpoints with the inventory.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDN-003",
+      "domain": "IDN",
+      "title": "Network and data flow documentation",
+      "objective": "Current diagrams show authorized network connections and data flows, including external connections.",
+      "assetTypes": [
+        "network_device",
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Network and data flow diagrams"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-003-01",
+          "text": "Are network and data flow diagrams current (updated in the last 12 months) and do they show every external connection?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: diagrams exist but outdated or missing external links.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDN-004",
+      "domain": "IDN",
+      "title": "Data inventory and classification",
+      "objective": "Designated data types are inventoried, classified, and prioritized by impact.",
+      "assetTypes": [
+        "document",
+        "application"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Data inventory and classification scheme"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-004-01",
+          "text": "Is there an inventory of designated data types (for example personal, financial, operational) with a classification and owner for each?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: classification scheme exists but not applied to an inventory.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDN-004-02",
+          "text": "Are systems prioritized by the classification of data they hold and their impact on the mission?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for the criticality ranking.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDN-005",
+      "domain": "IDN",
+      "title": "Vulnerability management",
+      "objective": "Assets are scanned for vulnerabilities on a schedule and critical findings are remediated within a defined time.",
+      "assetTypes": [
+        "server",
+        "endpoint",
+        "network_device"
+      ],
+      "defaultSeverity": "high",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Latest scan report"
+        },
+        {
+          "type": "log",
+          "description": "Remediation tickets"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-005-01",
+          "text": "Days since the last authenticated vulnerability scan of internal systems",
+          "answerType": "number",
+          "unit": "days",
+          "guidance": "Use the scan report date.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDN-005-02",
+          "text": "Number of critical-severity vulnerabilities open longer than 30 days",
+          "answerType": "number",
+          "unit": "vulnerabilities",
+          "guidance": "Count from the latest scan or tracker.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-IDN-006",
+      "domain": "IDN",
+      "title": "Cyber risk assessment",
+      "objective": "Threats, likelihoods, and impacts are assessed and used to prioritize risk responses.",
+      "assetTypes": [
+        "document"
+      ],
+      "defaultSeverity": "medium",
+      "evidence": [
+        {
+          "type": "document",
+          "description": "Most recent cyber risk assessment"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q-IDN-006-01",
+          "text": "Has a cybersecurity risk assessment recording threats, likelihood, and impact been completed in the last 12 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Partial: completed more than 12 months ago.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-IDN-006-02",
+          "text": "Does the organization receive threat intelligence from at least one sharing source (for example an ISAC or government advisory feed)?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask which feeds are used and who reads them.",
+          "photoOnDeficiency": false
+        }
+      ],
+      "references": [
+        {
+          "source": "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0",
+          "section": "CSF Core",
+          "verified": false,
+          "note": "wording to be checked against CSWP 29"
+        }
+      ],
+      "status": "needs_review"
+    }
+  ]
+}

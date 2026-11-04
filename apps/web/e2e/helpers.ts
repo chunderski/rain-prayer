@@ -20,7 +20,7 @@ export async function expectNoSeriousA11yViolations(page: Page) {
 }
 
 /** Screenshots are kept for the Pixel 7 project only. */
-export async function screenshotOnPixel(page: Page, testInfo: TestInfo, name: string) {
+export async function screenshotOnPixel(page: Page, testInfo: TestInfo, name: string, fullPage = true) {
   if (testInfo.project.name !== "pixel-7") return;
-  await page.screenshot({ path: path.resolve(testInfo.project.testDir, "..", "screenshots", name), fullPage: true });
+  await page.screenshot({ path: path.resolve(testInfo.project.testDir, "..", "screenshots", name), fullPage });
 }

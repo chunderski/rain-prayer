@@ -54,7 +54,7 @@ export function FrameworkPicker({ frameworks, value, onChange, controlsByFramewo
                 disabled={ids.length === 0}
                 onClick={() => onChange(available.filter((a) => ids.includes(a)))}
                 className={
-                  "flex min-h-14 flex-col items-start justify-center rounded-lg border-2 px-4 py-2 text-left " +
+                  "flex min-h-14 w-full flex-col items-start justify-center rounded-lg border-2 px-4 py-2 text-left sm:w-auto " +
                   (active ? "border-primary bg-primary text-on-primary" : "border-line bg-surface text-ink")
                 }
               >

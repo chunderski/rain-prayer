@@ -102,7 +102,9 @@ test.describe("Phase 1", () => {
     await expect(counts).toContainText("Informs");
     await expect(page.getByRole("heading", { name: "Questions (3)" })).toBeVisible();
     await expectNoSeriousA11yViolations(page);
-    await screenshotOnPixel(page, testInfo, "control-detail.png");
+    // Viewport shot scrolled to the mappings: a full-page capture paints the fixed bottom nav mid-page.
+    await page.getByRole("heading", { name: "Counts toward" }).evaluate((el) => el.scrollIntoView({ block: "start" }));
+    await screenshotOnPixel(page, testInfo, "control-detail.png", false);
   });
 
   test("library filters by framework and flags controls pending review", async ({ page }) => {

@@ -1,0 +1,38 @@
+{
+  "libraryVersion": "0.1.0",
+  "domain": "PER",
+  "controls": [
+    {
+      "id": "SC-PER-001",
+      "domain": "PER",
+      "title": "Perimeter fence",
+      "objective": "A continuous fence encloses the site perimeter.",
+      "assetTypes": ["fence"],
+      "defaultSeverity": "high",
+      "evidence": [{ "type": "photo", "description": "Photo of the fence line" }],
+      "questions": [
+        { "id": "Q-PER-001-01", "text": "Is the perimeter fully fenced?", "answerType": "yes_no_na",
+          "guidance": "Walk the full perimeter and note any gaps.", "photoOnDeficiency": true },
+        { "id": "Q-PER-001-02", "text": "What is the fence height in meters?", "answerType": "number", "unit": "m",
+          "guidance": "Measure at three points and record the lowest." }
+      ],
+      "references": [],
+      "status": "needs_review"
+    },
+    {
+      "id": "SC-PER-002",
+      "domain": "PER",
+      "title": "Crypto inventory (fixture)",
+      "objective": "An inventory of cryptographic assets is maintained.",
+      "assetTypes": ["cryptographic_asset"],
+      "defaultSeverity": "medium",
+      "evidence": [{ "type": "document", "description": "Inventory export" }],
+      "questions": [
+        { "id": "Q-PER-002-01", "text": "Does a current crypto inventory exist?", "answerType": "yes_no_na",
+          "guidance": "Ask for the inventory and check its date." }
+      ],
+      "references": [],
+      "status": "approved"
+    }
+  ]
+}

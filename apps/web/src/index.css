@@ -1,0 +1,114 @@
+@import "tailwindcss";
+
+/*
+ * Field-ready design tokens. Light theme is the default (sunlight); dark follows the OS setting.
+ * Primary text on surface is at least 7:1 in both themes. Tokens are declared on :host too so the
+ * same stylesheet works inside the <sentinel-assess> shadow root.
+ */
+:root,
+:host {
+  --sa-bg: #f3f5f9;
+  --sa-surface: #ffffff;
+  --sa-text: #0b1220; /* 18.9:1 on surface */
+  --sa-muted: #334155; /* 10.4:1 on surface */
+  --sa-border: #475569;
+  --sa-primary: #0b3d91; /* white text on it: 10.2:1 */
+  --sa-on-primary: #ffffff;
+  --sa-primary-soft: #dbe7fb;
+  --sa-focus: #b45309;
+  --sa-danger: #9f1239;
+  --sa-on-danger: #ffffff;
+  --sa-danger-soft: #ffe4e6;
+  --sa-warn: #713f12;
+  --sa-warn-soft: #fef3c7;
+  --sa-ok: #14532d;
+  --sa-ok-soft: #dcfce7;
+  --sa-physical: #7c2d12;
+  --sa-physical-soft: #ffedd5;
+  --sa-cyber: #1e3a8a;
+  --sa-cyber-soft: #dbeafe;
+  --sa-hybrid: #581c87;
+  --sa-hybrid-soft: #f3e8ff;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root,
+  :host {
+    --sa-bg: #05080f;
+    --sa-surface: #0f172a;
+    --sa-text: #f8fafc;
+    --sa-muted: #cbd5e1;
+    --sa-border: #94a3b8;
+    --sa-primary: #93c5fd;
+    --sa-on-primary: #05080f;
+    --sa-primary-soft: #1e3a5f;
+    --sa-focus: #fbbf24;
+    --sa-danger: #fda4af;
+    --sa-on-danger: #05080f;
+    --sa-danger-soft: #4c0519;
+    --sa-warn: #fde68a;
+    --sa-warn-soft: #422006;
+    --sa-ok: #86efac;
+    --sa-ok-soft: #052e16;
+    --sa-physical: #fdba74;
+    --sa-physical-soft: #431407;
+    --sa-cyber: #93c5fd;
+    --sa-cyber-soft: #172554;
+    --sa-hybrid: #d8b4fe;
+    --sa-hybrid-soft: #3b0764;
+    color-scheme: dark;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--sa-bg);
+  --color-surface: var(--sa-surface);
+  --color-ink: var(--sa-text);
+  --color-muted: var(--sa-muted);
+  --color-line: var(--sa-border);
+  --color-primary: var(--sa-primary);
+  --color-on-primary: var(--sa-on-primary);
+  --color-primary-soft: var(--sa-primary-soft);
+  --color-focus: var(--sa-focus);
+  --color-danger: var(--sa-danger);
+  --color-on-danger: var(--sa-on-danger);
+  --color-danger-soft: var(--sa-danger-soft);
+  --color-warn: var(--sa-warn);
+  --color-warn-soft: var(--sa-warn-soft);
+  --color-ok: var(--sa-ok);
+  --color-ok-soft: var(--sa-ok-soft);
+  --color-physical: var(--sa-physical);
+  --color-physical-soft: var(--sa-physical-soft);
+  --color-cyber: var(--sa-cyber);
+  --color-cyber-soft: var(--sa-cyber-soft);
+  --color-hybrid: var(--sa-hybrid);
+  --color-hybrid-soft: var(--sa-hybrid-soft);
+}
+
+@layer base {
+  html,
+  body {
+    background: var(--sa-bg);
+    color: var(--sa-text);
+  }
+  :host {
+    display: block;
+    background: var(--sa-bg);
+    color: var(--sa-text);
+  }
+  /* Visible 3px focus ring on everything focusable. */
+  :focus-visible {
+    outline: 3px solid var(--sa-focus);
+    outline-offset: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

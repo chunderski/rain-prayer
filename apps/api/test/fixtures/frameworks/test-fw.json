@@ -1,0 +1,21 @@
+{
+  "id": "test-fw",
+  "name": "Test Framework (fixture)",
+  "shortName": "TESTFW",
+  "version": "1.0.0",
+  "sourceEdition": "Fixture edition 1",
+  "publisher": "Sentinel test suite",
+  "kind": "control_framework",
+  "category": "hybrid",
+  "description": "Fictional framework used only by the API test suite.",
+  "sources": [{ "source": "Sentinel test fixture", "section": "n/a", "verified": false, "note": "fixture, not real content" }],
+  "levels": ["function", "requirement"],
+  "requirements": [
+    { "code": "TF", "title": "Test function", "text": "Top-level grouping for fixture requirements.", "level": "function",
+      "citation": { "source": "Sentinel test fixture", "section": "TF", "verified": false }, "status": "needs_review" },
+    { "code": "TF-01", "title": "Perimeter is fenced", "text": "The site perimeter is enclosed.", "level": "requirement", "parentCode": "TF",
+      "citation": { "source": "Sentinel test fixture", "section": "TF-01", "verified": false }, "status": "needs_review" },
+    { "code": "TF-02", "title": "Crypto inventory exists", "text": "Cryptographic assets are inventoried.", "level": "requirement", "parentCode": "TF",
+      "citation": { "source": "Sentinel test fixture", "section": "TF-02", "verified": true }, "status": "verified" }
+  ]
+}

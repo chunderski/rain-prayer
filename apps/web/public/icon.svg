@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sentinel Assess">
+  <rect width="512" height="512" fill="#0b3d91"/>
+  <path d="M256 92 L392 140 L392 252 C392 334 334 392 256 424 C178 392 120 334 120 252 L120 140 Z" fill="#ffffff"/>
+  <path d="M196 262 L240 306 L324 208" fill="none" stroke="#0b3d91" stroke-width="34" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sentinel Assess embed demo</title>
+    <style>
+      body { font-family: system-ui, sans-serif; margin: 0; padding: 16px; background: #eef1f6; color: #111; }
+      h1, h2 { margin: 0.5em 0; }
+      .frame { border: 2px solid #475569; border-radius: 12px; overflow: hidden; background: #fff; }
+      iframe { display: block; width: 100%; height: 640px; border: 0; }
+      code { background: #fff; padding: 2px 4px; border-radius: 4px; }
+      section { margin-bottom: 32px; }
+    </style>
+  </head>
+  <body>
+    <h1>Host page: Sentinel Assess embed demo</h1>
+    <p>This page stands in for an integrator portal. It embeds Sentinel Assess two ways.</p>
+
+    <section>
+      <h2>1. iframe</h2>
+      <p>
+        <code>&lt;iframe src="https://app.example/" allow="camera; geolocation" title="Sentinel Assess"&gt;</code>
+        The app runs on its own origin with its own URL routing and service worker.
+      </p>
+      <div class="frame">
+        <iframe src="/" title="Sentinel Assess (iframe)" allow="camera; geolocation"></iframe>
+      </div>
+    </section>
+
+    <section>
+      <h2>2. Web component</h2>
+      <p>
+        <code>&lt;script type="module" src="https://app.example/sentinel-assess.js"&gt;&lt;/script&gt;</code> then
+        <code>&lt;sentinel-assess initial-path="/library"&gt;&lt;/sentinel-assess&gt;</code>.
+        Renders in a shadow root with an in-memory router, so host styles and the host URL are untouched.
+      </p>
+      <div class="frame">
+        <sentinel-assess initial-path="/library"></sentinel-assess>
+      </div>
+    </section>
+
+    <script type="module" src="/src/embed.tsx"></script>
+  </body>
+</html>

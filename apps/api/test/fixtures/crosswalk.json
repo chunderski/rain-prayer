@@ -1,0 +1,7 @@
+{
+  "libraryVersion": "0.1.0",
+  "entries": [
+    { "sharedControlId": "SC-PER-001", "frameworkId": "test-fw", "requirementCode": "TF-01", "relationship": "satisfies", "rationale": "Fence satisfies the fixture requirement." },
+    { "sharedControlId": "SC-PER-002", "frameworkId": "test-fw", "requirementCode": "TF-02", "relationship": "supports", "rationale": "Inventory supports the fixture requirement." }
+  ]
+}

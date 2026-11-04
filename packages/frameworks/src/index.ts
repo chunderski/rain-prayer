@@ -2,7 +2,7 @@
  * Framework library loader. Reads every JSON file under data/, validates it
  * against the @sentinel/shared schemas, and checks referential integrity.
  */
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
@@ -12,6 +12,7 @@ import {
   SharedControlLibrary,
   type CrosswalkEntry,
   type SharedControl,
+  Walkthrough,
 } from "@sentinel/shared";
 
 export const DATA_DIR = join(dirname(fileURLToPath(import.meta.url)), "..", "data");
@@ -21,6 +22,8 @@ export interface Library {
   controls: SharedControl[];
   crosswalk: CrosswalkEntry[];
   libraryVersion: string;
+  /** Undefined until data/walkthrough.json exists. */
+  walkthrough?: Walkthrough;
 }
 
 const readJson = (p: string): unknown => JSON.parse(readFileSync(p, "utf8"));
@@ -39,6 +42,7 @@ export function loadLibrary(dataDir = DATA_DIR): Library {
     controls: controlFiles.flatMap((c) => c.controls),
     crosswalk: cw.entries,
     libraryVersion: cw.libraryVersion,
+    walkthrough: existsSync(join(dataDir, "walkthrough.json")) ? parseOrThrow(Walkthrough, join(dataDir, "walkthrough.json")) : undefined,
   };
   const problems = checkIntegrity(lib);
   if (problems.length) throw new Error(`Framework library integrity errors:\n- ${problems.join("\n- ")}`);

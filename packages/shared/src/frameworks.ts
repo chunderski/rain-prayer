@@ -209,3 +209,20 @@ export const Crosswalk = z.object({
   entries: z.array(CrosswalkEntry).min(1),
 });
 export type Crosswalk = z.infer<typeof Crosswalk>;
+
+/** Walkthrough ordering (packages/frameworks/data/walkthrough.json). */
+export const WalkthroughSection = z.object({
+  id: z.string().regex(/^[a-z][a-z0-9-]{1,40}$/),
+  title: z.string().min(2).max(80),
+  /** Plain-language instruction for the assessor, shown at the top of the section. */
+  description: z.string().min(10).max(500),
+  order: z.number().int().min(0),
+  domains: z.array(ControlDomain).min(1),
+});
+export const Walkthrough = z.object({
+  libraryVersion: z.string().regex(SEMVER),
+  sections: z.array(WalkthroughSection).min(1),
+  /** Asset type to likely shared controls; used to pick candidate controls for the vision model. */
+  assetTypeControls: z.record(AssetType, z.array(SharedControlId)),
+});
+export type Walkthrough = z.infer<typeof Walkthrough>;

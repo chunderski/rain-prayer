@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import type { LoginRequest, SessionInfo } from "@sentinel/shared";
 import { createApiClient, type ApiClient } from "../api/client";
-import { clearDrafts } from "../offline/db";
+import { clearDrafts, clearOutbox } from "../offline/db";
 
 type Status = "loading" | "signed_out" | "signed_in";
 
@@ -56,6 +56,7 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
       async signOut() {
         await api.logout();
         await clearDrafts().catch(() => undefined);
+        await clearOutbox().catch(() => undefined);
         setSession(null);
         setStatus("signed_out");
       },

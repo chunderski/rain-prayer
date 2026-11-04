@@ -11,6 +11,7 @@ import { computeCoverage } from "../components/coverage";
 import { Banner, Button, Card, Chip, EmptyState, Field, Loading, PageHeader, categoryLabel, categoryTone } from "../components/ui";
 import { errorMessage, useAsync } from "../lib/useAsync";
 import { deleteDraft, getDraft, saveDraft } from "../offline/db";
+import { useOnline } from "../offline/useOnline";
 
 const DRAFT_ID = "new-assessment";
 
@@ -51,6 +52,7 @@ export function NewAssessment() {
   const [restored, setRestored] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const online = useOnline();
   const headingRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
 
@@ -254,9 +256,16 @@ export function NewAssessment() {
             Next
           </Button>
         ) : (
-          <Button size="lg" className="flex-1" onClick={() => void create()} disabled={busy}>
-            {busy ? "Creating…" : "Create assessment"}
-          </Button>
+          <div className="flex flex-1 flex-col gap-1">
+            <Button size="lg" className="w-full" onClick={() => void create()} disabled={busy || !online} aria-describedby={online ? undefined : "offline-create-note"}>
+              {busy ? "Creating…" : "Create assessment"}
+            </Button>
+            {!online && (
+              <p id="offline-create-note" className="text-base font-semibold">
+                You are offline. Your choices are saved on this device; create the assessment when you have signal.
+              </p>
+            )}
+          </div>
         )}
       </div>
     </>

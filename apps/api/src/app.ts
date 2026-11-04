@@ -49,6 +49,10 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   });
 
   await app.register(helmet, { crossOriginResourcePolicy: { policy: "same-site" } });
+  // API responses may carry tenant data or tokens: never let browsers or proxies cache them (QA R-4).
+  app.addHook("onSend", async (_req, reply) => {
+    reply.header("Cache-Control", "no-store");
+  });
   await app.register(cors, {
     origin: [cfg.WEB_ORIGIN], // exact match; other origins get no CORS headers
     credentials: true,

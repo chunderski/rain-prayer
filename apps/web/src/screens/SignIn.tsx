@@ -15,6 +15,8 @@ const GOOGLE_ERRORS: Record<string, string> = {
   account_mismatch: "That Google account is linked to a different Sentinel user.",
   google_denied: "Google sign in was cancelled.",
   invalid_state: "The sign in link expired; try again.",
+  tenant_required: "Your Google account belongs to several workspaces; sign in with email and password to choose one.",
+  invalid_request: "The sign in request was not valid; start again.",
   google_failed: "Google sign in failed; try again or use email and password.",
 };
 

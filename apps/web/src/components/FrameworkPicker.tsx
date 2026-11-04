@@ -38,6 +38,25 @@ export function FrameworkPicker({ frameworks, value, onChange, controlsByFramewo
 
   return (
     <div className="flex flex-col gap-5">
+      <div role="status" aria-live="polite" className="rounded-xl border-2 border-primary bg-primary-soft p-4" data-testid="picker-summary">
+        <p className="font-bold">{summary}</p>
+        {value.length > 0 && coverage.complete && (
+          <dl className="mt-2 grid grid-cols-3 gap-2 text-center">
+            <div>
+              <dt className="text-base text-muted">Controls to check</dt>
+              <dd className="text-2xl font-bold">{coverage.controlCount}</dd>
+            </div>
+            <div>
+              <dt className="text-base text-muted">Count toward 2+ frameworks</dt>
+              <dd className="text-2xl font-bold">{coverage.overlapCount}</dd>
+            </div>
+            <div>
+              <dt className="text-base text-muted">Questions on site</dt>
+              <dd className="text-2xl font-bold">{coverage.questionCount}</dd>
+            </div>
+          </dl>
+        )}
+      </div>
       <section aria-labelledby={`${legendId}-presets`} className="flex flex-col gap-2">
         <h2 id={`${legendId}-presets`} className="text-xl font-bold">
           Quick presets
@@ -131,25 +150,6 @@ export function FrameworkPicker({ frameworks, value, onChange, controlsByFramewo
         </ul>
       </fieldset>
 
-      <div role="status" aria-live="polite" className="rounded-xl border-2 border-primary bg-primary-soft p-4" data-testid="picker-summary">
-        <p className="font-bold">{summary}</p>
-        {value.length > 0 && coverage.complete && (
-          <dl className="mt-2 grid grid-cols-3 gap-2 text-center">
-            <div>
-              <dt className="text-base text-muted">Shared controls</dt>
-              <dd className="text-2xl font-bold">{coverage.controlCount}</dd>
-            </div>
-            <div>
-              <dt className="text-base text-muted">Overlapping</dt>
-              <dd className="text-2xl font-bold">{coverage.overlapCount}</dd>
-            </div>
-            <div>
-              <dt className="text-base text-muted">Questions</dt>
-              <dd className="text-2xl font-bold">{coverage.questionCount}</dd>
-            </div>
-          </dl>
-        )}
-      </div>
     </div>
   );
 }

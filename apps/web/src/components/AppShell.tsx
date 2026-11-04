@@ -2,6 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { useOnline } from "../offline/useOnline";
 import { Banner, Button, Logo } from "./ui";
+import { pendingLocalCount } from "../offline/db";
 
 const NAV = [
   { to: "/", label: "Assessments", end: true },
@@ -21,6 +22,19 @@ export function OfflineBanner() {
   );
 }
 
+/** Field review P1-4: warn before sign out deletes unsaved work on this device. */
+async function confirmSignOut(signOut: () => Promise<void>) {
+  const pending = await pendingLocalCount().catch(() => 0);
+  if (
+    pending > 0 &&
+    !window.confirm(
+      `You have ${pending} unsaved ${pending === 1 ? "item" : "items"} on this device. Signing out deletes them. Sign out anyway?`,
+    )
+  )
+    return;
+  await signOut();
+}
+
 export function AppShell() {
   const { session, signOut } = useAuth();
   return (
@@ -37,7 +51,7 @@ export function AppShell() {
               {session && <p className="truncate text-base text-muted">{session.tenant.name}</p>}
             </div>
           </div>
-          <Button variant="secondary" onClick={() => void signOut()}>
+          <Button variant="secondary" onClick={() => void confirmSignOut(signOut)}>
             Sign out
           </Button>
         </div>

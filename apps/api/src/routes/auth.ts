@@ -122,6 +122,7 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
 
     if (user.locked_until && new Date(user.locked_until) > new Date()) {
       await logFailure("locked");
+      await verifyPassword(null, body.password); // equalize timing with the unknown-user path (QA R-2)
       throw new AppError(429, "account_locked", "Too many failed sign-in attempts. Try again later.");
     }
     if (!(await verifyPassword(user.password_hash, body.password))) {

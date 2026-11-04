@@ -1,17 +1,48 @@
-# Rain Prayer
+# Sentinel Assess
 
-A playful little project to ideate and iterate on summoning the rain we desperately need.
+AI-native physical and cyber security assessment platform for systems integrators and security contractors: guided field walkthroughs with photos, a shared control library across CARVER, CPTED, general physical security, NIST CSF 2.0, and PQC readiness, explainable risk scoring, and Google Docs, Sheets, and Drive export.
 
-## The Problem
-We need rain bad. The forecast lied. Time to take matters into our own hands.
+Status: Phase 1 (Foundation). See [PLAN.md](PLAN.md).
 
-## Starting Point
-- Simple Python script that generates a "rain prayer" based on current vibes.
-- Future: Add weather API checks, ritual generators, or just more creative nonsense.
+## Quick start (Docker)
 
-## How to Run
 ```bash
-python rain_prayer.py
+cp .env.example .env          # replace placeholders
+docker compose up --build     # db, minio, api (:3000), web (:5173)
+docker compose exec api npm run db:migrate
+docker compose exec api npm run db:seed
 ```
 
-Let's iterate from here. What's the next step?
+## Quick start (no Docker)
+
+Requires Node 22 and PostgreSQL 16. See [apps/api/README.md](apps/api/README.md) for creating the database roles, then:
+
+```bash
+npm install
+npm run db:migrate && npm run db:seed
+npm run dev:api     # http://localhost:3000
+npm run dev:web     # http://localhost:5173
+```
+
+## Checks
+
+```bash
+npm run typecheck
+npm test
+npm run validate:frameworks
+```
+
+## Repository map
+
+| Path | What |
+|---|---|
+| `apps/api` | Fastify API, migrations, row-level security |
+| `apps/web` | Progressive web app |
+| `packages/shared` | Shared schemas and types |
+| `packages/frameworks` | Versioned framework library and crosswalk |
+| `docs/` | Decisions, user stories, API contract, security |
+| `.claude/agents/` | The agent team definitions |
+
+## Legacy
+
+`rain_prayer.py` is the original contents of this repository and is unrelated to Sentinel Assess (`python rain_prayer.py`).

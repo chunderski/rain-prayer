@@ -74,7 +74,7 @@ export function SignIn() {
         </div>
       </div>
 
-      {urlError && GOOGLE_ERRORS[urlError] && <Banner tone="error">{GOOGLE_ERRORS[urlError]}</Banner>}
+      {urlError && Object.hasOwn(GOOGLE_ERRORS, urlError) && <Banner tone="error">{GOOGLE_ERRORS[urlError]}</Banner>}
       {errors.form && <Banner tone="error">{errors.form}</Banner>}
 
       <form onSubmit={submit} noValidate className="flex flex-col gap-4">

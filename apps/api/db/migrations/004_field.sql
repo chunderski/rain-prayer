@@ -75,6 +75,7 @@ ALTER TABLE area
   ADD COLUMN sort_order integer NOT NULL DEFAULT 0 CHECK (sort_order BETWEEN 0 AND 10000),
   ADD COLUMN version integer NOT NULL DEFAULT 1,
   ADD COLUMN updated_at timestamptz NOT NULL DEFAULT now(),
+  ADD COLUMN created_by uuid,
   ADD COLUMN updated_by uuid,
   ADD COLUMN deleted_at timestamptz,
   ADD COLUMN client_updated_at timestamptz,

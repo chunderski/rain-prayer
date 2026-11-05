@@ -36,6 +36,9 @@ services:
       DATABASE_URL: postgres://sentinel_app:${SENTINEL_APP_PASSWORD}@db:5432/sentinel
       MIGRATION_DATABASE_URL: postgres://sentinel_owner:${SENTINEL_OWNER_PASSWORD}@db:5432/sentinel
       S3_ENDPOINT: http://minio:9000
+      # Signed photo URLs must use an address the browser can reach.
+      S3_PUBLIC_ENDPOINT: http://localhost:9000
+      STORAGE_DRIVER: s3
     depends_on:
       db: { condition: service_healthy }
       minio: { condition: service_started }

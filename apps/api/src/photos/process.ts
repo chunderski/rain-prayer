@@ -9,7 +9,7 @@
  */
 import { createHash } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
-import sharp from "sharp";
+import sharp, { type OutputInfo } from "sharp";
 import { AppError } from "../lib/errors.js";
 
 export const MAX_PHOTO_BYTES = 15 * 1024 * 1024;
@@ -51,7 +51,7 @@ export async function processPhoto(input: Buffer): Promise<ProcessedPhoto> {
     throw unsupported("HEIC photos cannot be decoded by this server; set the camera to Most Compatible (JPEG) or let the app convert the photo before upload");
   }
   let full: Buffer;
-  let info: sharp.OutputInfo;
+  let info: OutputInfo;
   try {
     const r = await sharp(input, { limitInputPixels: MAX_INPUT_PIXELS, failOn: "error", pages: 1 })
       .rotate()

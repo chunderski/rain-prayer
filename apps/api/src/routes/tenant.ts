@@ -5,7 +5,8 @@ import { CreateAssessment, CreateClient, CreateSite, Uuid } from "@sentinel/shar
 import type { Config } from "../config.js";
 import type { Db, Tx } from "../db/pool.js";
 import { audit } from "../lib/audit.js";
-import { authOf, requireRole } from "../lib/auth.js";
+import { guard, type Limiters } from "../lib/access.js";
+import { authOf } from "../lib/auth.js";
 import { AppError, notFound, parse } from "../lib/errors.js";
 import { reqMeta } from "./auth.js";
 import { currentLibraryVersion } from "./library.js";
@@ -15,7 +16,7 @@ const IdParams = z.object({ id: Uuid });
 const CLIENT_COLS = `id, name, industry, notes, created_at AS "createdAt"`;
 const SITE_COLS = `id, client_id AS "clientId", name, address, site_type AS "siteType", created_at AS "createdAt"`;
 
-async function assessmentDetail(tx: Tx, id: string) {
+export async function assessmentDetail(tx: Tx, id: string) {
   const { rows } = await tx.query(
     `SELECT a.id, a.title, a.status, a.site_id AS "siteId", s.name AS "siteName", s.client_id AS "clientId",
             c.name AS "clientName", a.scheduled_for AS "scheduledFor", a.library_version AS "libraryVersion",
@@ -44,8 +45,8 @@ async function assessmentDetail(tx: Tx, id: string) {
   return rows[0] ?? null;
 }
 
-export async function tenantRoutes(app: FastifyInstance, { cfg, db }: { cfg: Config; db: Db }) {
-  const role = (min: "viewer" | "assessor" | "admin" | "owner") => ({ preHandler: requireRole(cfg, db, min) });
+export async function tenantRoutes(app: FastifyInstance, { cfg, db, limiters }: { cfg: Config; db: Db; limiters: Limiters }) {
+  const role = guard(cfg, db, limiters);
 
   // Clients
   app.get("/clients", role("viewer"), async (req) =>
@@ -167,6 +168,8 @@ export async function tenantRoutes(app: FastifyInstance, { cfg, db }: { cfg: Con
          SELECT $1, $2, f, v FROM unnest($3::text[], $4::text[]) AS t(f, v)`,
         [a.tenantId, id, ids, body.frameworks.map((f) => f.version)],
       );
+      // The creator is assigned, so an assessor can capture field data on what they created.
+      await tx.query("INSERT INTO assessment_assessor (tenant_id, assessment_id, user_id, created_by) VALUES ($1, $2, $3, $3)", [a.tenantId, id, a.userId]);
       await audit(tx, {
         tenantId: a.tenantId, actorUserId: a.userId, actorEmail: a.user.email, action: "assessment.create",
         entityType: "assessment", entityId: id, ...reqMeta(req), details: { siteId: body.siteId, frameworks: body.frameworks, libraryVersion },

@@ -1,4 +1,4 @@
-import Fastify, { type FastifyError, type FastifyInstance } from "fastify";
+import Fastify, { type FastifyError, type FastifyInstance, type FastifyRequest } from "fastify";
 import cookie from "@fastify/cookie";
 import cors from "@fastify/cors";
 import helmet from "@fastify/helmet";
@@ -10,10 +10,34 @@ import { authRoutes } from "./routes/auth.js";
 import { googleRoutes, type GoogleDeps } from "./routes/google.js";
 import { libraryRoutes } from "./routes/library.js";
 import { tenantRoutes } from "./routes/tenant.js";
+import { createAnthropicVisionClient, type VisionClient } from "@sentinel/ai";
+import { createLimiters, type Limiters } from "./lib/access.js";
+import { audit } from "./lib/audit.js";
+import { loadWalkthrough, type WalkthroughDef } from "./lib/walkthrough.js";
+import { aiRoutes } from "./routes/ai.js";
+import { logUnscoped } from "./routes/auth.js";
+import { fieldRoutes } from "./routes/field.js";
+import { photoRoutes } from "./routes/photos.js";
+import { syncRoutes } from "./routes/sync.js";
+import { createStorage, type ObjectStorage } from "./storage/index.js";
 
 export interface AppDeps {
   db?: Db;
   google?: GoogleDeps;
+  storage?: ObjectStorage;
+  /** Vision transport; tests inject a fake. Defaults to the Anthropic client when ANTHROPIC_API_KEY is real. */
+  vision?: VisionClient;
+  /** Walkthrough definition; undefined loads packages/frameworks/data/walkthrough.json, null forces the per-domain fallback. */
+  walkthrough?: WalkthroughDef | null;
+  /** Exposed for tests (reset between cases). */
+  limiters?: Limiters;
+}
+
+declare module "fastify" {
+  interface FastifyInstance {
+    limiters: Limiters;
+    storage: ObjectStorage;
+  }
 }
 
 const FASTIFY_CODES: Record<string, [number, string, string]> = {
@@ -26,6 +50,7 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   const app = Fastify({
     trustProxy: cfg.TRUST_PROXY,
     bodyLimit: 256 * 1024,
+    routerOptions: { maxParamLength: 600 }, // signed file tokens (/files/:token) are about 200 characters
     logger: {
       level: cfg.LOG_LEVEL,
       redact: ["req.headers.authorization", "req.headers.cookie", 'res.headers["set-cookie"]'],
@@ -54,9 +79,11 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
     reply.header("Cache-Control", "no-store");
   });
   await app.register(cors, {
-    origin: [cfg.WEB_ORIGIN], // exact match; other origins get no CORS headers
+    // Exact match: the PWA origin plus embedding hosts (EMBED_ORIGINS, QA R-10); other origins get no CORS headers.
+    origin: [cfg.WEB_ORIGIN, ...cfg.embedOrigins],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    exposedHeaders: ["X-Sentinel-Gps", "Retry-After", "X-RateLimit-Remaining"],
   });
   await app.register(cookie);
   await app.register(rateLimit, {
@@ -64,8 +91,28 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
     errorResponseBuilder: (_req, ctx) => new AppError(429, "rate_limited", `Too many requests; try again in ${ctx.after}`),
   });
 
-  app.setErrorHandler((err: FastifyError | AppError, req, reply) => {
+  /** QA R-6: every 403 is audited, in the caller's tenant when known, otherwise as an unscoped auth event. */
+  const auditDenied = async (req: FastifyRequest, err: AppError) => {
+    const details = { method: req.method, route: req.routeOptions.url ?? req.url.split("?")[0], code: err.code };
+    try {
+      if (req.auth) {
+        await db.withTenant(req.auth.tenantId, (tx) =>
+          audit(tx, {
+            tenantId: req.auth!.tenantId, actorUserId: req.auth!.userId, actorEmail: req.auth!.user.email, action: "access.denied",
+            entityType: "route", entityId: details.route, ip: req.ip, userAgent: req.headers["user-agent"], details,
+          }),
+        );
+      } else {
+        await logUnscoped(db, req, "auth.denied", null, "", details);
+      }
+    } catch (e) {
+      req.log.error({ err: e }, "could not audit a 403");
+    }
+  };
+
+  app.setErrorHandler(async (err: FastifyError | AppError, req, reply) => {
     if (err instanceof AppError) {
+      if (err.statusCode === 403) await auditDenied(req, err);
       const body: Record<string, unknown> = { code: err.code, message: err.message };
       if (err.details !== undefined) body.details = err.details;
       return reply.code(err.statusCode).send({ error: body });
@@ -81,11 +128,27 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   });
   app.setNotFoundHandler((_req, reply) => reply.code(404).send({ error: { code: "not_found", message: "Route not found" } }));
 
+  const limiters = deps.limiters ?? createLimiters(cfg);
+  const storage = deps.storage ?? createStorage(cfg);
+  const walkthrough = deps.walkthrough === undefined ? loadWalkthrough(undefined, (m) => app.log.warn(m)) : deps.walkthrough;
+  let vision: VisionClient | null | undefined = deps.vision;
+  const getVision = () => {
+    if (vision === undefined) vision = cfg.anthropicApiKey ? createAnthropicVisionClient({ apiKey: cfg.anthropicApiKey }) : null;
+    return vision;
+  };
+  app.decorate("limiters", limiters);
+  app.decorate("storage", storage);
+  const fieldDeps = { cfg, db, limiters, storage, walkthrough, vision: getVision };
+
   app.get("/health", async () => ({ status: "ok" }));
   await app.register(authRoutes, { cfg, db });
   await app.register(googleRoutes, { cfg, db, deps: deps.google ?? {} });
-  await app.register(libraryRoutes, { cfg, db });
-  await app.register(tenantRoutes, { cfg, db });
+  await app.register(libraryRoutes, { cfg, db, limiters });
+  await app.register(tenantRoutes, { cfg, db, limiters });
+  await app.register(fieldRoutes, fieldDeps);
+  await app.register(photoRoutes, fieldDeps);
+  await app.register(aiRoutes, fieldDeps);
+  await app.register(syncRoutes, fieldDeps);
   return app;
 }
 

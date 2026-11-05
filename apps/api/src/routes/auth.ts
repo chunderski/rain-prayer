@@ -88,7 +88,7 @@ export async function startSession(
 /** Rejects cookie-authenticated requests from a foreign Origin (defense in depth beyond SameSite). */
 function checkOrigin(cfg: Config, req: FastifyRequest) {
   const origin = req.headers.origin;
-  if (origin && origin !== cfg.WEB_ORIGIN) throw new AppError(403, "forbidden_origin", "Origin not allowed");
+  if (origin && origin !== cfg.WEB_ORIGIN && !cfg.embedOrigins.includes(origin)) throw new AppError(403, "forbidden_origin", "Origin not allowed");
 }
 
 export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Config; db: Db }) {
@@ -151,8 +151,15 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
       "SELECT * FROM auth_find_refresh_token($1)", [sha256(presented)],
     );
     const row = rows[0];
-    if (!row) throw reject();
+    if (!row) {
+      await logUnscoped(db, req, "auth.refresh.failure", null, "", { reason: "unknown_token" }); // QA R-6
+      throw reject();
+    }
     const m = reqMeta(req);
+    const failure = (reason: string) =>
+      db.withTenant(row.tenant_id, (tx) =>
+        audit(tx, { tenantId: row.tenant_id, actorUserId: row.user_id, action: "auth.refresh.failure", entityType: "user", entityId: row.user_id, ...m, details: { reason } }),
+      );
 
     const revokeFamily = (reason: string) =>
       db.withTenant(row.tenant_id, async (tx) => {
@@ -165,23 +172,42 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
       await revokeFamily("revoked_token_reused");
       throw reject();
     }
-    if (new Date(row.expires_at) <= new Date()) throw reject("Session expired");
+    if (new Date(row.expires_at) <= new Date()) {
+      await failure("expired");
+      throw reject("Session expired");
+    }
 
     const newId = randomUUID();
     const result = await db.withTenant(row.tenant_id, async (tx) => {
+      // Absolute session cap (QA R-5): no rotation past SESSION_ABSOLUTE_TTL_SECONDS after the original sign-in.
+      const started = (await tx.query<{ s: Date; capped: boolean }>(
+        "SELECT session_started_at AS s, session_started_at + make_interval(secs => $2) <= now() AS capped FROM refresh_token WHERE id = $1",
+        [row.id, cfg.SESSION_ABSOLUTE_TTL_SECONDS],
+      )).rows[0];
+      if (!started || started.capped) return "capped" as const;
       const upd = await tx.query("UPDATE refresh_token SET revoked_at = now(), replaced_by = $2 WHERE id = $1 AND revoked_at IS NULL", [row.id, newId]);
       if (upd.rowCount !== 1) return null; // lost a race with another use of the same token
       const session = await loadSession(tx, row.user_id);
       if (!session) return null;
-      const refreshToken = await createRefreshToken(cfg, tx, { id: newId, tenantId: row.tenant_id, userId: row.user_id, familyId: row.family_id, ...m });
+      const refreshToken = await createRefreshToken(cfg, tx, {
+        id: newId, tenantId: row.tenant_id, userId: row.user_id, familyId: row.family_id, sessionStartedAt: started.s, ...m,
+      });
       const accessToken = await signAccessToken(cfg, { userId: row.user_id, tenantId: row.tenant_id, role: session.role });
-      return { accessToken, refreshToken, session };
+      const remaining = (started.s.getTime() + cfg.SESSION_ABSOLUTE_TTL_SECONDS * 1000 - Date.now()) / 1000;
+      return { accessToken, refreshToken, session, remaining };
     });
+    if (result === "capped") {
+      await db.withTenant(row.tenant_id, async (tx) => {
+        await tx.query("UPDATE refresh_token SET revoked_at = now() WHERE family_id = $1 AND revoked_at IS NULL", [row.family_id]);
+        await audit(tx, { tenantId: row.tenant_id, actorUserId: row.user_id, action: "auth.session.expired", entityType: "user", entityId: row.user_id, ...m, details: { reason: "absolute_cap" } });
+      });
+      throw reject("Session expired; sign in again");
+    }
     if (!result) {
       await revokeFamily("concurrent_use");
       throw reject();
     }
-    setRefreshCookie(cfg, reply, result.refreshToken);
+    setRefreshCookie(cfg, reply, result.refreshToken, result.remaining);
     return { accessToken: result.accessToken, session: result.session };
   });
 

@@ -96,24 +96,28 @@ export async function loadSession(tx: Tx, userId: string): Promise<SessionInfo |
 export async function createRefreshToken(
   cfg: Config,
   tx: Tx,
-  a: { tenantId: string; userId: string; familyId?: string; ip?: string; userAgent?: string; id?: string },
+  a: { tenantId: string; userId: string; familyId?: string; ip?: string; userAgent?: string; id?: string; sessionStartedAt?: Date },
 ): Promise<string> {
   const { token, hash } = newRefreshToken();
+  // Expiry is the sliding TTL, capped at the absolute session lifetime from the original sign-in (QA R-5).
   await tx.query(
-    `INSERT INTO refresh_token (id, tenant_id, user_id, family_id, token_hash, expires_at, ip, user_agent)
-     VALUES ($1, $2, $3, $4, $5, now() + make_interval(secs => $6), $7, $8)`,
-    [a.id ?? randomUUID(), a.tenantId, a.userId, a.familyId ?? randomUUID(), hash, cfg.REFRESH_TOKEN_TTL_SECONDS, a.ip ?? null, a.userAgent?.slice(0, 512) ?? null],
+    `INSERT INTO refresh_token (id, tenant_id, user_id, family_id, token_hash, expires_at, ip, user_agent, session_started_at)
+     VALUES ($1, $2, $3, $4, $5,
+             LEAST(now() + make_interval(secs => $6), COALESCE($9::timestamptz, now()) + make_interval(secs => $10)),
+             $7, $8, COALESCE($9::timestamptz, now()))`,
+    [a.id ?? randomUUID(), a.tenantId, a.userId, a.familyId ?? randomUUID(), hash, cfg.REFRESH_TOKEN_TTL_SECONDS, a.ip ?? null,
+      a.userAgent?.slice(0, 512) ?? null, a.sessionStartedAt ?? null, cfg.SESSION_ABSOLUTE_TTL_SECONDS],
   );
   return token;
 }
 
-export function setRefreshCookie(cfg: Config, reply: FastifyReply, token: string) {
+export function setRefreshCookie(cfg: Config, reply: FastifyReply, token: string, maxAgeSeconds = cfg.REFRESH_TOKEN_TTL_SECONDS) {
   reply.setCookie(REFRESH_COOKIE, token, {
     httpOnly: true,
     secure: cfg.NODE_ENV !== "development",
     sameSite: "strict",
     path: "/auth",
-    maxAge: cfg.REFRESH_TOKEN_TTL_SECONDS,
+    maxAge: Math.max(1, Math.min(cfg.REFRESH_TOKEN_TTL_SECONDS, Math.floor(maxAgeSeconds))),
   });
 }
 
@@ -130,8 +134,9 @@ export function requireRole(cfg: Config, db: Db, min: Role) {
     const claims = await verifyAccessToken(cfg, m[1]);
     const session = await db.withTenant(claims.tenantId, (tx) => loadSession(tx, claims.userId));
     if (!session) throw new AppError(401, "unauthorized", "Session is no longer valid");
-    if (!hasRole(session.role, min)) throw new AppError(403, "forbidden", `Requires role ${min} or higher`);
+    // Set before the role check so a 403 can be audited against the caller (QA R-6).
     req.auth = { ...session, userId: session.user.id, tenantId: session.tenant.id };
+    if (!hasRole(session.role, min)) throw new AppError(403, "forbidden", `Requires role ${min} or higher`);
   };
 }
 

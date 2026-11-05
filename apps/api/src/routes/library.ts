@@ -4,7 +4,7 @@ import { z } from "zod";
 import { ControlDomain, FrameworkId, SEMVER, SharedControlId } from "@sentinel/shared";
 import type { Config } from "../config.js";
 import type { Db } from "../db/pool.js";
-import { requireRole } from "../lib/auth.js";
+import { guard, type Limiters } from "../lib/access.js";
 import { notFound, parse } from "../lib/errors.js";
 
 const SEMVER_ORDER = (col: string) => `string_to_array(${col}, '.')::int[]`;
@@ -20,8 +20,8 @@ export async function currentLibraryVersion(db: Db): Promise<string | null> {
 const omitNull = <T extends Record<string, unknown>>(o: T) =>
   Object.fromEntries(Object.entries(o).filter(([, v]) => v !== null && v !== undefined)) as Partial<T>;
 
-export async function libraryRoutes(app: FastifyInstance, { cfg, db }: { cfg: Config; db: Db }) {
-  const viewer = { preHandler: requireRole(cfg, db, "viewer") };
+export async function libraryRoutes(app: FastifyInstance, { cfg, db, limiters }: { cfg: Config; db: Db; limiters: Limiters }) {
+  const viewer = guard(cfg, db, limiters)("viewer");
 
   app.get("/frameworks", viewer, async () => {
     const lib = await currentLibraryVersion(db);

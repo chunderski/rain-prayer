@@ -1,0 +1,2 @@
+# Local photo storage (STORAGE_DRIVER=local)
+.data/

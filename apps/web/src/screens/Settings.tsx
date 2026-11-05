@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { ApiError } from "../api/client";
 import { useApi, useCanAdmin } from "../auth/AuthContext";
-import { disconnectGoogle, fetchGoogle, googleConnectUrl } from "../api/phase3";
+import { disconnectGoogle, fetchGoogle, fetchGoogleConnectUrl } from "../api/phase3";
 import { errorMessage, useAsync } from "../lib/useAsync";
 import { useOnline } from "../offline/useOnline";
 import { Banner, Button, Card, Loading, PageHeader } from "../components/ui";
@@ -27,8 +27,15 @@ export function IntegrationsScreen() {
 
   const notConfigured = status.error instanceof ApiError && status.error.code === "google_not_configured";
 
-  function connect() {
-    const url = googleConnectUrl(api);
+  async function connect() {
+    setError(null);
+    let url: string;
+    try {
+      url = await fetchGoogleConnectUrl(api);
+    } catch (e) {
+      setError(errorMessage(e) || "Could not start Google sign in. Try again.");
+      return;
+    }
     // Google refuses to show consent inside a frame; use a new tab when embedded.
     if (window.top !== window.self) window.open(url, "_blank", "noopener");
     else window.location.assign(url);

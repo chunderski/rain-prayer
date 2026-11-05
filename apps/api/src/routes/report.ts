@@ -65,15 +65,20 @@ export async function reportRoutes(app: FastifyInstance, deps: ReportRouteDeps) 
     return narrativeOut((await ctx.tx.query(`${NARRATIVE_SQL} AND section = $2`, [id, section])).rows[0]);
   };
 
-  const DraftBody = z.object({ section: NarrativeSection }).strict();
+  const DraftBody = z.object({ section: NarrativeSection, replace: z.boolean().optional() }).strict();
   app.post("/assessments/:id/narrative/draft", role("assessor", limiters.narrative), async (req) => {
     const { id } = parse(IdParams, req.params);
-    const { section } = parse(DraftBody, req.body);
+    const { section, replace } = parse(DraftBody, req.body);
     const client = deps.text();
     if (!client) throw new AppError(503, "ai_not_configured", "AI narrative drafting is not configured on this server (ANTHROPIC_API_KEY)");
     // Facts only from confirmed findings and the risk result; AI drafts never feed AI drafts.
     const facts = await inField(db, req, async (ctx): Promise<DraftNarrativeInput["facts"]> => {
       await requireAssessmentWrite(ctx, id);
+      // Human-written or approved text is never silently replaced by a new AI draft.
+      const existing = (await ctx.tx.query(`${NARRATIVE_SQL} AND section = $2`, [id, section])).rows[0] as { status?: string } | undefined;
+      if (existing && existing.status !== "ai_draft" && !replace) {
+        throw new AppError(409, "narrative_exists", "This section already has edited or approved text; confirm to replace it with a new AI draft");
+      }
       const data = await loadReportData(ctx, id, risk);
       if (!data.risk) throw new AppError(503, "risk_unavailable", "Risk scores are needed for a narrative draft and are not available");
       return {

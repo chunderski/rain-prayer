@@ -131,6 +131,7 @@ describe("report preview and narrative", () => {
     expect((await app.inject({ method: "POST", url: `/assessments/${fx.assessmentId}/narrative/draft`, headers: H(viewer), payload: { section: "methodology" } })).statusCode).toBe(403);
   });
 
+
   it("maps an ungrounded draft to 422 and a model failure to 502, storing nothing", async () => {
     const cases: [TextClient, number, string][] = [
       [{ complete: async () => ({ text: "Measured against ISO 27001 and SOC 2, the site is fine." }) }, 422, "ai_draft_rejected"],
@@ -197,6 +198,20 @@ describe("report preview and narrative", () => {
     expect(list.map((n: unknown) => Narrative.parse(n).section)).toEqual(["executive_summary"]);
     const log = (await app.inject({ url: "/audit?limit=50", headers: H(owner) })).json();
     expect(log.find((r: { action: string }) => r.action === "narrative.approve")).toBeTruthy();
+  });
+
+  it("never replaces approved or edited text with a new AI draft unless replace is confirmed", async () => {
+    const url = `/assessments/${fx.assessmentId}/narrative`;
+    const put = await app.inject({ method: "PUT", url: `${url}/recommendations`, headers: H(assessor), payload: { text: "Assessor approved text", approve: true } });
+    expect(put.statusCode, put.body).toBe(200);
+    const refused = await app.inject({ method: "POST", url: `${url}/draft`, headers: H(assessor), payload: { section: "recommendations" } });
+    expect(refused.statusCode, refused.body).toBe(409);
+    expect(refused.json().error.code).toBe("narrative_exists");
+    const kept = (await app.inject({ method: "GET", url, headers: H(assessor) })).json() as { section: string; text: string; status: string }[];
+    expect(kept.find((n) => n.section === "recommendations")).toMatchObject({ text: "Assessor approved text", status: "approved" });
+    const replaced = await app.inject({ method: "POST", url: `${url}/draft`, headers: H(assessor), payload: { section: "recommendations", replace: true } });
+    expect(replaced.statusCode, replaced.body).toBe(200);
+    expect(replaced.json().status).toBe("ai_draft");
   });
 });
 

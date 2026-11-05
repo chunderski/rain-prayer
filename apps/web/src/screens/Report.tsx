@@ -55,7 +55,8 @@ function NarrativeCard({ section, current, onSaved }: { section: NarrativeSectio
     setBusy(kind);
     setError(null);
     try {
-      const n = kind === "draft" ? await draftNarrative(api, f.assessmentId, section) : await putNarrative(api, f.assessmentId, section, text, kind === "approve");
+      const replace = kind === "draft" && !!current && current.status !== "ai_draft" && !!current.text.trim();
+      const n = kind === "draft" ? await draftNarrative(api, f.assessmentId, section, replace) : await putNarrative(api, f.assessmentId, section, text, kind === "approve");
       onSaved(n);
     } catch (e) {
       if (e instanceof ApiError && e.code === "ai_not_configured") setError("AI drafting is not set up on this server. Write the section yourself.");

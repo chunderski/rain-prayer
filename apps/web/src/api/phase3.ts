@@ -74,8 +74,8 @@ export const reopenAssessment = (api: ApiClient, id: string, reason: string) =>
   api.request(`/assessments/${enc(id)}/reopen`, { method: "POST", body: { reason } });
 
 export const fetchNarratives = (api: ApiClient, id: string) => api.get(`/assessments/${enc(id)}/narrative`, z.array(Narrative));
-export const draftNarrative = (api: ApiClient, id: string, section: NarrativeSection) =>
-  api.post(`/assessments/${enc(id)}/narrative/draft`, { section }, Narrative);
+export const draftNarrative = (api: ApiClient, id: string, section: NarrativeSection, replace = false) =>
+  api.post(`/assessments/${enc(id)}/narrative/draft`, replace ? { section, replace } : { section }, Narrative);
 export const putNarrative = (api: ApiClient, id: string, section: NarrativeSection, text: string, approve: boolean) =>
   api.request(`/assessments/${enc(id)}/narrative/${enc(section)}`, { method: "PUT", body: { text, approve }, schema: Narrative });
 export const fetchReportPreview = (api: ApiClient, id: string) =>
@@ -88,6 +88,7 @@ export const fetchExports = (api: ApiClient, id: string) => api.get(`/assessment
 
 export const fetchGoogle = (api: ApiClient) => api.get("/integrations/google", GoogleStatus);
 export const disconnectGoogle = (api: ApiClient) => api.request("/integrations/google", { method: "DELETE" });
-export const googleConnectUrl = (api: ApiClient) => `${api.baseUrl}/integrations/google/connect`;
+/** The API checks the admin bearer token and returns the Google consent URL (state and PKCE bound to this admin). */
+export const fetchGoogleConnectUrl = async (api: ApiClient) => (await api.get("/integrations/google/connect", z.object({ url: z.string().url() }))).url;
 
 export const SEVERITY_ORDER: Severity[] = ["critical", "high", "medium", "low", "info"];

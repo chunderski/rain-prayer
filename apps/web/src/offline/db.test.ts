@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { IDBFactory } from "fake-indexeddb";
-import { enqueue, getDraft, getLibrary, listOutbox, outboxCount, putLibrary, removeFromOutbox, resetDbForTests, saveDraft, clearDrafts } from "./db";
+import { enqueue, getDraft, getLibrary, listOutbox, outboxCount, putLibrary, removeFromOutbox, resetDbForTests, saveDraft, clearDrafts, DB_NAME, getDb, setMeta, getMeta, clearClientData } from "./db";
 
 beforeEach(() => {
   globalThis.indexedDB = new IDBFactory();
@@ -63,5 +63,38 @@ describe("library cache and drafts", () => {
     expect((await getDraft<{ step: number }>("new-assessment"))?.data.step).toBe(2);
     await clearDrafts();
     expect(await getDraft("new-assessment")).toBeUndefined();
+  });
+});
+
+describe("version 2 migration", () => {
+  it("upgrades a version 1 database without losing the library cache or drafts", async () => {
+    const { openDB } = await import("idb");
+    const v1 = await openDB(DB_NAME, 1, {
+      upgrade(db) {
+        db.createObjectStore("library", { keyPath: "key" });
+        db.createObjectStore("drafts", { keyPath: "id" }).createIndex("byKind", "kind");
+        db.createObjectStore("outbox", { keyPath: "id" }).createIndex("byCreatedAt", "createdAt");
+      },
+    });
+    await v1.put("library", { key: "/frameworks", data: [1], cachedAt: "t" });
+    await v1.put("drafts", { id: "wizard", kind: "assessment_wizard", data: { step: 2 }, updatedAt: "t" });
+    v1.close();
+    expect((await getLibrary("/frameworks"))?.data).toEqual([1]);
+    expect((await getDraft("wizard"))?.data).toEqual({ step: 2 });
+    const db = await getDb();
+    expect(db.version).toBe(2);
+    for (const s of ["walkthroughs", "areas", "assets", "answers", "findings", "photos", "photoBlobs", "suggestions", "syncOps", "conflicts", "meta"]) {
+      expect(db.objectStoreNames.contains(s as never)).toBe(true);
+    }
+  });
+
+  it("clearClientData wipes field data and the cached profile but keeps the library cache", async () => {
+    await putLibrary("/frameworks", [1]);
+    await setMeta("profile", { x: 1 });
+    await saveDraft("d", "k", {});
+    await clearClientData();
+    expect(await getMeta("profile")).toBeUndefined();
+    expect(await getDraft("d")).toBeUndefined();
+    expect((await getLibrary("/frameworks"))?.data).toEqual([1]);
   });
 });

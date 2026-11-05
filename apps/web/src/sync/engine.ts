@@ -115,7 +115,8 @@ export class SyncEngine {
     const db = await getDb();
     const ops = (await db.getAll("syncOps")).filter((o) => !ctx || (o.userId === ctx.userId && o.tenantId === ctx.tenantId));
     const photos = (await db.getAll("photos")) as LocalPhoto[];
-    const uploads = photos.filter((p) => !p.deleted && (p.upload === "waiting_meta" || p.upload === "ready")).length;
+    // A photo waiting for its metadata op is already counted by that op.
+    const uploads = photos.filter((p) => !p.deleted && p.upload === "ready").length;
     const failedUploads = photos.filter((p) => p.lastUploadError && p.upload === "ready" && p.nextUploadAt === Number.MAX_SAFE_INTEGER).length;
     this.emit({
       pending: ops.filter((o) => o.status === "pending").length + uploads,
@@ -258,6 +259,8 @@ export class SyncEngine {
       }
       const results = await this.o.transport.push(deviceId, ops);
       await this.applyResults(batch, results);
+      // A server that answered none of our ops: stop for now, they stay queued for the next run.
+      if (!results.some((r) => batch.some((q) => q.opId === r.opId))) return;
     }
   }
 

@@ -14,7 +14,7 @@ export interface Cached<T> {
   cachedAt?: string;
 }
 
-async function cachedGet<S extends z.ZodTypeAny>(api: ApiClient, path: string, schema: S): Promise<Cached<z.infer<S>>> {
+export async function cachedGet<S extends z.ZodTypeAny>(api: ApiClient, path: string, schema: S): Promise<Cached<z.infer<S>>> {
   try {
     const data = await api.get(path, schema);
     putLibrary(path, data).catch(() => undefined);

@@ -7,7 +7,7 @@ import { z } from "zod";
 import { AiSuggestion, Answer, Area, Asset, Finding, Photo, Question, Severity, SignedUrl } from "@sentinel/shared";
 import { Relationship } from "../api/schemas";
 
-const withVersion = <T extends z.ZodObject>(s: T) => s.extend({ version: z.number().int().nullish() });
+const version = { version: z.number().int().nullish() };
 
 export const WalkthroughFramework = z.object({
   frameworkId: z.string(),
@@ -38,11 +38,11 @@ export const WalkthroughSection = z.object({
 });
 export type WalkthroughSection = z.infer<typeof WalkthroughSection>;
 
-export const VersionedArea = withVersion(Area);
-export const VersionedAnswer = withVersion(Answer);
-export const VersionedAsset = withVersion(Asset);
-export const VersionedFinding = withVersion(Finding);
-export const VersionedPhoto = withVersion(Photo);
+export const VersionedArea = Area.extend(version);
+export const VersionedAnswer = Answer.extend(version);
+export const VersionedAsset = Asset.extend(version);
+export const VersionedFinding = Finding.extend(version);
+export const VersionedPhoto = Photo.extend(version);
 
 export const WalkthroughResponse = z.object({
   assessmentId: z.string(),

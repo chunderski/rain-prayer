@@ -8,6 +8,13 @@ import { AssessmentDetail, AssessmentsHome } from "./screens/Assessments";
 import { ClientDetail, ClientsList } from "./screens/Clients";
 import { NewAssessment } from "./screens/NewAssessment";
 import { ControlDetailScreen, Library } from "./screens/Library";
+import { SyncProvider } from "./sync/SyncContext";
+import { FieldLayout } from "./field/FieldContext";
+import { WalkthroughHome, WalkthroughStep } from "./screens/Walkthrough";
+import { PhotoDetail, PhotosList, PhotoTagScreen } from "./screens/Photos";
+import { FindingEdit, FindingsList } from "./screens/Findings";
+import { AreasScreen, AssessorsScreen } from "./screens/Admin";
+import { SyncReview } from "./screens/SyncReview";
 
 function Gate() {
   const { status } = useAuth();
@@ -20,11 +27,25 @@ function Gate() {
       </>
     );
   return (
+    <SyncProvider>
     <Routes>
       <Route element={<AppShell />}>
         <Route index element={<AssessmentsHome />} />
         <Route path="assessments/new" element={<NewAssessment />} />
-        <Route path="assessments/:id" element={<AssessmentDetail />} />
+        <Route path="assessments/:id" element={<FieldLayout />}>
+          <Route index element={<AssessmentDetail />} />
+          <Route path="walkthrough" element={<WalkthroughHome />} />
+          <Route path="walkthrough/:areaKey" element={<WalkthroughStep />} />
+          <Route path="photos" element={<PhotosList />} />
+          <Route path="photos/:photoId" element={<PhotoDetail />} />
+          <Route path="photos/:photoId/tag" element={<PhotoTagScreen />} />
+          <Route path="findings" element={<FindingsList />} />
+          <Route path="findings/new" element={<FindingEdit />} />
+          <Route path="findings/:findingId" element={<FindingEdit key="edit" />} />
+          <Route path="assessors" element={<AssessorsScreen />} />
+          <Route path="areas" element={<AreasScreen />} />
+        </Route>
+        <Route path="sync" element={<SyncReview />} />
         <Route path="clients" element={<ClientsList />} />
         <Route path="clients/:id" element={<ClientDetail />} />
         <Route path="library" element={<Library />} />
@@ -32,6 +53,7 @@ function Gate() {
         <Route path="*" element={<AssessmentsHome />} />
       </Route>
     </Routes>
+    </SyncProvider>
   );
 }
 

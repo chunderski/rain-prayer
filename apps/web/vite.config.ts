@@ -1,4 +1,4 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
@@ -6,8 +6,60 @@ import { fileURLToPath } from "node:url";
 
 const r = (p: string) => fileURLToPath(new URL(p, import.meta.url));
 
-export default defineConfig({
+const originOf = (url: string | undefined, fallback: string) => {
+  try {
+    return new URL(url || fallback).origin;
+  } catch {
+    return new URL(fallback).origin;
+  }
+};
+
+/**
+ * Builds the Content-Security-Policy for the app page (QA R-10). Only for production builds:
+ * the dev server injects inline scripts for hot reload. `frame-ancestors` cannot be set from a
+ * meta tag; the host must send it as a header (see README).
+ */
+export function buildCsp(env: Record<string, string>): string {
+  const api = originOf(env.VITE_API_URL, "http://localhost:3000");
+  // Signed photo URLs: the API itself for the local storage driver, or the S3 endpoint.
+  const photos = (env.VITE_PHOTO_URL_ORIGINS || api)
+    .split(/[\s,]+/)
+    .filter(Boolean)
+    .map((o) => originOf(o, api));
+  const img = [...new Set(["'self'", "blob:", "data:", ...photos])].join(" ");
+  return [
+    "default-src 'self'",
+    "script-src 'self'",
+    "style-src 'self'",
+    `img-src ${img}`,
+    `connect-src 'self' ${api}`,
+    "font-src 'self'",
+    "worker-src 'self'",
+    "manifest-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+  ].join("; ");
+}
+
+function cspPlugin(env: Record<string, string>): Plugin {
+  return {
+    name: "sentinel-csp",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(html, ctx) {
+        // The app page only; embed-demo.html stands in for a third-party host page.
+        if (!ctx.filename.endsWith("index.html")) return html;
+        return html.replace("<head>", `<head>\n    <meta http-equiv="Content-Security-Policy" content="${buildCsp(env)}" />`);
+      },
+    },
+  };
+}
+
+export default defineConfig(({ mode }) => ({
   plugins: [
+    cspPlugin(loadEnv(mode, process.cwd(), "VITE_")),
     react(),
     tailwindcss(),
     VitePWA({
@@ -40,6 +92,8 @@ export default defineConfig({
         navigateFallback: "/index.html",
         navigateFallbackDenylist: [/^\/auth\//, /^\/api\//],
         cleanupOutdatedCaches: true,
+        // Background Sync relay (public/sw-sync.js): wakes open windows to push their outbox.
+        importScripts: ["sw-sync.js"],
       },
       devOptions: { enabled: false },
     }),
@@ -59,4 +113,4 @@ export default defineConfig({
   },
   server: { port: 5173 },
   preview: { port: 4173 },
-});
+}));

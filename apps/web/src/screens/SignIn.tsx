@@ -1,4 +1,5 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
+import { pendingLocalCount } from "../offline/db";
 import { LoginRequest } from "@sentinel/shared";
 import { useAuth } from "../auth/AuthContext";
 import { ApiError, NetworkError, TenantRequiredError } from "../api/client";
@@ -28,6 +29,11 @@ export function SignIn() {
   const [tenants, setTenants] = useState<TenantChoice[] | null>(null);
   const [tenantSlug, setTenantSlug] = useState("");
   const [busy, setBusy] = useState(false);
+
+  const [unsent, setUnsent] = useState(0);
+  useEffect(() => {
+    pendingLocalCount().then(setUnsent, () => undefined);
+  }, []);
 
   const urlError = new URLSearchParams(typeof window === "undefined" ? "" : window.location.search).get("error");
 
@@ -78,6 +84,11 @@ export function SignIn() {
 
       {urlError && Object.hasOwn(GOOGLE_ERRORS, urlError) && <Banner tone="error">{GOOGLE_ERRORS[urlError]}</Banner>}
       {errors.form && <Banner tone="error">{errors.form}</Banner>}
+      {unsent > 0 && (
+        <Banner tone="warn" title={`${unsent} unsent ${unsent === 1 ? "change is" : "changes are"} on this device`}>
+          Sign in as the same person and workspace to send them. Signing in as someone else deletes them from this device.
+        </Banner>
+      )}
 
       <form onSubmit={submit} noValidate className="flex flex-col gap-4">
         <h2 className="text-2xl font-bold">Sign in</h2>

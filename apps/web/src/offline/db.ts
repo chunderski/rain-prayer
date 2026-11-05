@@ -287,7 +287,8 @@ export async function clearDrafts(): Promise<void> {
 /** Number of unsaved items (drafts plus queued changes) that sign out would delete. */
 export async function pendingLocalCount(): Promise<number> {
   const db = await getDb();
-  return (await db.count("drafts")) + (await db.count("outbox")) + (await db.count("syncOps"));
+  const uploads = (await db.countFromIndex("photos", "byUpload", "ready"));
+  return (await db.count("drafts")) + (await db.count("outbox")) + (await db.count("syncOps")) + uploads;
 }
 
 /** Queued changes can hold client data, so they are cleared on sign out too (QA R-11). */

@@ -2,7 +2,7 @@
  * In-memory mock of the Phase 1 API (docs/api-phase1.md) served through page.route(), so the E2E
  * suite runs without the backend. State is per page.
  */
-import type { Page, Route } from "@playwright/test";
+import type { Page, Request, Route } from "@playwright/test";
 
 export const API = "http://localhost:3000";
 export const PASSWORD = "Sentinel-dev-2026!";
@@ -57,18 +57,29 @@ const controlDetail = (id: string) => {
   };
 };
 
+export type ExtraHandler = (route: Route, req: Request, url: URL, reply: (status: number, body?: unknown) => Promise<void>, cors: Record<string, string>) => Promise<boolean>;
+
 export interface MockOptions {
   /** Make login answer 409 tenant_required until a tenantSlug is sent. */
   multiTenant?: boolean;
+  /** Assessments listed from the start (Phase 2 specs seed one). */
+  seedAssessments?: Record<string, unknown>[];
+  /** Phase 2 routes (e2e/mock-field.ts), tried before the 404 fallback. */
+  extra?: ExtraHandler;
 }
 
 export interface MockState {
   createdAssessments: unknown[];
   requests: string[];
+  /**
+   * page.route() still fulfills requests while the context is offline, so specs that call
+   * context.setOffline(true) set this too and the mock fails every API request like a dead network.
+   */
+  offline: boolean;
 }
 
 export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockState> {
-  const state: MockState = { createdAssessments: [], requests: [] };
+  const state: MockState = { createdAssessments: [], requests: [], offline: false };
   let signedIn = false;
   let tenant = TENANTS.acme;
   const clients: { id: string; name: string; industry: string | null; siteCount: number; createdAt: string; notes: string | null }[] = [
@@ -78,7 +89,7 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
     { id: "d0000000-0000-4000-8000-000000000001", clientId: clients[0]!.id, name: "Main warehouse", address: "1 Dock Road", siteType: "warehouse" },
     { id: "d0000000-0000-4000-8000-000000000002", clientId: clients[0]!.id, name: "Head office", address: "20 High Street", siteType: "office" },
   ];
-  const assessments: Record<string, unknown>[] = [];
+  const assessments: Record<string, unknown>[] = [...(opts.seedAssessments ?? [])];
 
   const session = () => ({
     user: { id: "b0000000-0000-4000-8000-000000000001", email: "assessor@acme.test", name: "Alex Assessor" },
@@ -100,6 +111,7 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
       route.fulfill({ status, headers: { ...cors, "Content-Type": "application/json" }, body: body === undefined ? "" : JSON.stringify(body) });
     const err = (status: number, code: string, message: string, details?: unknown) => reply(status, { error: { code, message, details } });
 
+    if (state.offline) return route.abort("internetdisconnected");
     if (req.method() === "OPTIONS") return route.fulfill({ status: 204, headers: cors });
     const url = new URL(req.url());
     const path = url.pathname;
@@ -121,7 +133,10 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
       signedIn = true;
       return reply(200, { accessToken: "mock-access-token", session: session() });
     }
+    // Signed photo URLs carry their own grant, not a bearer token.
+    if (path.startsWith("/files/") && opts.extra && (await opts.extra(route, req, url, reply, cors))) return;
     if (!authed) return err(401, "unauthorized", "Sign in required");
+    if (opts.extra && (await opts.extra(route, req, url, reply, cors))) return;
 
     if (path === "/frameworks") return reply(200, FRAMEWORKS);
     if (path === "/controls") {

@@ -1,7 +1,11 @@
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { z } from "zod";
-import { useApi } from "../auth/AuthContext";
-import { AssessmentDetail as AssessmentDetailSchema, AssessmentSummary } from "../api/schemas";
+import { useApi, useCanAdmin } from "../auth/AuthContext";
+import { AssessmentSummary } from "../api/schemas";
+import { cachedGet } from "../api/library";
+import { useField } from "../field/FieldContext";
+import { getPosition } from "../field/walkthrough";
+import { useLocal } from "../lib/useLocal";
 import { errorMessage, useAsync } from "../lib/useAsync";
 import { Banner, ButtonLink, Card, Chip, EmptyState, Loading, PageHeader } from "../components/ui";
 
@@ -15,7 +19,8 @@ export const statusLabel: Record<string, string> = {
 
 export function AssessmentsHome() {
   const api = useApi();
-  const { data, error, loading, reload } = useAsync(() => api.get("/assessments", z.array(AssessmentSummary)), [api]);
+  const { data: cached, error, loading, reload } = useAsync(() => cachedGet(api, "/assessments", z.array(AssessmentSummary)), [api]);
+  const data = cached?.data;
   return (
     <>
       <PageHeader
@@ -31,6 +36,11 @@ export function AssessmentsHome() {
           {errorMessage(error)}
         </Banner>
       ) : null}
+      {cached?.fromCache && (
+        <div className="mb-3">
+          <Banner tone="info">Showing assessments saved on this device. Open one you worked on before to continue offline.</Banner>
+        </div>
+      )}
       {loading && !data && <Loading label="Loading assessments" />}
       {data && data.length === 0 && (
         <EmptyState title="No assessments yet" action={<ButtonLink to="/assessments/new">Create your first assessment</ButtonLink>}>
@@ -66,18 +76,45 @@ export function AssessmentsHome() {
 }
 
 export function AssessmentDetail() {
-  const { id = "" } = useParams();
-  const api = useApi();
-  const { data, error, loading } = useAsync(() => api.get(`/assessments/${encodeURIComponent(id)}`, AssessmentDetailSchema), [api, id]);
-  if (loading && !data) return <Loading label="Loading assessment" />;
-  if (error || !data) return <Banner tone="error">{errorMessage(error) || "Assessment not found."}</Banner>;
+  const f = useField();
+  const isAdmin = useCanAdmin();
+  const data = f.assessment;
+  const base = `/assessments/${f.assessmentId}`;
+  const resume = useLocal(() => getPosition(f.assessmentId), [f.assessmentId]);
+  const untagged = f.photos.filter((p) => !p.data.findingId).length;
   return (
     <>
-      <PageHeader
-        title={data.title}
-        back={{ to: "/", label: "Assessments" }}
-        subtitle={[data.clientName, data.siteName].filter(Boolean).join(" · ")}
-      />
+      <PageHeader title={data.title} back={{ to: "/", label: "Assessments" }} subtitle={[data.clientName, data.siteName].filter(Boolean).join(" · ")} />
+      {f.fromCache && (
+        <div className="mb-4">
+          <Banner tone="info">Showing the copy saved on this device.</Banner>
+        </div>
+      )}
+      <Card as="section" className="mb-4 border-primary">
+        <h2 className="text-xl font-bold">Next steps</h2>
+        <div className="mt-3 flex flex-col gap-2">
+          <ButtonLink to={`${base}/walkthrough${resume.data ? `/${resume.data.areaKey}` : ""}`} size="lg" block>
+            {resume.data ? "Continue walkthrough" : "Start walkthrough"}
+          </ButtonLink>
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <ButtonLink to={`${base}/findings`} variant="secondary" size="lg" block>
+              Findings ({f.findings.length})
+            </ButtonLink>
+            <ButtonLink to={`${base}/photos`} variant="secondary" size="lg" block>
+              Photos ({f.photos.length}
+              {untagged ? `, ${untagged} need a finding` : ""})
+            </ButtonLink>
+            <ButtonLink to={`${base}/areas`} variant="secondary" size="lg" block>
+              Areas ({f.areas.length})
+            </ButtonLink>
+            {isAdmin && (
+              <ButtonLink to={`${base}/assessors`} variant="secondary" size="lg" block>
+                Assign assessors
+              </ButtonLink>
+            )}
+          </div>
+        </div>
+      </Card>
       <div className="grid gap-4 sm:grid-cols-2">
         <Card as="section">
           <h2 className="text-xl font-bold">Status</h2>
@@ -85,12 +122,15 @@ export function AssessmentDetail() {
             <Chip>{statusLabel[data.status] ?? data.status}</Chip>
           </p>
           {data.scheduledFor && <p className="mt-2">Scheduled for {data.scheduledFor}</p>}
+          <p className="mt-2 text-base text-muted">
+            Assessors: {f.structure.assessors.length ? f.structure.assessors.map((a) => a.name).join(", ") : "None assigned yet"}
+          </p>
         </Card>
         <Card as="section">
           <h2 className="text-xl font-bold">Scope</h2>
           <dl className="mt-1 grid grid-cols-2 gap-2">
             <div>
-              <dt className="text-base text-muted">Shared controls</dt>
+              <dt className="text-base text-muted">Controls to check</dt>
               <dd className="text-2xl font-bold" data-testid="assessment-control-count">{data.controlCount ?? "–"}</dd>
             </div>
             <div>
@@ -103,10 +143,10 @@ export function AssessmentDetail() {
         <Card as="section" className="sm:col-span-2">
           <h2 className="text-xl font-bold">Frameworks (pinned versions)</h2>
           <ul className="mt-2 flex flex-wrap gap-2">
-            {data.frameworks.map((f) => (
-              <li key={f.frameworkId}>
+            {data.frameworks.map((fw) => (
+              <li key={fw.frameworkId}>
                 <Chip tone="primary">
-                  {f.shortName ?? f.frameworkId} v{f.version}
+                  {fw.shortName ?? fw.frameworkId} v{fw.version}
                 </Chip>
               </li>
             ))}
@@ -114,7 +154,6 @@ export function AssessmentDetail() {
           <p className="mt-2 text-base text-muted">Later library updates do not change this assessment.</p>
         </Card>
       </div>
-      <p className="mt-6 text-muted">The guided walkthrough and photo capture arrive in Phase 2.</p>
     </>
   );
 }

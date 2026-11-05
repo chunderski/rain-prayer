@@ -13,7 +13,7 @@ export class TransportError extends Error {
   constructor(
     readonly kind: TransportErrorKind,
     message: string,
-    readonly code = kind,
+    readonly code: string = kind,
     readonly status = 0,
   ) {
     super(message);

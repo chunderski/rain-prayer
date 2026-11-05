@@ -29,7 +29,8 @@
     "@fastify/multipart": "^10.1.0",
     "file-type": "^22.0.0",
     "sharp": "^0.35.0",
-    "@sentinel/ai": "*"
+    "@sentinel/ai": "*",
+    "@sentinel/risk": "*"
   },
   "devDependencies": {
     "@types/pg": "^8.15.0"

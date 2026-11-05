@@ -1,0 +1,54 @@
+{
+  "name": "not-relevant",
+  "description": "Photo of a lunch table; model still proposes a finding, which the pipeline removes.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-PER-001",
+        "title": "Perimeter fence height and condition",
+        "objective": "The perimeter fence is intact, of adequate height, and free of gaps or damage.",
+        "assetTypes": [
+          "fence"
+        ]
+      }
+    ]
+  },
+  "responses": [
+    {
+      "imageQuality": "not_security_relevant",
+      "assetType": {
+        "value": "other",
+        "confidence": 0.9
+      },
+      "condition": {
+        "rating": "unknown",
+        "summary": "A table with food; no security asset visible.",
+        "confidence": 0.9
+      },
+      "deficiencies": [],
+      "controls": [],
+      "draftFindings": [
+        {
+          "title": "Unrelated",
+          "description": "x",
+          "recommendation": "y",
+          "severity": "info",
+          "controlIds": [
+            "SC-PER-001"
+          ],
+          "confidence": 0.1
+        }
+      ],
+      "cautions": []
+    }
+  ],
+  "expect": {
+    "imageQuality": "not_security_relevant",
+    "assetType": "other",
+    "draftFindings": 0,
+    "controlIds": [],
+    "cautionIncludes": [
+      "not security relevant"
+    ]
+  }
+}

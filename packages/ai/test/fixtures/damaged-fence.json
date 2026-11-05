@@ -1,0 +1,92 @@
+{
+  "name": "damaged-fence",
+  "description": "Chain link fence with a cut section; the model also cites an ID outside the candidate list.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-PER-001",
+        "title": "Perimeter fence height and condition",
+        "objective": "The perimeter fence is intact, of adequate height, and free of gaps or damage.",
+        "assetTypes": [
+          "fence"
+        ]
+      },
+      {
+        "id": "SC-PER-002",
+        "title": "Perimeter clear zone",
+        "objective": "A clear zone on both sides of the fence is free of objects that aid climbing or concealment.",
+        "assetTypes": [
+          "fence",
+          "landscaping"
+        ]
+      }
+    ],
+    "assetTypeHint": "fence",
+    "areaName": "North perimeter"
+  },
+  "responses": [
+    {
+      "imageQuality": "ok",
+      "assetType": {
+        "value": "fence",
+        "confidence": 0.92
+      },
+      "condition": {
+        "rating": "poor",
+        "summary": "Chain link fence with a vertical cut about 1 m long near a post; fabric pulled back.",
+        "confidence": 0.8
+      },
+      "deficiencies": [
+        {
+          "description": "Cut in fence fabric creates an opening large enough for a person to pass.",
+          "severity": "high",
+          "confidence": 0.85,
+          "controlIds": [
+            "SC-PER-001",
+            "SC-PER-999"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-PER-001",
+          "confidence": 0.9,
+          "rationale": "Fence condition is directly visible."
+        },
+        {
+          "id": "SC-GRD-001",
+          "confidence": 0.4,
+          "rationale": "Patrols may not have noticed the cut."
+        }
+      ],
+      "draftFindings": [
+        {
+          "title": "Cut in perimeter fence fabric",
+          "description": "A vertical cut about 1 m long in the chain link fabric next to a line post leaves an opening.",
+          "recommendation": "Repair the fabric and inspect the full fence line for other damage.",
+          "severity": "high",
+          "controlIds": [
+            "SC-PER-001"
+          ],
+          "confidence": 0.85
+        }
+      ],
+      "cautions": []
+    }
+  ],
+  "expect": {
+    "imageQuality": "ok",
+    "assetType": "fence",
+    "draftFindings": 1,
+    "controlIds": [
+      "SC-PER-001"
+    ],
+    "droppedIds": [
+      "SC-PER-999",
+      "SC-GRD-001"
+    ],
+    "cautionIncludes": [
+      "not in the candidate list"
+    ]
+  }
+}

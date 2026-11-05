@@ -29,6 +29,36 @@ export const ConfigSchema = z
     GOOGLE_CLIENT_SECRET: z.string().optional(),
     GOOGLE_REDIRECT_URI: z.string().url().optional(),
     LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
+    /** Absolute session lifetime: refresh tokens stop rotating this long after sign-in (QA R-5). */
+    SESSION_ABSOLUTE_TTL_SECONDS: z.coerce.number().int().min(300).max(60 * 60 * 24 * 90).default(2_592_000),
+    /** Comma-separated origins allowed to embed the app (web component or iframe host pages); added to CORS (QA R-10). */
+    EMBED_ORIGINS: z.string().default(""),
+    /** Base URL clients use to reach this API; used for local-driver signed photo URLs. */
+    API_PUBLIC_URL: z.string().url().optional(),
+    // Per-user rate limits on data routes (QA R-9).
+    DATA_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(600),
+    DATA_RATE_LIMIT_WINDOW_SECONDS: z.coerce.number().int().min(1).default(60),
+    SYNC_RATE_LIMIT_MAX: z.coerce.number().int().min(1).default(120),
+    AI_ANALYZE_RATE_LIMIT_PER_HOUR: z.coerce.number().int().min(1).default(30),
+    // Photo storage.
+    STORAGE_DRIVER: z.enum(["local", "s3"]).default("local"),
+    LOCAL_STORAGE_DIR: z.string().min(1).default("./.data/storage"),
+    /** Optional separate key for local signed URLs; otherwise derived from JWT_SECRET with a distinct label. */
+    STORAGE_SIGNING_SECRET: z.string().min(32).optional(),
+    SIGNED_URL_TTL_SECONDS: z.coerce.number().int().min(30).max(3600).default(300),
+    S3_ENDPOINT: z.string().url().optional(),
+    /** Endpoint browsers use for presigned URLs when it differs from S3_ENDPOINT (for example Docker networking). */
+    S3_PUBLIC_ENDPOINT: z.string().url().optional(),
+    S3_REGION: z.string().default("us-east-1"),
+    S3_BUCKET: z.string().optional(),
+    S3_ACCESS_KEY_ID: z.string().optional(),
+    S3_SECRET_ACCESS_KEY: z.string().optional(),
+    S3_FORCE_PATH_STYLE: bool.default(true),
+    /** Server-side encryption header for PutObject; leave unset for MinIO without KMS. */
+    S3_SSE: z.enum(["AES256", "aws:kms"]).optional(),
+    // Anthropic vision.
+    ANTHROPIC_API_KEY: z.string().optional(),
+    ANTHROPIC_VISION_MODEL: z.string().min(1).default("claude-sonnet-5-5"),
   })
   .superRefine((c, ctx) => {
     if (c.NODE_ENV === "production") {
@@ -39,9 +69,38 @@ export const ConfigSchema = z
         ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["WEB_ORIGIN"], message: "must be https in production" });
       }
     }
+    for (const o of splitOrigins(c.EMBED_ORIGINS)) {
+      let ok = false;
+      try {
+        const u = new URL(o);
+        ok = u.origin === o && (u.protocol === "https:" || (c.NODE_ENV !== "production" && u.protocol === "http:"));
+      } catch {
+        ok = false;
+      }
+      if (!ok) ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["EMBED_ORIGINS"], message: `"${o}" must be a bare origin (scheme://host[:port]), https in production` });
+    }
+    if (c.STORAGE_DRIVER === "s3") {
+      for (const k of ["S3_ENDPOINT", "S3_BUCKET", "S3_ACCESS_KEY_ID", "S3_SECRET_ACCESS_KEY"] as const) {
+        if (!c[k]) ctx.addIssue({ code: z.ZodIssueCode.custom, path: [k], message: "required when STORAGE_DRIVER=s3" });
+        else if (c.NODE_ENV === "production" && PLACEHOLDER.test(c[k]!)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: [k], message: "placeholder in production" });
+      }
+    }
+    if (c.STORAGE_SIGNING_SECRET && PLACEHOLDER.test(c.STORAGE_SIGNING_SECRET)) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["STORAGE_SIGNING_SECRET"], message: "still a placeholder; generate one with: openssl rand -base64 48 (or leave unset)" });
+    }
   });
 
-export type Config = z.infer<typeof ConfigSchema> & { google: GoogleConfig | null };
+const splitOrigins = (v: string) => v.split(",").map((s) => s.trim()).filter(Boolean);
+
+export type Config = z.infer<typeof ConfigSchema> & {
+  google: GoogleConfig | null;
+  /** Parsed EMBED_ORIGINS. */
+  embedOrigins: string[];
+  /** ANTHROPIC_API_KEY when it is a real value, else null (analyze answers 503 ai_not_configured). */
+  anthropicApiKey: string | null;
+  /** Base URL for links this API hands out. */
+  publicUrl: string;
+};
 
 export interface GoogleConfig {
   clientId: string;
@@ -66,5 +125,12 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     const lines = r.error.issues.map((i) => `  ${i.path.join(".") || "(env)"}: ${i.message}`).join("\n");
     throw new Error(`Invalid configuration:\n${lines}`);
   }
-  return { ...r.data, google: googleConfig(r.data) };
+  const key = r.data.ANTHROPIC_API_KEY?.trim();
+  return {
+    ...r.data,
+    google: googleConfig(r.data),
+    embedOrigins: splitOrigins(r.data.EMBED_ORIGINS),
+    anthropicApiKey: key && !PLACEHOLDER.test(key) ? key : null,
+    publicUrl: (r.data.API_PUBLIC_URL ?? `http://localhost:${r.data.API_PORT}`).replace(/\/+$/, ""),
+  };
 }

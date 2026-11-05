@@ -1,0 +1,24 @@
+{
+  "name": "invalid-twice",
+  "description": "Model returns non JSON and then schema-invalid JSON; pipeline throws invalid_output.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-PER-001",
+        "title": "Perimeter fence height and condition",
+        "objective": "The perimeter fence is intact, of adequate height, and free of gaps or damage.",
+        "assetTypes": [
+          "fence"
+        ]
+      }
+    ]
+  },
+  "responses": [
+    "Sure! Here is my analysis: the fence looks fine.",
+    "{\"imageQuality\":\"great\",\"assetType\":\"fence\"}"
+  ],
+  "expect": {
+    "error": "invalid_output",
+    "calls": 2
+  }
+}

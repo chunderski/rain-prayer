@@ -1,0 +1,80 @@
+{
+  "name": "camera-obstructed",
+  "description": "Dome camera whose view is blocked by a hanging sign.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-VSS-001",
+        "title": "Entrance identification coverage",
+        "objective": "Cameras covering entrances capture an unobstructed view adequate for identification.",
+        "assetTypes": [
+          "camera"
+        ]
+      },
+      {
+        "id": "SC-VSS-002",
+        "title": "Perimeter and parking camera coverage",
+        "objective": "Cameras cover the perimeter and parking areas with unobstructed fields of view.",
+        "assetTypes": [
+          "camera",
+          "parking"
+        ]
+      }
+    ],
+    "assetTypeHint": "camera"
+  },
+  "responses": [
+    {
+      "imageQuality": "ok",
+      "assetType": {
+        "value": "camera",
+        "confidence": 0.95
+      },
+      "condition": {
+        "rating": "fair",
+        "summary": "Dome camera intact; a hanging sign blocks most of its field of view toward the entrance.",
+        "confidence": 0.75
+      },
+      "deficiencies": [
+        {
+          "description": "Hanging sign obstructs the camera view of the entrance.",
+          "severity": "medium",
+          "confidence": 0.7,
+          "controlIds": [
+            "SC-VSS-001"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-VSS-001",
+          "confidence": 0.8,
+          "rationale": "Entrance camera view is visible and obstructed."
+        }
+      ],
+      "draftFindings": [
+        {
+          "title": "Entrance camera view obstructed by sign",
+          "description": "A suspended sign sits directly in front of the dome camera covering the main entrance.",
+          "recommendation": "Relocate the sign or the camera and verify the recorded view.",
+          "severity": "medium",
+          "controlIds": [
+            "SC-VSS-001"
+          ],
+          "confidence": 0.7
+        }
+      ],
+      "cautions": [
+        "Confirm the recorded image; the obstruction is judged from the photo angle only."
+      ]
+    }
+  ],
+  "expect": {
+    "imageQuality": "ok",
+    "assetType": "camera",
+    "draftFindings": 1,
+    "controlIds": [
+      "SC-VSS-001"
+    ]
+  }
+}

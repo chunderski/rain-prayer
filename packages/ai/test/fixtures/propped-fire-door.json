@@ -1,0 +1,95 @@
+{
+  "name": "propped-fire-door",
+  "description": "Fire exit door held open with a wedge; confidences out of range are clamped and one finding lacks a valid control.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-ACC-003",
+        "title": "Controlled entry points",
+        "objective": "Entry points are closed and secured when not in use and are not propped open.",
+        "assetTypes": [
+          "door",
+          "card_reader"
+        ]
+      },
+      {
+        "id": "SC-LCK-001",
+        "title": "Exterior lock hardware grade",
+        "objective": "Exterior and sensitive doors and enclosures use locking hardware that is engaged and of suitable grade.",
+        "assetTypes": [
+          "lock",
+          "door",
+          "server"
+        ]
+      }
+    ],
+    "assetTypeHint": "door"
+  },
+  "responses": [
+    {
+      "imageQuality": "ok",
+      "assetType": {
+        "value": "door",
+        "confidence": 1.3
+      },
+      "condition": {
+        "rating": "poor",
+        "summary": "Exit door held open with a rubber wedge.",
+        "confidence": 0.9
+      },
+      "deficiencies": [
+        {
+          "description": "Door propped open with a wedge, defeating closure and latching.",
+          "severity": "high",
+          "confidence": 0.95,
+          "controlIds": [
+            "SC-ACC-003"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-ACC-003",
+          "confidence": -0.2,
+          "rationale": "Door state is visible."
+        }
+      ],
+      "draftFindings": [
+        {
+          "title": "Exit door propped open",
+          "description": "A rubber wedge holds the exit door open.",
+          "recommendation": "Remove the wedge, alarm the door for held-open events, and brief staff.",
+          "severity": "high",
+          "controlIds": [
+            "SC-ACC-003"
+          ],
+          "confidence": 0.9
+        },
+        {
+          "title": "Fire code concern",
+          "description": "Propped fire doors may violate fire code.",
+          "recommendation": "Consult the fire marshal.",
+          "severity": "medium",
+          "controlIds": [
+            "SC-FIRE-001"
+          ],
+          "confidence": 0.5
+        }
+      ],
+      "cautions": []
+    }
+  ],
+  "expect": {
+    "imageQuality": "ok",
+    "assetType": "door",
+    "assetConfidence": 1,
+    "draftFindings": 1,
+    "controlIds": [
+      "SC-ACC-003"
+    ],
+    "controlConfidence": 0,
+    "cautionIncludes": [
+      "Removed 1 draft finding"
+    ]
+  }
+}

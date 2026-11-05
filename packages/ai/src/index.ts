@@ -44,3 +44,5 @@ export class VisionError extends Error {
 }
 
 export { analyzePhoto, createAnthropicVisionClient, PROMPT_VERSION } from "./vision.js";
+export type { AnalyzePhotoDeps, AnthropicVisionClientOptions } from "./vision.js";
+export { DEFAULT_MAX_TOKENS, MAX_IMAGE_BYTES } from "./vision.js";

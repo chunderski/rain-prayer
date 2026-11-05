@@ -1,0 +1,80 @@
+{
+  "name": "server-rack-unlocked",
+  "description": "Server rack with the front door open and no lock engaged.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-LCK-001",
+        "title": "Exterior lock hardware grade",
+        "objective": "Exterior and sensitive doors and enclosures use locking hardware that is engaged and of suitable grade.",
+        "assetTypes": [
+          "lock",
+          "door",
+          "server"
+        ]
+      },
+      {
+        "id": "SC-ACC-001",
+        "title": "Multi-factor authentication",
+        "objective": "Access to sensitive systems and spaces requires more than one factor.",
+        "assetTypes": [
+          "server_room"
+        ]
+      }
+    ],
+    "assetTypeHint": "server",
+    "assessorNotes": "Rack 4 in the IT closet, door was open on arrival."
+  },
+  "responses": [
+    {
+      "imageQuality": "ok",
+      "assetType": {
+        "value": "server",
+        "confidence": 0.9
+      },
+      "condition": {
+        "rating": "fair",
+        "summary": "Server rack with front door open; lock cylinder visible but not engaged.",
+        "confidence": 0.8
+      },
+      "deficiencies": [
+        {
+          "description": "Rack door open with lock not engaged, exposing equipment to tampering.",
+          "severity": "medium",
+          "confidence": 0.8,
+          "controlIds": [
+            "SC-LCK-001"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-LCK-001",
+          "confidence": 0.8,
+          "rationale": "Locking hardware state visible."
+        }
+      ],
+      "draftFindings": [
+        {
+          "title": "Server rack door unlocked and open",
+          "description": "The front door of rack 4 is open and the lock is not engaged.",
+          "recommendation": "Keep rack doors locked and control rack keys.",
+          "severity": "medium",
+          "controlIds": [
+            "SC-LCK-001"
+          ],
+          "confidence": 0.8
+        }
+      ],
+      "cautions": []
+    }
+  ],
+  "expect": {
+    "imageQuality": "ok",
+    "assetType": "server",
+    "draftFindings": 1,
+    "controlIds": [
+      "SC-LCK-001"
+    ]
+  }
+}

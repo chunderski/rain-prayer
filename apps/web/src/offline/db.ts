@@ -1,18 +1,26 @@
 /**
- * Local IndexedDB storage.
+ * Local IndexedDB storage. Nothing token-bearing is ever written here.
  *
- * Stores:
- *  - library: cached GET /frameworks and /controls responses (reference data, no tokens), so the
- *    library browser and framework picker work offline once loaded.
+ * Version 1 stores:
+ *  - library: cached GET responses for reference data and assessment summaries (no tokens).
  *  - drafts: in-progress forms (for example the new assessment wizard), saved on every change.
- *  - outbox: writes waiting to be sent to the API. Phase 1 only enqueues and lists; the sync
- *    worker that drains it with retries is Phase 2.
+ *  - outbox: Phase 1 REST writes waiting for a connection (kept for compatibility).
+ * Version 2 (Phase 2 field capture) adds:
+ *  - walkthroughs: cached GET /assessments/:id/walkthrough structure per assessment.
+ *  - areas, assets, answers, findings, photos: local copies of field records with their last
+ *    known server version and a count of queued ops (see src/field/repo.ts).
+ *  - photoBlobs: photo bytes (ArrayBuffer plus content type) until the server has stored them.
+ *  - suggestions: AI suggestions fetched for photos.
+ *  - syncOps: the sync outbox (SyncOps bound to user and tenant, QA R-11).
+ *  - conflicts: losing copies reported by the server, for the "Conflict: review" screen.
+ *  - meta: small key-value items (device id, pull cursors, walkthrough position, cached
+ *    non-secret session profile, tenant settings).
  */
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
 import { z } from "zod";
 
 export const DB_NAME = "sentinel-assess";
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 export interface LibraryEntry {
   key: string;
@@ -56,24 +64,139 @@ export interface OutboxItem extends OutboxInput {
   lastError?: string;
 }
 
+// ---------- Phase 2 field records ----------
+
+export type FieldStore = "areas" | "assets" | "answers" | "findings" | "photos";
+
+/** A field record as stored on the device. */
+export interface LocalRecord<T = unknown> {
+  id: string;
+  /** Owning assessment; areas belong to a site and use siteId instead. */
+  assessmentId: string;
+  siteId?: string;
+  data: T;
+  /** Last server version seen; null until the server has the record. */
+  version: number | null;
+  /** Number of ops for this record still in the sync outbox. */
+  pendingOps: number;
+  deleted?: boolean;
+  updatedAt: string;
+}
+
+export type UploadState = "waiting_meta" | "ready" | "done";
+export interface LocalPhoto<T = unknown> extends LocalRecord<T> {
+  serverStatus: "pending_upload" | "stored" | null;
+  upload: UploadState;
+  uploadAttempts: number;
+  nextUploadAt: number;
+  lastUploadError?: string;
+  width?: number | null;
+  height?: number | null;
+}
+
+export interface PhotoBlob {
+  id: string;
+  bytes: ArrayBuffer;
+  contentType: string;
+}
+
+export interface QueuedOp {
+  opId: string;
+  /** Monotonic order across reloads (Date.now based plus counter). */
+  seq: number;
+  userId: string;
+  tenantId: string;
+  assessmentId: string;
+  store: FieldStore;
+  op: {
+    opId: string;
+    entity: "area" | "asset" | "answer" | "finding" | "photo_meta";
+    action: "upsert" | "delete";
+    id: string;
+    data?: unknown;
+    baseVersion: number | null;
+    clientUpdatedAt: string;
+  };
+  status: "pending" | "rejected";
+  attempts: number;
+  error?: { code: string; message: string };
+}
+
+export interface ConflictEntry {
+  id: string;
+  opId: string;
+  assessmentId: string;
+  store: FieldStore;
+  entity: QueuedOp["op"]["entity"];
+  recordId: string;
+  local: unknown;
+  server: unknown;
+  serverVersion: number | null;
+  at: string;
+}
+
+export interface WalkthroughEntry {
+  assessmentId: string;
+  data: unknown;
+  cachedAt: string;
+}
+
+export interface SuggestionEntry {
+  id: string;
+  photoId: string;
+  data: unknown;
+}
+
 interface SentinelDB extends DBSchema {
   library: { key: string; value: LibraryEntry };
   drafts: { key: string; value: Draft; indexes: { byKind: string } };
   outbox: { key: string; value: OutboxItem; indexes: { byCreatedAt: string } };
+  walkthroughs: { key: string; value: WalkthroughEntry };
+  areas: { key: string; value: LocalRecord; indexes: { bySite: string; byAssessment: string } };
+  assets: { key: string; value: LocalRecord; indexes: { byAssessment: string } };
+  answers: { key: string; value: LocalRecord; indexes: { byAssessment: string } };
+  findings: { key: string; value: LocalRecord; indexes: { byAssessment: string } };
+  photos: { key: string; value: LocalPhoto; indexes: { byAssessment: string; byUpload: string } };
+  photoBlobs: { key: string; value: PhotoBlob };
+  suggestions: { key: string; value: SuggestionEntry; indexes: { byPhoto: string } };
+  syncOps: { key: string; value: QueuedOp; indexes: { bySeq: number } };
+  conflicts: { key: string; value: ConflictEntry; indexes: { byAssessment: string } };
+  meta: { key: string; value: { key: string; value: unknown } };
 }
+
+export const FIELD_STORES: FieldStore[] = ["areas", "assets", "answers", "findings", "photos"];
+/** Stores that hold client data and are wiped at sign out. */
+const CLIENT_DATA_STORES = ["drafts", "outbox", "walkthroughs", ...FIELD_STORES, "photoBlobs", "suggestions", "syncOps", "conflicts", "meta"] as const;
 
 let dbPromise: Promise<IDBPDatabase<SentinelDB>> | null = null;
 
 export function getDb(): Promise<IDBPDatabase<SentinelDB>> {
   if (!dbPromise) {
     dbPromise = openDB<SentinelDB>(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains("library")) db.createObjectStore("library", { keyPath: "key" });
-        if (!db.objectStoreNames.contains("drafts")) {
+      upgrade(db, oldVersion) {
+        // Version 1: Phase 1 stores.
+        if (oldVersion < 1) {
+          db.createObjectStore("library", { keyPath: "key" });
           db.createObjectStore("drafts", { keyPath: "id" }).createIndex("byKind", "kind");
-        }
-        if (!db.objectStoreNames.contains("outbox")) {
           db.createObjectStore("outbox", { keyPath: "id" }).createIndex("byCreatedAt", "createdAt");
+        }
+        // Version 2: Phase 2 field capture. Additive only, so existing library cache and drafts survive.
+        if (oldVersion < 2) {
+          db.createObjectStore("walkthroughs", { keyPath: "assessmentId" });
+          const areas = db.createObjectStore("areas", { keyPath: "id" });
+          areas.createIndex("bySite", "siteId");
+          areas.createIndex("byAssessment", "assessmentId");
+          for (const name of ["assets", "answers", "findings"] as const) {
+            db.createObjectStore(name, { keyPath: "id" }).createIndex("byAssessment", "assessmentId");
+          }
+          const photos = db.createObjectStore("photos", { keyPath: "id" });
+          photos.createIndex("byAssessment", "assessmentId");
+          photos.createIndex("byUpload", "upload");
+          db.createObjectStore("photoBlobs", { keyPath: "id" });
+          db.createObjectStore("suggestions", { keyPath: "id" }).createIndex("byPhoto", "photoId");
+          db.createObjectStore("syncOps", { keyPath: "opId" }).createIndex("bySeq", "seq");
+          db.createObjectStore("conflicts", { keyPath: "id" }).createIndex("byAssessment", "assessmentId");
+          db.createObjectStore("meta", { keyPath: "key" });
         }
       },
     });
@@ -87,8 +210,50 @@ export async function resetDbForTests(): Promise<void> {
   dbPromise = null;
 }
 
-const newId = () =>
-  globalThis.crypto?.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 12)}`;
+/** UUID v4 (field record ids, op ids, device id). */
+export function uuid(): string {
+  if (globalThis.crypto?.randomUUID) return globalThis.crypto.randomUUID();
+  const b = new Uint8Array(16);
+  globalThis.crypto.getRandomValues(b);
+  b[6] = (b[6]! & 0x0f) | 0x40;
+  b[8] = (b[8]! & 0x3f) | 0x80;
+  const h = [...b].map((x) => x.toString(16).padStart(2, "0")).join("");
+  return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+}
+const newId = uuid;
+
+// ---------- change notifications ----------
+
+type Listener = () => void;
+const listeners = new Set<Listener>();
+/** Subscribe to local data changes (writes, sync results). Returns an unsubscribe function. */
+export function onLocalChange(cb: Listener): () => void {
+  listeners.add(cb);
+  return () => listeners.delete(cb);
+}
+export function notifyLocalChange(): void {
+  for (const l of [...listeners]) l();
+}
+
+// ---------- meta ----------
+
+export async function getMeta<T>(key: string): Promise<T | undefined> {
+  return (await (await getDb()).get("meta", key))?.value as T | undefined;
+}
+export async function setMeta(key: string, value: unknown): Promise<void> {
+  await (await getDb()).put("meta", { key, value });
+}
+export async function deleteMeta(key: string): Promise<void> {
+  await (await getDb()).delete("meta", key);
+}
+
+/** Wipe every store that can hold client data (sign out, or a different user signing in). */
+export async function clearClientData(): Promise<void> {
+  const db = await getDb();
+  const tx = db.transaction([...CLIENT_DATA_STORES], "readwrite");
+  await Promise.all([...CLIENT_DATA_STORES.map((s) => tx.objectStore(s).clear()), tx.done]);
+  notifyLocalChange();
+}
 
 // ---------- library cache ----------
 
@@ -122,7 +287,7 @@ export async function clearDrafts(): Promise<void> {
 /** Number of unsaved items (drafts plus queued changes) that sign out would delete. */
 export async function pendingLocalCount(): Promise<number> {
   const db = await getDb();
-  return (await db.count("drafts")) + (await db.count("outbox"));
+  return (await db.count("drafts")) + (await db.count("outbox")) + (await db.count("syncOps"));
 }
 
 /** Queued changes can hold client data, so they are cleared on sign out too (QA R-11). */

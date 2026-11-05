@@ -1,0 +1,92 @@
+{
+  "name": "unlit-parking-lot",
+  "description": "Night photo of a parking lot with several fixtures out; first reply is truncated JSON, the retry succeeds.",
+  "context": {
+    "candidateControls": [
+      {
+        "id": "SC-LGT-001",
+        "title": "Parking area illuminance",
+        "objective": "Parking areas are lit to a level that supports observation and camera use at night.",
+        "assetTypes": [
+          "parking",
+          "lighting"
+        ]
+      },
+      {
+        "id": "SC-LGT-002",
+        "title": "Pedestrian path lighting continuity",
+        "objective": "Pedestrian paths are continuously lit without dark gaps.",
+        "assetTypes": [
+          "lighting"
+        ]
+      },
+      {
+        "id": "SC-VSS-002",
+        "title": "Perimeter and parking camera coverage",
+        "objective": "Cameras cover the perimeter and parking areas with unobstructed fields of view.",
+        "assetTypes": [
+          "camera",
+          "parking"
+        ]
+      }
+    ],
+    "assetTypeHint": "parking",
+    "areaName": "Lot B"
+  },
+  "responses": [
+    "{\"imageQuality\": \"dark\", \"assetType\": {\"value\": \"parking\"",
+    {
+      "imageQuality": "dark",
+      "assetType": {
+        "value": "parking",
+        "confidence": 0.7
+      },
+      "condition": {
+        "rating": "poor",
+        "summary": "Large portions of the lot are dark; two pole fixtures appear unlit.",
+        "confidence": 0.55
+      },
+      "deficiencies": [
+        {
+          "description": "Several pole fixtures are not lit, leaving dark areas between parked cars.",
+          "severity": "medium",
+          "confidence": 0.55,
+          "controlIds": [
+            "SC-LGT-001"
+          ]
+        }
+      ],
+      "controls": [
+        {
+          "id": "SC-LGT-001",
+          "confidence": 0.6,
+          "rationale": "Lighting level is the visible issue."
+        }
+      ],
+      "draftFindings": [
+        {
+          "title": "Parking lot fixtures out",
+          "description": "At least two pole fixtures in Lot B are unlit at night.",
+          "recommendation": "Repair fixtures and measure illuminance after repair.",
+          "severity": "medium",
+          "confidence": 0.5,
+          "controlIds": [
+            "SC-LGT-001"
+          ]
+        }
+      ],
+      "cautions": [
+        "Night photo: illuminance cannot be measured from an image."
+      ]
+    }
+  ],
+  "expect": {
+    "imageQuality": "dark",
+    "assetType": "parking",
+    "draftFindings": 1,
+    "controlIds": [
+      "SC-LGT-001"
+    ],
+    "calls": 2
+  }
+}

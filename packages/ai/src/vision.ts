@@ -220,6 +220,8 @@ export interface AnthropicVisionClientOptions {
   effort?: "low" | "medium" | "high" | "xhigh" | "max";
   /** For tests or proxies. */
   baseURL?: string;
+  /** Custom fetch, used by tests to record requests without a network. */
+  fetch?: typeof fetch;
 }
 
 export function createAnthropicVisionClient(opts: AnthropicVisionClientOptions): VisionClient {
@@ -229,6 +231,7 @@ export function createAnthropicVisionClient(opts: AnthropicVisionClientOptions):
     timeout: opts.timeoutMs ?? 60_000,
     maxRetries: opts.maxRetries ?? 2,
     ...(opts.baseURL ? { baseURL: opts.baseURL } : {}),
+    ...(opts.fetch ? { fetch: opts.fetch } : {}),
   });
 
   return {

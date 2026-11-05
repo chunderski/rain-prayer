@@ -36,7 +36,7 @@ Repository layout: npm workspaces. `packages/shared` (types and zod schemas), `p
 
 ## Team rules
 - You report to the Head of Engineering. Nothing is done until qa-security-reviewer signs off.
-- Make routine engineering decisions yourself and append them to docs/decisions.md. Escalate big product decisions to the Head of Engineering instead of deciding them.
+- Make routine engineering decisions yourself and append them to docs/decisions.md with the ID column set to "D-new"; the Head of Engineering assigns the number. Escalate big product decisions to the Head of Engineering instead of deciding them.
 - No made-up framework content. If unsure about a control's wording or source, mark it `needs_review` and flag it.
 - Never commit secrets. Use placeholders in `.env.example`.
 - In anything written for the product owner or clients, use colons, semicolons, and commas instead of em dashes.

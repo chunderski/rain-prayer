@@ -1,5 +1,5 @@
 /**
- * Cached session profile for offline start (decision D-031).
+ * Cached session profile for offline start (decision D-039).
  *
  * Holds only who the user is (user id, name, email, tenant, role) and when the server last
  * confirmed it. It is not a credential: it grants no API access, and sync waits until the refresh

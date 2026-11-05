@@ -113,10 +113,10 @@ export function Library() {
           return (
             <li key={c.id}>
               <Link to={`/library/${encodeURIComponent(c.id)}`} className="block rounded-xl border-2 border-line bg-surface p-4">
+                <span className="block text-xl font-bold text-primary underline underline-offset-4">{c.title}</span>
                 <span className="block text-base font-semibold text-muted">
                   {c.id} · {DOMAIN_LABELS[c.domain] ?? c.domain}
                 </span>
-                <span className="block text-xl font-bold text-primary underline underline-offset-4">{c.title}</span>
                 <span className="mt-1 block">{c.objective}</span>
                 <span className="mt-2 flex flex-wrap items-center gap-2">
                   {c.status === "needs_review" && <NeedsReviewBadge />}

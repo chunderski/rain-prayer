@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "IDN",
   "controls": [
     {
@@ -155,7 +155,7 @@
           "id": "Q-IDN-004-02",
           "text": "Are systems prioritized by the classification of data they hold and their impact on the mission?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for the criticality ranking.",
+          "guidance": "Ask for the criticality ranking. Partial: systems are ranked by data classification or by mission impact, but not both.",
           "photoOnDeficiency": false
         }
       ],
@@ -245,7 +245,7 @@
           "id": "Q-IDN-006-02",
           "text": "Does the organization receive threat intelligence from at least one sharing source (for example an ISAC or government advisory feed)?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask which feeds are used and who reads them.",
+          "guidance": "Ask which feeds are used and who reads them. Partial: feeds are received but no named person reviews them.",
           "photoOnDeficiency": false
         }
       ],

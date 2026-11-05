@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "ACC",
   "controls": [
     {
@@ -141,7 +141,7 @@
           "id": "Q-ACC-003-03",
           "text": "Are unreturned visitor badges reconciled at least daily, with temporary badges invalidated at sign-out?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check the visitor log against returned badges for one recent day.",
+          "guidance": "Check the visitor log against returned badges for one recent day. Partial: reconciled less often than daily, or temporary badges are not invalidated at sign-out.",
           "photoOnDeficiency": false
         }
       ],
@@ -323,7 +323,7 @@
           "id": "Q-ACC-007-02",
           "text": "Is the receiving area separated from the rest of the building by a door that is locked or controlled?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Photograph the separating door and its hardware.",
+          "guidance": "Photograph the separating door and its hardware. Partial: a separating door exists but was found propped open or unlocked during the walk.",
           "photoOnDeficiency": true
         }
       ],

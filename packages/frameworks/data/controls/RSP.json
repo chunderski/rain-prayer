@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "RSP",
   "controls": [
     {
@@ -106,7 +106,7 @@
           "id": "Q-RSP-003-02",
           "text": "Did the last significant incident include a documented root-cause analysis?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for the post-incident report.",
+          "guidance": "Ask for the post-incident report. Partial: a post-incident report exists but does not identify a root cause.",
           "photoOnDeficiency": false
         }
       ],
@@ -181,7 +181,7 @@
           "id": "Q-RSP-005-02",
           "text": "Can the response team isolate an endpoint or disable an account within 15 minutes, shown by test or a past ticket?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for a demonstration or ticket timestamps.",
+          "guidance": "Ask for a demonstration or ticket timestamps. Partial: possible, but the test or ticket shows it took longer than 15 minutes.",
           "photoOnDeficiency": false
         }
       ],

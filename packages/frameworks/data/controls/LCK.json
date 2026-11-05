@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "LCK",
   "controls": [
     {
@@ -84,7 +84,7 @@
           "id": "Q-LCK-002-03",
           "text": "Do master keys use a restricted or patented keyway that cannot be duplicated without authorization?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check the key marking or the locksmith's documentation.",
+          "guidance": "Check the key marking or the locksmith's documentation. Partial: a restricted keyway is used for some master key systems but not all.",
           "photoOnDeficiency": false
         }
       ],
@@ -118,14 +118,14 @@
           "id": "Q-LCK-003-01",
           "text": "Are out-swinging exterior doors fitted with non-removable hinge pins or security studs?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Inspect from outside. Photograph exposed removable pins.",
+          "guidance": "Inspect from outside. Photograph exposed removable pins. Partial: exposed removable hinge pins on one door only.",
           "photoOnDeficiency": true
         },
         {
           "id": "Q-LCK-003-02",
           "text": "Is each exterior latch protected by a latch guard, or is the door-to-frame gap at the latch 1/8 in (3 mm) or less?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Measure the gap at the latch with a feeler gauge or ruler.",
+          "guidance": "Measure the gap at the latch with a feeler gauge or ruler. Partial: one exterior latch has neither a latch guard nor a gap of 1/8 in (3 mm) or less.",
           "photoOnDeficiency": true
         }
       ],

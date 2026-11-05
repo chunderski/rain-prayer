@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "LGT",
   "controls": [
     {
@@ -28,7 +28,7 @@
           "text": "Lowest horizontal illuminance measured at grade in the parking area at night",
           "answerType": "number",
           "unit": "lux",
-          "guidance": "Take readings with a calibrated meter at the darkest visible points, sensor flat at grade. 1 foot-candle = 10.76 lux. Compare with the site target or ANSI/IES RP-20 (unverified).",
+          "guidance": "Take readings with a calibrated meter at the darkest visible points, sensor flat at grade. 1 foot-candle = 10.76 lux. Target to confirm: the site target, or ANSI/IES RP-20 values for the property type.",
           "photoOnDeficiency": true
         },
         {
@@ -70,7 +70,7 @@
           "id": "Q-LGT-002-01",
           "text": "Are exterior pedestrian paths lit at night with no unlit gaps between fixtures?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Walk each path at night. A gap is a stretch where a person's face cannot be seen at 30 ft (9 m). Photograph each gap.",
+          "guidance": "Walk each path at night. A gap is a stretch where a person's face cannot be seen at 30 ft (9 m). Photograph each gap. Partial: one unlit gap, on a secondary path only; any gap on a main entrance route is No.",
           "photoOnDeficiency": true
         }
       ],
@@ -156,9 +156,16 @@
         },
         {
           "id": "Q-LGT-004-02",
-          "text": "Is there a defined repair time for failed exterior lights (for example 72 hours) and was it met for the last 5 work orders?",
+          "text": "Is there a defined repair time for failed exterior lights (for example 72 hours)?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Partial: target defined but not met.",
+          "guidance": "Ask for the policy, contract, or work order standard. Partial: a target is used in practice but is not written down.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-LGT-004-03",
+          "text": "Was the defined repair time met for each of the last 5 exterior lighting work orders?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Compare report and completion dates. Partial: met for 3 or 4 of the 5. Answer N/A if there is no defined repair time.",
           "photoOnDeficiency": false
         }
       ],
@@ -203,7 +210,7 @@
           "id": "Q-LGT-005-02",
           "text": "Is lighting at entrances, camera views, and guard posts on emergency or generator power?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check panel schedules or ask facilities to show the circuits.",
+          "guidance": "Check panel schedules or ask facilities to show the circuits. Partial: one or two of the three (entrances, camera views, guard posts) are on emergency power, not all three.",
           "photoOnDeficiency": false
         }
       ],
@@ -238,7 +245,7 @@
           "id": "Q-LGT-006-01",
           "text": "Is every camera view and guard sightline free of light fixtures shining directly toward it?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check night camera views for bright fixtures in frame. Photograph conflicts.",
+          "guidance": "Check night camera views for bright fixtures in frame. Photograph conflicts. Partial: glare affects one camera view or sightline only.",
           "photoOnDeficiency": true
         }
       ],

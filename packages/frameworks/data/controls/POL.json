@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "POL",
   "controls": [
     {
@@ -63,7 +63,7 @@
           "id": "Q-POL-002-02",
           "text": "Were the recommendations from that assessment tracked to closure with owners and dates?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for the remediation tracker.",
+          "guidance": "Ask for the remediation tracker. Partial: recommendations tracked with owners but without dates, or some recommendations not tracked.",
           "photoOnDeficiency": false
         }
       ],
@@ -247,7 +247,7 @@
           "id": "Q-POL-007-01",
           "text": "Are public directories, signs, and door labels free of wording that identifies critical rooms (server room, cash room, chemical storage, security office)?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Code-required hazard signage is exempt; note it. Photograph each revealing sign.",
+          "guidance": "Code-required hazard signage is exempt; note it. Photograph each revealing sign. Partial: one revealing sign or label found.",
           "photoOnDeficiency": true
         }
       ],

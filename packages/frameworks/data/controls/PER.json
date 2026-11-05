@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "PER",
   "controls": [
     {
@@ -27,7 +27,7 @@
           "text": "Measured fence height at the lowest point along the run, including any top guard",
           "answerType": "number",
           "unit": "ft",
-          "guidance": "Measure from finished grade to the top of the fabric or top guard at the lowest section found. Record in feet (1 ft = 0.305 m). Compare against the site specification; DoD sites commonly specify 7 ft fabric plus top guard (UFC 4-022-03, unverified).",
+          "guidance": "Measure from finished grade to the top of the fabric or top guard at the lowest section found. Record in feet (1 ft = 0.305 m). Target to confirm: the site specification; DoD sites commonly specify 7 ft fabric plus top guard (UFC 4-022-03).",
           "photoOnDeficiency": true
         },
         {
@@ -41,7 +41,7 @@
           "id": "Q-PER-001-03",
           "text": "Is the gap between the bottom of the fence and grade 2 in (5 cm) or less along the full run, including at washouts?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check low points, swales, and drainage paths where erosion creates gaps. Photograph and measure the largest gap found.",
+          "guidance": "Check low points, swales, and drainage paths where erosion creates gaps. Photograph and measure the largest gap found. Partial: one location with a gap over 2 in (5 cm).",
           "photoOnDeficiency": true
         }
       ],
@@ -81,7 +81,7 @@
           "text": "Narrowest measured width of the outside clear zone free of vegetation taller than 8 in, structures, and stored material",
           "answerType": "number",
           "unit": "ft",
-          "guidance": "Measure from the fence line outward at the narrowest point. Record 0 if objects touch the fence. Site specification governs; UFC 4-022-03 discusses clear zones (unverified).",
+          "guidance": "Measure from the fence line outward at the narrowest point. Record 0 if objects touch the fence. Target to confirm: the site specification; UFC 4-022-03 discusses clear zones.",
           "photoOnDeficiency": true
         },
         {
@@ -131,9 +131,16 @@
         },
         {
           "id": "Q-PER-003-02",
-          "text": "Do gates match the fence height with no gap over 2 in (5 cm) at hinges, between leaves, or under the gate?",
+          "text": "Do all perimeter gates match the height of the adjacent fence, including any top guard?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Inspect hinge side, latch side, and bottom. Photograph and measure gaps.",
+          "guidance": "Measure each gate against the fence beside it. Partial: one gate lower than the fence. Photograph low gates.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-PER-003-03",
+          "text": "Is every gap at gate hinges, between gate leaves, and under each gate 2 in (5 cm) or less?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Inspect the hinge side, latch side, and bottom of each gate. Partial: a gap over 2 in (5 cm) at one gate only. Photograph and measure gaps.",
           "photoOnDeficiency": true
         }
       ],
@@ -180,7 +187,7 @@
           "text": "Shortest measured distance from an uncontrolled vehicle area (street, visitor parking) to the occupied building facade",
           "answerType": "number",
           "unit": "ft",
-          "guidance": "Measure or scale from the site plan. Compare to the site's design basis threat; UFC 4-010-01 defines DoD minimum standoff (unverified, cite only if DoD).",
+          "guidance": "Measure or scale from the site plan. Target to confirm: the site's design basis threat; for DoD sites only, the UFC 4-010-01 minimum standoff.",
           "photoOnDeficiency": true
         }
       ],
@@ -215,7 +222,7 @@
           "id": "Q-PER-005-01",
           "text": "Are all perimeter openings larger than 96 sq in (620 sq cm) with any side over 6 in (15 cm) protected by grilles, bars, or equal barriers?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Include culverts, drainage ditches, and utility tunnels. The 96 sq in threshold follows common DoD practice (UFC 4-022-03, unverified). Photograph each opening.",
+          "guidance": "Include culverts, drainage ditches, and utility tunnels. Partial: one unprotected opening, or a protected opening with damaged grilles or bars. Photograph each opening. Target to confirm: the 96 sq in threshold follows common DoD practice (UFC 4-022-03).",
           "photoOnDeficiency": true
         }
       ],
@@ -257,7 +264,7 @@
           "id": "Q-PER-006-02",
           "text": "Is perimeter signage free of wording that names critical assets or functions behind it (for example 'chemical storage' or 'data center')?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Signs should state rules, not contents. Hazard signage required by code is exempt; note it instead.",
+          "guidance": "Signs should state rules, not contents. Hazard signage required by code is exempt; note it instead. Partial: one sign names a critical asset or function.",
           "photoOnDeficiency": true
         }
       ],

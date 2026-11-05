@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "CRY",
   "controls": [
     {
@@ -190,7 +190,7 @@
           "id": "Q-CRY-004-02",
           "text": "Is AES with 256-bit keys used for data that must stay confidential for 10 years or more?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Partial: AES-128 used. AES-256 is CNSA 2.0 practice (unverified for commercial targets).",
+          "guidance": "Partial: AES-128 used. Target to confirm: AES-256 follows CNSA 2.0 for national security systems; confirm whether the client adopts it for commercial data.",
           "photoOnDeficiency": false
         }
       ],
@@ -234,7 +234,7 @@
           "id": "Q-CRY-005-02",
           "text": "Is TLS 1.3 enabled on externally facing services?",
           "answerType": "yes_partial_no_na",
-          "guidance": "TLS 1.3 is the version where hybrid post-quantum key exchange is being deployed; partial: some services.",
+          "guidance": "TLS 1.3 is the version where hybrid post-quantum key exchange is being deployed. Partial: enabled on some externally facing services but not all.",
           "photoOnDeficiency": false
         }
       ],
@@ -429,7 +429,7 @@
           "id": "Q-CRY-009-02",
           "text": "Do the roadmap's target dates finish moving critical systems off quantum-vulnerable algorithms by 2035, the disallowance date in the IR 8547 draft?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check against the current version of IR 8547 (draft dates: deprecate 2030, disallow 2035; unverified).",
+          "guidance": "Partial: target dates by 2035 exist for some critical systems but not all. Target to confirm: the IR 8547 draft dates (deprecate 2030, disallow 2035); check the current version of IR 8547.",
           "photoOnDeficiency": false
         },
         {
@@ -484,14 +484,14 @@
           "id": "Q-CRY-010-02",
           "text": "Where hybrid key establishment is deployed, is the combination and the plan to retire the classical part documented?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Answer N/A if no hybrid is deployed.",
+          "guidance": "Answer N/A if no hybrid is deployed. Partial: the hybrid combination is documented but there is no plan to retire the classical part.",
           "photoOnDeficiency": false
         },
         {
           "id": "Q-CRY-010-03",
           "text": "Are PQC implementations in use drawn from libraries or modules with NIST algorithm validation (CAVP) or FIPS 140-3 validation where required?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for certificate numbers.",
+          "guidance": "Ask for certificate numbers. Partial: validated libraries or modules for some PQC implementations but not all, or validation is still in process.",
           "photoOnDeficiency": false
         }
       ],

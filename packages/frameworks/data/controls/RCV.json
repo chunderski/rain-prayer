@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "RCV",
   "controls": [
     {
@@ -25,9 +25,16 @@
       "questions": [
         {
           "id": "Q-RCV-001-01",
-          "text": "Is at least one copy of critical backups offline or immutable, and separated from production credentials?",
+          "text": "Is at least one copy of critical backups offline or immutable?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Partial: backups exist but all reachable with domain admin credentials.",
+          "guidance": "Ask to see the offline media or the immutability setting. Partial: an offline or immutable copy exists for some critical systems but not all.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-RCV-001-03",
+          "text": "Are backups separated from production credentials, so that a domain administrator account cannot delete or alter them?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask how the backup console and storage are accessed. Partial: separate backup accounts exist but domain administrators can still reach the backup console.",
           "photoOnDeficiency": false
         },
         {

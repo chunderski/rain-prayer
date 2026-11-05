@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "GRD",
   "controls": [
     {
@@ -242,16 +242,23 @@
       "questions": [
         {
           "id": "Q-GRD-006-01",
-          "text": "Are incidents recorded with time, location, description, and action taken, and reviewed by a supervisor within 24 hours?",
+          "text": "Are incidents recorded with time, location, description, and action taken?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Sample 5 entries. Partial: entries complete but not reviewed.",
+          "guidance": "Sample 5 entries. Partial: 3 or 4 of the 5 entries are complete.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GRD-006-03",
+          "text": "Was each of the 5 sampled incident entries reviewed by a supervisor within 24 hours?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Look for a supervisor signature or review timestamp on the same 5 entries. Partial: all reviewed, but some later than 24 hours.",
           "photoOnDeficiency": false
         },
         {
           "id": "Q-GRD-006-02",
           "text": "Are physical incidents that could affect information systems (for example a forced server room door) reported to IT security?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for the procedure or a recent example.",
+          "guidance": "Ask for the procedure or a recent example. Partial: reporting happens in practice (a recent example exists) but there is no written procedure.",
           "photoOnDeficiency": false
         }
       ],

@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "GOV",
   "controls": [
     {
@@ -29,7 +29,7 @@
           "id": "Q-GOV-001-02",
           "text": "Is the policy communicated to all staff, with acknowledgement recorded?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for acknowledgement records.",
+          "guidance": "Ask for acknowledgement records. Partial: communicated to all staff but acknowledgement recorded for only some, or communicated to some staff groups only.",
           "photoOnDeficiency": false
         }
       ],
@@ -106,9 +106,16 @@
         },
         {
           "id": "Q-GOV-003-02",
-          "text": "Is there a risk register that scores cybersecurity risks with a defined method and was updated in the last 6 months?",
+          "text": "Is there a risk register that scores cybersecurity risks with a defined method?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Partial: register exists but stale or without a scoring method.",
+          "guidance": "Ask for the register and the scoring method. Partial: risks are listed but not scored, or scored without a documented method.",
+          "photoOnDeficiency": false
+        },
+        {
+          "id": "Q-GOV-003-03",
+          "text": "Was the cybersecurity risk register updated in the last 6 months?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Check the last-modified date or change history. Partial: updated 6 to 12 months ago. Answer N/A if there is no register.",
           "photoOnDeficiency": false
         }
       ],

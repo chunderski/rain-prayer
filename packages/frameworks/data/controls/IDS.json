@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "IDS",
   "controls": [
     {
@@ -35,7 +35,7 @@
           "id": "Q-IDS-001-02",
           "text": "Are accessible ground-floor windows and roof hatches covered by contacts, glass-break, or motion detection?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Accessible means reachable from grade or a climbable feature without a ladder.",
+          "guidance": "Accessible means reachable from grade or a climbable feature without a ladder. Partial: some accessible windows or hatches are covered and others are not; record which.",
           "photoOnDeficiency": true
         }
       ],
@@ -74,7 +74,7 @@
           "id": "Q-IDS-002-01",
           "text": "Are server rooms, cash rooms, and other high-value rooms covered by an interior detector on a separate zone?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Check detector placement covers the entry path into the room.",
+          "guidance": "Check detector placement covers the entry path into the room. Partial: only some high-value rooms are covered, or the detector shares a zone with general areas.",
           "photoOnDeficiency": true
         }
       ],
@@ -208,10 +208,17 @@
       "questions": [
         {
           "id": "Q-IDS-005-01",
-          "text": "Are panic or duress buttons installed at reception and cash-handling positions, and tested in the last 12 months?",
+          "text": "Are panic or duress buttons installed at reception and cash-handling positions?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Partial: installed but not tested in 12 months.",
+          "guidance": "Partial: installed at some of these positions but not all. Photograph positions without a button.",
           "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-IDS-005-02",
+          "text": "Was every panic or duress button tested in the last 12 months, with a dated record?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Ask for test records from the alarm company or monitoring center. Partial: some buttons tested, or tested without a dated record. Answer N/A if none are installed.",
+          "photoOnDeficiency": false
         }
       ],
       "references": [
@@ -255,7 +262,7 @@
           "id": "Q-IDS-006-02",
           "text": "Does the panel report loss of its primary communication path, using a second path (cellular or network) as backup?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask for the communicator configuration or monitoring account details.",
+          "guidance": "Ask for the communicator configuration or monitoring account details. Partial: a backup path exists but loss of the primary path is not reported to the monitoring point.",
           "photoOnDeficiency": false
         }
       ],

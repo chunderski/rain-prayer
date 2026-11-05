@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "VSS",
   "controls": [
     {
@@ -35,7 +35,7 @@
           "text": "Pixel density on target at the entrance threshold, measured or calculated",
           "answerType": "number",
           "unit": "px/m",
-          "guidance": "Use a test target or calculate from resolution, lens, and distance. IEC 62676-4 DORI guidance: about 250 px/m to identify, 125 to recognize (unverified).",
+          "guidance": "Use a test target or calculate from resolution, lens, and distance. Target to confirm: IEC 62676-4 DORI guidance of about 250 px/m to identify and 125 px/m to recognize.",
           "photoOnDeficiency": false
         }
       ],
@@ -73,9 +73,16 @@
       "questions": [
         {
           "id": "Q-VSS-002-01",
-          "text": "Do camera views cover the full perimeter line and all parking areas, with adjacent views overlapping and no blind spots?",
+          "text": "Do camera views cover the full perimeter line, with adjacent views overlapping so there are no blind spots?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Compare the camera layout with a walk of the perimeter. Photograph each blind spot.",
+          "guidance": "Compare the camera layout with a walk of the perimeter. Partial: one blind spot found. Photograph each blind spot.",
+          "photoOnDeficiency": true
+        },
+        {
+          "id": "Q-VSS-002-03",
+          "text": "Do camera views cover all parking areas with no blind spots?",
+          "answerType": "yes_partial_no_na",
+          "guidance": "Walk each parking area and compare with the live views. Partial: one parking row or section not covered. Photograph each blind spot. Answer N/A if the site has no parking.",
           "photoOnDeficiency": true
         },
         {
@@ -83,7 +90,7 @@
           "text": "Pixel density at the far edge of the perimeter detection zone",
           "answerType": "number",
           "unit": "px/m",
-          "guidance": "IEC 62676-4 DORI: about 25 px/m to detect, 62 to observe (unverified). Record the lowest value across perimeter cameras.",
+          "guidance": "Record the lowest value across perimeter cameras. Target to confirm: IEC 62676-4 DORI guidance of about 25 px/m to detect and 62 px/m to observe.",
           "photoOnDeficiency": false
         }
       ],
@@ -171,7 +178,7 @@
           "id": "Q-VSS-004-02",
           "text": "Does the video system send an alert to a monitored point when a camera goes offline or is tampered with?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask the operator to show an alert or the configuration.",
+          "guidance": "Ask the operator to show an alert or the configuration. Partial: offline alerts work but tamper alerts do not, or alerts go to a point that is not monitored at all times.",
           "photoOnDeficiency": false
         }
       ],
@@ -259,7 +266,7 @@
           "id": "Q-VSS-006-02",
           "text": "Is the video system on a network segment separated from the general business network by a firewall or VLAN with access rules?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Review the network diagram or switch configuration.",
+          "guidance": "Review the network diagram or switch configuration. Partial: on a separate VLAN but without access rules between segments.",
           "photoOnDeficiency": false
         },
         {
@@ -310,7 +317,7 @@
           "id": "Q-VSS-007-02",
           "text": "Can an authorized operator export a clip with a hash, watermark, or signed export that shows it was not altered?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Ask the operator to demonstrate an export.",
+          "guidance": "Ask the operator to demonstrate an export. Partial: an export is possible but without a hash, watermark, or signature.",
           "photoOnDeficiency": false
         }
       ],

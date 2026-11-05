@@ -1,5 +1,5 @@
 {
-  "libraryVersion": "1.0.0",
+  "libraryVersion": "1.1.0",
   "domain": "PRT",
   "controls": [
     {
@@ -165,7 +165,7 @@
           "id": "Q-PRT-004-02",
           "text": "Is installation or execution of unapproved software blocked on endpoints (application allowlisting or no local admin rights)?",
           "answerType": "yes_partial_no_na",
-          "guidance": "Test with a standard user account if allowed.",
+          "guidance": "Test with a standard user account if allowed. Partial: blocked on some endpoint groups only (for example servers but not laptops), or local admin rights removed for most but not all users.",
           "photoOnDeficiency": false
         }
       ],

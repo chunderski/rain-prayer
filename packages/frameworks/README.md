@@ -9,19 +9,22 @@ data/
   controls/<DOMAIN>.json          SharedControlLibrary: one file per domain (16 files)
   frameworks/<id>/<version>.json  FrameworkVersion: one file per framework version
   crosswalk.json                  Crosswalk: shared control -> framework requirement
+  walkthrough.json                Walkthrough: field order of sections, asset type -> likely controls
+CHANGELOG.md                      every library release and every changed question id
 src/
-  index.ts                        loadLibrary(), checkIntegrity(), crosswalk queries
+  index.ts                        loadLibrary(), checkIntegrity(), checkWalkthrough(), crosswalk queries
   validate-cli.ts                 npm run validate:frameworks
   library.test.ts                 Vitest content tests
 ```
 
-Library 1.0.0 contents:
+Library 1.1.0 contents (see CHANGELOG.md for what changed from 1.0.0):
 
 | Layer | Count |
 |---|---|
 | Shared controls | 101 (physical: PER 6, ACC 7, VSS 7, IDS 6, LCK 6, LGT 6, GRD 6, POL 7, ENV 7; cyber: GOV 6, IDN 6, PRT 7, DET 5, RSP 5, RCV 4; CRY 10) |
-| Questions | 176 (yes/partial/no/N/A, number with unit, or anchored scale; no free text) |
+| Questions | 184 (yes/partial/no/N/A, number with unit, or anchored scale; no free text). Every yes/partial/no/N/A question defines Partial in its guidance |
 | Frameworks | nist-csf-2 (6 functions, 22 categories, 106 subcategories), pqc-readiness (8 pillars, 13 requirements), cpted (6 principles, 17 strategies), carver (6 criteria with 1 to 10 scales), physical-general (8 areas, 36 requirements) |
+| Walkthrough | 11 sections in field order covering all 16 domains once; `assetTypeControls` for all 23 asset types |
 | Crosswalk | 272 entries: 118 satisfies, 119 supports, 35 informs; 75 controls count toward 2 or more frameworks, 22 toward 3 or more |
 
 ### The three layers
@@ -39,6 +42,12 @@ CARVER codes: `SA-CARVER-C` Criticality, `SA-CARVER-A` Accessibility, `SA-CARVER
 
 Units: distances are in feet with metric in the question text, illuminance in lux (1 fc = 10.76 lux), pixel density in px/m.
 
+### Walkthrough
+
+`data/walkthrough.json` orders the guided field walk (API: `GET /assessments/:id/walkthrough`). Sections follow the route an assessor walks: arrival and perimeter (PER, ENV), parking and exterior lighting (LGT, needs a night visit), entrances and access control (ACC), building envelope (LCK), interior and intrusion detection (IDS), video surveillance (VSS), security operations and guards (GRD), policies and records interview (POL), IT and server room (PRT, IDN, DET), cyber governance interview (GOV, RSP, RCV), cryptography and PQC interview (CRY). Each description tells the assessor what to bring, when to go, and what to request in advance.
+
+Rules, enforced by `checkWalkthrough()`: every domain is in exactly one section; section ids and `order` values are unique; `assetTypeControls` has a key for every `AssetType` and lists only existing shared controls; `libraryVersion` equals the crosswalk's. `assetTypeControls` is derived from each control's `assetTypes` plus a few additions (gate, server room, barrier); it feeds candidate controls to the photo model.
+
 ## Working with the library
 
 ```
@@ -47,15 +56,24 @@ npx vitest run --root packages/frameworks   # content tests
 npx tsc --noEmit -p packages/frameworks
 ```
 
-### Changing content
+### Changing content (versioning practice)
 
-Every file carries a semantic version and assessments pin the versions they used. Never edit a published version in place:
+Phase 1 is signed off (D-026), so every content change publishes a new version and is recorded in `CHANGELOG.md`. Assessments pin the library release and framework versions they used (D-023).
 
 - Wording fix or new citation note: patch (`1.0.1`).
-- New requirement, control, or question: minor (`1.1.0`).
-- Removed or re-coded requirement, changed scale: major (`2.0.0`).
+- New requirement, control, or question, or a split question: minor (`1.1.0`).
+- Removed or re-coded requirement, removed question, changed scale or answer type: major (`2.0.0`).
 
-Write the new version next to the old one (`data/frameworks/nist-csf-2/1.1.0.json`), keep the old file, and bump `libraryVersion` in the control files and crosswalk when they change. The loader accepts several versions of one framework; the crosswalk currently references requirement codes by framework id, so a re-coded major version needs a crosswalk review.
+Library release: the control files, `crosswalk.json`, and `walkthrough.json` share one `libraryVersion` (tests enforce this); bump all of them together. Framework files are versioned on their own: write the new version next to the old one (`data/frameworks/nist-csf-2/1.1.0.json`) and keep the old file. The loader accepts several versions of one framework; the crosswalk references requirement codes by framework id, so a re-coded major version needs a crosswalk review.
+
+Question ids:
+
+- Keep the id when the meaning is unchanged (guidance edits, clearer wording).
+- When splitting a compound question, the original id keeps the first part and the other parts get the next free numbers in that control.
+- Never reuse an id for a different meaning; retire it instead.
+- List every added or changed id in `CHANGELOG.md`.
+
+Field guidance style: yes/partial/no/N/A questions say `Partial: ...`; thresholds that are not confirmed against a source say `Target to confirm: ...`, never "(unverified)".
 
 ### Adding a framework (ASIS, ISO 27001)
 
@@ -67,7 +85,7 @@ Write the new version next to the old one (`data/frameworks/nist-csf-2/1.1.0.jso
 ## Citation policy
 
 - Cite document, edition, and section or identifier for every requirement and control reference.
-- `verified: true` only when the wording and section were checked against the source. Nothing in 1.0.0 is verified: the build container could not reach nist.gov or any standards body.
+- `verified: true` only when the wording and section were checked against the source. Nothing in 1.0.0 or 1.1.0 is verified: the build container could not reach nist.gov or any standards body.
 - Paywalled sources (ISO, ASIS, IEC, UL, NFPA, IES, BHMA) are always paraphrased.
 - Requirement `status` is `needs_review` whenever its citation is unverified. Shared controls are all `needs_review`; none is `approved` until a human expert reviews it.
 - Sentinel-authored requirements (PQC, CPTED, CARVER, physical-general) say in their citation note that they are derived from the source, not quoted.
@@ -81,7 +99,7 @@ Write the new version next to the old one (`data/frameworks/nist-csf-2/1.1.0.jso
 | nist-csf-2 GV.OC-03 | Source uses a dash-delimited aside; rewritten with commas for house style | Confirm acceptable deviation from official text |
 | nist-csf-2 GV.RR-03, PR.IR-04 | Official text contains "Adequate"; kept as quoted | None (question heuristic applies to questions only) |
 | pqc-readiness, all requirements | Sentinel requirements derived from sources; section names, not numbers, for FIPS 203, 204, 205 | Add FIPS section numbers (parameter set sections) after checking the PDFs |
-| NIST IR 8547 | Initial public draft (Nov 2024); 2030 deprecation and 2035 disallowance dates | Check for a final version and any date changes; update SA-PQC-MIG-01 and Q-CRY-009-02 |
+| NIST IR 8547 | Initial public draft (Nov 2024); 2030 deprecation and 2035 disallowance dates | Check for a final version and any date changes; update SA-PQC-MIG-01 and Q-CRY-009-02 (guidance says "Target to confirm") |
 | CNSA 2.0 | Cited for AES-256 and SHA-384/512 and timelines; applies to National Security Systems | Confirm current advisory version |
 | SA-PQC-TST-02 | CAVP and CMVP program references | Confirm program names and current FIPS 140-3 guidance |
 | SA-PQC-DATA-01 | Lifetime vs. threat horizon method (Mosca) is a Sentinel method | None; already labeled |

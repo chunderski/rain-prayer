@@ -1,0 +1,332 @@
+{
+  "libraryVersion": "1.1.0",
+  "sections": [
+    {
+      "id": "arrival-perimeter",
+      "title": "Arrival and perimeter",
+      "description": "Start outside the property line and walk the full fence and gate line, then the approach to the building. Bring a tape measure and a camera. Go in daylight first; note signage, landscaping, and upkeep as a visitor would see them.",
+      "order": 0,
+      "domains": [
+        "PER",
+        "ENV"
+      ]
+    },
+    {
+      "id": "parking-lighting",
+      "title": "Parking and exterior lighting",
+      "description": "Walk parking areas, paths, and entrances. Lighting checks need a night visit: go at least 30 minutes after sunset with a calibrated light meter. Ask facilities for lighting work orders and the backup power schedule.",
+      "order": 1,
+      "domains": [
+        "LGT"
+      ]
+    },
+    {
+      "id": "entrances-access",
+      "title": "Entrances and access control",
+      "description": "Try every exterior door from outside, then arrive at reception as a visitor would. Watch the main entry at a busy time for tailgating. Ask for an export of active credentials and the last 5 staff separations.",
+      "order": 2,
+      "domains": [
+        "ACC"
+      ]
+    },
+    {
+      "id": "building-envelope",
+      "title": "Building envelope: doors, windows, locks",
+      "description": "Inspect exterior doors, frames, hinges, latches, and accessible windows. Bring a ruler or feeler gauge for latch gaps. Ask for the key register and the date combinations were last changed.",
+      "order": 3,
+      "domains": [
+        "LCK"
+      ]
+    },
+    {
+      "id": "interior-alarms",
+      "title": "Interior, restricted areas, and intrusion detection",
+      "description": "Walk the inside of the building to server rooms, cash rooms, and other restricted areas, noting detectors on the way. Ask the alarm company or monitoring center for test records and the communicator setup before the visit.",
+      "order": 4,
+      "domains": [
+        "IDS"
+      ]
+    },
+    {
+      "id": "video-surveillance",
+      "title": "Video surveillance",
+      "description": "Sit with the operator at the recorder or monitoring station and compare live views with what you saw on the walk. Check night views if you are there after dark. Ask for the camera layout drawing and retention settings.",
+      "order": 5,
+      "domains": [
+        "VSS"
+      ]
+    },
+    {
+      "id": "security-operations",
+      "title": "Security operations and guards",
+      "description": "Visit each guard post, read the post orders, and ask an officer to show the patrol record and radio check. Plan for a shift change if you can, so you see handover and staffing.",
+      "order": 6,
+      "domains": [
+        "GRD"
+      ]
+    },
+    {
+      "id": "policies-records",
+      "title": "Policies and records (office interview)",
+      "description": "Sit down with the security or facilities manager. Ask in advance for the security policy, last risk assessment, emergency plans, drill records, training records, and screening procedure, so you can check dates on the spot.",
+      "order": 7,
+      "domains": [
+        "POL"
+      ]
+    },
+    {
+      "id": "it-server-room",
+      "title": "IT and server room",
+      "description": "Walk the server room and network closets with an IT contact, then review asset inventories, patching, access, and monitoring at their console. Ask for the network diagram and a recent vulnerability scan report ahead of time.",
+      "order": 8,
+      "domains": [
+        "PRT",
+        "IDN",
+        "DET"
+      ]
+    },
+    {
+      "id": "cyber-governance",
+      "title": "Cyber governance (interview)",
+      "description": "Interview the IT or security lead and the person who owns risk. Ask in advance for the cybersecurity policy, risk register, supplier list, incident response plan, recent incident reports, and backup and recovery test records.",
+      "order": 9,
+      "domains": [
+        "GOV",
+        "RSP",
+        "RCV"
+      ]
+    },
+    {
+      "id": "cryptography-pqc",
+      "title": "Cryptography and PQC (interview)",
+      "description": "Interview the IT or security architect about encryption, keys, certificates, and post-quantum planning. Ask in advance for any crypto inventory, certificate list, vendor PQC roadmaps, and the migration plan.",
+      "order": 10,
+      "domains": [
+        "CRY"
+      ]
+    }
+  ],
+  "assetTypeControls": {
+    "camera": [
+      "SC-DET-004",
+      "SC-LGT-006",
+      "SC-VSS-001",
+      "SC-VSS-002",
+      "SC-VSS-003",
+      "SC-VSS-004",
+      "SC-VSS-005",
+      "SC-VSS-006",
+      "SC-VSS-007"
+    ],
+    "door": [
+      "SC-ACC-001",
+      "SC-ACC-003",
+      "SC-ACC-004",
+      "SC-ACC-005",
+      "SC-ACC-006",
+      "SC-ACC-007",
+      "SC-ENV-001",
+      "SC-ENV-004",
+      "SC-ENV-007",
+      "SC-IDS-001",
+      "SC-LCK-001",
+      "SC-LCK-003",
+      "SC-LGT-003",
+      "SC-POL-007",
+      "SC-VSS-001"
+    ],
+    "gate": [
+      "SC-LGT-003",
+      "SC-PER-001",
+      "SC-PER-003",
+      "SC-VSS-002"
+    ],
+    "lock": [
+      "SC-LCK-001",
+      "SC-LCK-002",
+      "SC-LCK-005",
+      "SC-LCK-006"
+    ],
+    "card_reader": [
+      "SC-ACC-001",
+      "SC-ACC-002",
+      "SC-ACC-004",
+      "SC-ACC-005",
+      "SC-ACC-006",
+      "SC-DET-004"
+    ],
+    "alarm_panel": [
+      "SC-ACC-004",
+      "SC-DET-004",
+      "SC-IDS-003",
+      "SC-IDS-004",
+      "SC-IDS-005",
+      "SC-IDS-006"
+    ],
+    "sensor": [
+      "SC-IDS-001",
+      "SC-IDS-002",
+      "SC-IDS-004",
+      "SC-IDS-005"
+    ],
+    "fence": [
+      "SC-ENV-003",
+      "SC-PER-001",
+      "SC-PER-002",
+      "SC-PER-005",
+      "SC-PER-006",
+      "SC-VSS-002"
+    ],
+    "barrier": [
+      "SC-ACC-006",
+      "SC-ACC-007",
+      "SC-PER-004",
+      "SC-PER-005"
+    ],
+    "lighting": [
+      "SC-LGT-001",
+      "SC-LGT-002",
+      "SC-LGT-003",
+      "SC-LGT-004",
+      "SC-LGT-005",
+      "SC-LGT-006",
+      "SC-VSS-005"
+    ],
+    "window": [
+      "SC-ENV-001",
+      "SC-IDS-001",
+      "SC-LCK-004"
+    ],
+    "signage": [
+      "SC-ENV-003",
+      "SC-ENV-004",
+      "SC-PER-006",
+      "SC-POL-007"
+    ],
+    "landscaping": [
+      "SC-ENV-002",
+      "SC-ENV-003",
+      "SC-ENV-006",
+      "SC-PER-002"
+    ],
+    "parking": [
+      "SC-ACC-007",
+      "SC-ENV-001",
+      "SC-LGT-001",
+      "SC-PER-004",
+      "SC-VSS-002"
+    ],
+    "guard_post": [
+      "SC-GRD-001",
+      "SC-GRD-002",
+      "SC-GRD-003",
+      "SC-GRD-004",
+      "SC-GRD-005",
+      "SC-GRD-006"
+    ],
+    "server_room": [
+      "SC-ACC-004",
+      "SC-ACC-005",
+      "SC-IDS-002",
+      "SC-LCK-005",
+      "SC-PRT-007",
+      "SC-VSS-001"
+    ],
+    "network_device": [
+      "SC-CRY-005",
+      "SC-DET-001",
+      "SC-DET-002",
+      "SC-IDN-001",
+      "SC-IDN-003",
+      "SC-IDN-005",
+      "SC-LCK-005",
+      "SC-PRT-003",
+      "SC-PRT-005",
+      "SC-VSS-006"
+    ],
+    "server": [
+      "SC-CRY-001",
+      "SC-CRY-004",
+      "SC-DET-001",
+      "SC-DET-002",
+      "SC-DET-003",
+      "SC-IDN-001",
+      "SC-IDN-005",
+      "SC-PRT-001",
+      "SC-PRT-002",
+      "SC-PRT-003",
+      "SC-PRT-004",
+      "SC-RCV-001",
+      "SC-RSP-003",
+      "SC-VSS-006",
+      "SC-VSS-007"
+    ],
+    "endpoint": [
+      "SC-CRY-004",
+      "SC-DET-003",
+      "SC-IDN-001",
+      "SC-IDN-005",
+      "SC-PRT-003",
+      "SC-PRT-004"
+    ],
+    "application": [
+      "SC-CRY-001",
+      "SC-CRY-005",
+      "SC-CRY-007",
+      "SC-CRY-008",
+      "SC-CRY-010",
+      "SC-DET-001",
+      "SC-IDN-002",
+      "SC-IDN-004",
+      "SC-PRT-001",
+      "SC-PRT-002",
+      "SC-RCV-001"
+    ],
+    "cryptographic_asset": [
+      "SC-CRY-001",
+      "SC-CRY-002",
+      "SC-CRY-004",
+      "SC-CRY-005",
+      "SC-CRY-006",
+      "SC-CRY-007",
+      "SC-CRY-010"
+    ],
+    "document": [
+      "SC-CRY-003",
+      "SC-CRY-008",
+      "SC-CRY-009",
+      "SC-DET-005",
+      "SC-GOV-001",
+      "SC-GOV-002",
+      "SC-GOV-003",
+      "SC-GOV-004",
+      "SC-GOV-005",
+      "SC-GOV-006",
+      "SC-GRD-001",
+      "SC-GRD-006",
+      "SC-IDN-003",
+      "SC-IDN-004",
+      "SC-IDN-006",
+      "SC-POL-001",
+      "SC-POL-002",
+      "SC-POL-003",
+      "SC-POL-004",
+      "SC-POL-005",
+      "SC-POL-006",
+      "SC-PRT-006",
+      "SC-RCV-002",
+      "SC-RCV-003",
+      "SC-RCV-004",
+      "SC-RSP-001",
+      "SC-RSP-002",
+      "SC-RSP-003",
+      "SC-RSP-004",
+      "SC-RSP-005"
+    ],
+    "other": [
+      "SC-ENV-005",
+      "SC-ENV-006",
+      "SC-ENV-007"
+    ]
+  }
+}

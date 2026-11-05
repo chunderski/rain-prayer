@@ -7,6 +7,8 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 import { z } from "zod";
 import {
+  AssetType,
+  ControlDomain,
   Crosswalk,
   FrameworkVersion,
   SharedControlLibrary,
@@ -97,6 +99,35 @@ export function checkIntegrity(lib: Library): string[] {
     const codes = reqs.get(e.frameworkId);
     if (!codes) problems.push(`crosswalk: unknown framework ${e.frameworkId}`);
     else if (!codes.has(e.requirementCode)) problems.push(`crosswalk: ${e.frameworkId} has no requirement ${e.requirementCode}`);
+  }
+  if (lib.walkthrough) problems.push(...checkWalkthrough(lib.walkthrough, controlIds, lib.libraryVersion));
+  return problems;
+}
+
+/** Walkthrough checks: every domain in exactly one section, known control ids, same release as the crosswalk. */
+export function checkWalkthrough(w: Walkthrough, controlIds: Set<string>, libraryVersion: string): string[] {
+  const problems: string[] = [];
+  if (w.libraryVersion !== libraryVersion) {
+    problems.push(`walkthrough: libraryVersion ${w.libraryVersion} does not match crosswalk ${libraryVersion}`);
+  }
+  const ids = new Set<string>();
+  const orders = new Set<number>();
+  const owner = new Map<string, string>();
+  for (const s of w.sections) {
+    if (ids.has(s.id)) problems.push(`walkthrough: duplicate section ${s.id}`);
+    ids.add(s.id);
+    if (orders.has(s.order)) problems.push(`walkthrough: duplicate order ${s.order}`);
+    orders.add(s.order);
+    for (const d of s.domains) {
+      const prev = owner.get(d);
+      if (prev) problems.push(`walkthrough: domain ${d} is in both ${prev} and ${s.id}`);
+      else owner.set(d, s.id);
+    }
+  }
+  for (const d of ControlDomain.options) if (!owner.has(d)) problems.push(`walkthrough: domain ${d} is in no section`);
+  for (const t of AssetType.options) if (!(t in w.assetTypeControls)) problems.push(`walkthrough: assetTypeControls missing ${t}`);
+  for (const [t, list] of Object.entries(w.assetTypeControls)) {
+    for (const id of list ?? []) if (!controlIds.has(id)) problems.push(`walkthrough: assetTypeControls.${t} has unknown control ${id}`);
   }
   return problems;
 }

@@ -1,7 +1,8 @@
 import { readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
-import { DATA_DIR, loadLibrary, mappingsForControl } from "./index.js";
+import { AssetType, ControlDomain } from "@sentinel/shared";
+import { DATA_DIR, checkWalkthrough, loadLibrary, mappingsForControl } from "./index.js";
 
 const lib = loadLibrary();
 const fw = (id: string) => {
@@ -12,7 +13,7 @@ const fw = (id: string) => {
 
 describe("framework library", () => {
   it("loads and passes integrity checks", () => {
-    expect(lib.libraryVersion).toBe("1.0.0");
+    expect(lib.libraryVersion).toBe("1.1.0");
     expect(lib.controls.length).toBeGreaterThan(0);
   });
 
@@ -103,5 +104,64 @@ describe("framework library", () => {
       const text = readFileSync(join(d.parentPath, d.name), "utf8");
       expect(text.includes("—"), `${d.name} contains an em dash`).toBe(false);
     }
+  });
+  it("defines Partial in the guidance of every yes/partial/no/N/A question", () => {
+    const missing = lib.controls
+      .flatMap((c) => c.questions)
+      .filter((q) => q.answerType === "yes_partial_no_na" && !/\bPartial:/.test(q.guidance))
+      .map((q) => q.id);
+    expect(missing).toEqual([]);
+  });
+
+  it("keeps data-quality notes out of field guidance (uses 'Target to confirm:' instead)", () => {
+    const offenders = lib.controls.flatMap((c) => c.questions).filter((q) => /unverified/i.test(q.guidance) || /unverified/i.test(q.text));
+    expect(offenders.map((q) => q.id)).toEqual([]);
+  });
+
+  it("uses the same release for every control file, the crosswalk, and the walkthrough", () => {
+    const versions = readdirSync(join(DATA_DIR, "controls")).map((f) => JSON.parse(readFileSync(join(DATA_DIR, "controls", f), "utf8")).libraryVersion);
+    expect(new Set(versions)).toEqual(new Set([lib.libraryVersion]));
+    expect(lib.walkthrough?.libraryVersion).toBe(lib.libraryVersion);
+  });
+});
+
+describe("walkthrough", () => {
+  const w = lib.walkthrough!;
+  const ids = new Set(lib.controls.map((c) => c.id));
+
+  it("exists and passes its integrity checks", () => {
+    expect(w).toBeDefined();
+    expect(checkWalkthrough(w, ids, lib.libraryVersion)).toEqual([]);
+  });
+
+  it("puts every one of the 16 domains in exactly one section", () => {
+    const all = w.sections.flatMap((s) => s.domains);
+    expect(all).toHaveLength(16);
+    expect([...all].sort()).toEqual([...ControlDomain.options].sort());
+  });
+
+  it("orders sections uniquely", () => {
+    const orders = w.sections.map((s) => s.order);
+    expect(new Set(orders).size).toBe(orders.length);
+  });
+
+  it("lists only existing controls for every asset type", () => {
+    expect(Object.keys(w.assetTypeControls).sort()).toEqual([...AssetType.options].sort());
+    for (const list of Object.values(w.assetTypeControls)) for (const id of list ?? []) expect(ids.has(id), id).toBe(true);
+    expect(w.assetTypeControls.camera?.length).toBeGreaterThan(0);
+  });
+
+  it("reports a domain listed twice or missing, an unknown control, and a version mismatch", () => {
+    const bad = structuredClone(w);
+    bad.sections[0]!.domains = [...bad.sections[0]!.domains, "CRY"];
+    bad.sections[1]!.domains = ["PER"];
+    bad.assetTypeControls.door = ["SC-ACC-999"];
+    bad.libraryVersion = "9.9.9";
+    const problems = checkWalkthrough(bad, ids, lib.libraryVersion).join("\n");
+    expect(problems).toMatch(/domain CRY is in both/);
+    expect(problems).toMatch(/domain PER is in both/);
+    expect(problems).toMatch(/domain LGT is in no section/);
+    expect(problems).toMatch(/unknown control SC-ACC-999/);
+    expect(problems).toMatch(/does not match crosswalk/);
   });
 });

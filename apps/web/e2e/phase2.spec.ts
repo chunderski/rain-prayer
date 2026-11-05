@@ -3,7 +3,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { mockApi } from "./mock-api";
 import { AREA_ID, ASSESSMENT_ID, createFieldMock, SEEDED_ASSESSMENT, type FieldMockOptions } from "./mock-field";
-import { expectNoSeriousA11yViolations, screenshotOnPixel, signIn } from "./helpers";
+import { expectNoSeriousA11yViolations, screenshotOnPixel, setPinFromPrompt, signIn } from "./helpers";
 
 const FIXTURE = path.join(path.dirname(fileURLToPath(import.meta.url)), "fixtures", "door.jpg");
 const Q = {
@@ -55,6 +55,8 @@ test.describe("Phase 2 offline", () => {
     await page.evaluate(async () => {
       await navigator.serviceWorker.ready;
     });
+    // R2-5: cached work opens offline only behind the local PIN.
+    await setPinFromPrompt(page);
     await openArea(page);
 
     // Section 1, control 1: perimeter fence.
@@ -94,6 +96,9 @@ test.describe("Phase 2 offline", () => {
 
     // Reload with no signal: the cached profile and data open the same place.
     await page.reload();
+    await expect(page.getByRole("heading", { name: "Enter your PIN", level: 1 })).toBeVisible({ timeout: 15_000 });
+    await page.getByLabel("PIN", { exact: true }).fill("246810");
+    await page.getByRole("button", { name: "Unlock" }).click();
     await expect(page.getByRole("heading", { name: LIGHTING, level: 2 })).toBeVisible({ timeout: 15_000 });
     await expect(page.getByText("Working offline as Alex Assessor")).toBeVisible();
     await expect(group(page, Q.even).getByRole("button", { name: /Mostly even/ })).toHaveAttribute("aria-pressed", "true");

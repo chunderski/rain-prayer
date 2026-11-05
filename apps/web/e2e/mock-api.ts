@@ -138,6 +138,8 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
     if (!authed) return err(401, "unauthorized", "Sign in required");
     if (opts.extra && (await opts.extra(route, req, url, reply, cors))) return;
 
+    // Phase 3: admins land on the dashboard; specs that need real numbers use e2e/mock-phase3.ts.
+    if (path === "/dashboard") return reply(200, { assessmentsByStatus: {}, findingsBySeverity: {}, openHighFindings: 0, topResidual: [], recent: [] });
     if (path === "/frameworks") return reply(200, FRAMEWORKS);
     if (path === "/controls") {
       const f = url.searchParams.get("framework");

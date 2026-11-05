@@ -101,11 +101,11 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
   const scenarioIds = [...new Set(c.sites.flatMap((s) => Object.keys(s.byScenario)))];
   // Worst first: highest residual anywhere.
   scenarioIds.sort((a, b) => Math.max(...c.sites.map((s) => s.byScenario[b]?.residual ?? 0)) - Math.max(...c.sites.map((s) => s.byScenario[a]?.residual ?? 0)));
-  const head = (
+  const head = (first: string) => (
     <thead>
       <tr>
         <th scope="col" className={thRow}>
-          Scenario
+          {first}
         </th>
         {c.sites.map((s) => (
           <th key={s.assessmentId} scope="col" className={thSite}>
@@ -133,7 +133,7 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
       <ScrollTable id="cmp-risk" title="Residual risk by scenario">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">Residual risk level and score for each scenario at each site. Not scored means the scenario had no inputs at that site.</caption>
-          {head}
+          {head("Scenario")}
           <tbody>
             <tr>
               <th scope="row" className={thRow}>
@@ -171,7 +171,7 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
       </ScrollTable>
       <ScrollTable id="cmp-findings" title="Findings by severity">
         <table className="w-full border-collapse text-left">
-          {head}
+          {head("Severity")}
           <tbody>
             {SEVERITY_ORDER.map((sev) => (
               <tr key={sev}>

@@ -29,7 +29,7 @@ test.describe("Phase 1", () => {
     await expect(page.getByRole("group", { name: "Choose a workspace" })).toBeVisible();
     await page.getByRole("radio", { name: "Bluefield Security" }).check();
     await page.getByRole("button", { name: "Continue" }).click();
-    await expect(page.getByRole("heading", { name: "Assessments", level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
     await expect(page.getByText("Bluefield Security")).toBeVisible();
   });
 

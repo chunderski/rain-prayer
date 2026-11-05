@@ -8,7 +8,17 @@ export async function signIn(page: Page, email = "assessor@acme.test") {
   await page.getByLabel("Email").fill(email);
   await page.getByLabel("Password").fill(PASSWORD);
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Assessments", level: 1 })).toBeVisible();
+  // Admins land on the dashboard (Phase 3); other roles on the assessments list.
+  await expect(page.getByRole("heading", { name: /^(Dashboard|Assessments)$/, level: 1 })).toBeVisible();
+}
+
+/** Set the local PIN from the prompt shown after sign in (R2-5). */
+export async function setPinFromPrompt(page: Page, pin = "246810") {
+  await page.getByRole("region", { name: "Set a PIN for offline work" }).getByRole("button", { name: "Set PIN" }).click();
+  await page.getByLabel("New PIN").fill(pin);
+  await page.getByLabel("Confirm PIN").fill(pin);
+  await page.getByRole("button", { name: "Save PIN" }).click();
+  await expect(page.getByText("PIN set", { exact: true })).toBeVisible();
 }
 
 /** Fails on any serious or critical axe violation (WCAG 2.1 A and AA rules). */

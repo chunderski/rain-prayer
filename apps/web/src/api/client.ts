@@ -64,7 +64,12 @@ interface RequestOptions<S extends z.ZodTypeAny> {
   /** Send the bearer token and refresh on 401. Default true. */
   auth?: boolean;
   signal?: AbortSignal;
+  /** Binary body (photo bytes); sent as is with `contentType`. */
+  rawBody?: Blob;
+  contentType?: string;
 }
+
+export type RestoreResult = { kind: "ok"; session: SessionInfo } | { kind: "none" } | { kind: "offline" };
 
 export type ApiClient = ReturnType<typeof createApiClient>;
 
@@ -134,15 +139,16 @@ export function createApiClient(options: ApiClientOptions = {}) {
     path: string,
     opts: RequestOptions<S> = {},
   ): Promise<z.infer<S>> {
-    const { method = "GET", body, schema, auth = true, signal } = opts;
+    const { method = "GET", body, schema, auth = true, signal, rawBody, contentType } = opts;
     const send = () => {
       const headers: Record<string, string> = { Accept: "application/json" };
-      if (body !== undefined) headers["Content-Type"] = "application/json";
+      if (rawBody) headers["Content-Type"] = contentType ?? (rawBody.type || "application/octet-stream");
+      else if (body !== undefined) headers["Content-Type"] = "application/json";
       if (auth && accessToken) headers.Authorization = `Bearer ${accessToken}`;
       return rawFetch(path, {
         method,
         headers,
-        body: body === undefined ? undefined : JSON.stringify(body),
+        body: rawBody ?? (body === undefined ? undefined : JSON.stringify(body)),
         signal,
         credentials: path.startsWith("/auth/") ? "include" : "same-origin",
       });
@@ -187,6 +193,26 @@ export function createApiClient(options: ApiClientOptions = {}) {
     async restore(): Promise<SessionInfo | null> {
       const ok = await refresh().catch(() => false);
       return ok ? currentSession : null;
+    },
+
+    /**
+     * Like restore, but tells "no session" apart from "could not reach the server", so the app can
+     * open cached work offline for a user who signed in on this device before.
+     */
+    async restoreDetailed(): Promise<RestoreResult> {
+      try {
+        const ok = await refresh();
+        return ok && currentSession ? { kind: "ok", session: currentSession } : { kind: "none" };
+      } catch (err) {
+        if (err instanceof NetworkError) return { kind: "offline" };
+        return { kind: "none" };
+      }
+    },
+
+    /** Resolve true when an access token is available, refreshing once if needed. Throws NetworkError when offline. */
+    async ensureToken(): Promise<boolean> {
+      if (accessToken) return true;
+      return refresh();
     },
 
     async logout(): Promise<void> {

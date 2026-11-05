@@ -57,7 +57,8 @@ export async function loadReportData(ctx: FieldCtx, assessmentId: string, risk: 
     riskError = "the scoring engine is unavailable";
   }
 
-  const all = await findingsWithFrameworks(ctx, assessmentId);
+  type F = Record<string, unknown> & { frameworks: ReportFinding["frameworks"] };
+  const all = (await findingsWithFrameworks(ctx, assessmentId)) as F[];
   const areas = new Map(
     (await ctx.tx.query<{ id: string; name: string }>("SELECT id, name FROM area WHERE site_id = $1", [scope.siteId])).rows.map((r) => [r.id, r.name]),
   );

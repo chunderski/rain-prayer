@@ -10,7 +10,14 @@ import { authRoutes } from "./routes/auth.js";
 import { googleRoutes, type GoogleDeps } from "./routes/google.js";
 import { libraryRoutes } from "./routes/library.js";
 import { tenantRoutes } from "./routes/tenant.js";
-import { createAnthropicVisionClient, type VisionClient } from "@sentinel/ai";
+import { createAnthropicTextClient, createAnthropicVisionClient, type TextClient, type VisionClient } from "@sentinel/ai";
+import { createGoogleClient, type Transport } from "./google/client.js";
+import { createExportQueue, type ExportQueue } from "./google/exports.js";
+import { photoGate } from "./photos/process.js";
+import { RiskService, type RiskDeps } from "./risk/service.js";
+import { integrationRoutes } from "./routes/integrations.js";
+import { reportRoutes } from "./routes/report.js";
+import { riskRoutes } from "./routes/risk.js";
 import { createLimiters, type Limiters } from "./lib/access.js";
 import { audit } from "./lib/audit.js";
 import { loadWalkthrough, type WalkthroughDef } from "./lib/walkthrough.js";
@@ -31,12 +38,19 @@ export interface AppDeps {
   walkthrough?: WalkthroughDef | null;
   /** Exposed for tests (reset between cases). */
   limiters?: Limiters;
+  /** Risk engine and scenario library overrides (tests use fixture scenarios). */
+  risk?: RiskDeps;
+  /** Narrative text transport; tests inject a fake. Defaults to the Anthropic client when ANTHROPIC_API_KEY is real. */
+  text?: TextClient | null;
+  /** Google Drive, Docs, and Sheets transport for exports; tests inject a fake. */
+  googleApi?: { transport?: Transport; sleep?: (ms: number) => Promise<void> };
 }
 
 declare module "fastify" {
   interface FastifyInstance {
     limiters: Limiters;
     storage: ObjectStorage;
+    exportQueue: ExportQueue | null;
   }
 }
 
@@ -83,7 +97,7 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
     origin: [cfg.WEB_ORIGIN, ...cfg.embedOrigins],
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    exposedHeaders: ["X-Sentinel-Gps", "Retry-After", "X-RateLimit-Remaining"],
+    exposedHeaders: ["X-Sentinel-Gps", "Retry-After", "X-RateLimit-Remaining", "X-Risk-Method", "X-Report-Template"],
   });
   await app.register(cookie);
   await app.register(rateLimit, {
@@ -136,9 +150,23 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
     if (vision === undefined) vision = cfg.anthropicApiKey ? createAnthropicVisionClient({ apiKey: cfg.anthropicApiKey }) : null;
     return vision;
   };
+  let text: TextClient | null | undefined = deps.text;
+  const getText = () => {
+    if (text === undefined) text = cfg.anthropicApiKey ? createAnthropicTextClient({ apiKey: cfg.anthropicApiKey }) : null;
+    return text;
+  };
+  photoGate.setMax(cfg.PHOTO_MAX_CONCURRENCY);
+  const risk = new RiskService(deps.risk);
+  const google = cfg.googleExport
+    ? createGoogleClient({ ...cfg.googleExport, transport: deps.googleApi?.transport, sleep: deps.googleApi?.sleep })
+    : null;
+  const exportQueue = google ? createExportQueue({ cfg, db, storage, risk, google, log: app.log }) : null;
+  // Let running exports finish before the pool closes.
+  app.addHook("onClose", async () => exportQueue?.idle());
   app.decorate("limiters", limiters);
   app.decorate("storage", storage);
-  const fieldDeps = { cfg, db, limiters, storage, walkthrough, vision: getVision };
+  app.decorate("exportQueue", exportQueue);
+  const fieldDeps = { cfg, db, limiters, storage, walkthrough, vision: getVision, risk };
 
   app.get("/health", async () => ({ status: "ok" }));
   await app.register(authRoutes, { cfg, db });
@@ -149,6 +177,9 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   await app.register(photoRoutes, fieldDeps);
   await app.register(aiRoutes, fieldDeps);
   await app.register(syncRoutes, fieldDeps);
+  await app.register(riskRoutes, fieldDeps);
+  await app.register(reportRoutes, { ...fieldDeps, text: getText });
+  await app.register(integrationRoutes, { ...fieldDeps, google, exportQueue });
   return app;
 }
 

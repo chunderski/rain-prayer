@@ -4,9 +4,11 @@ import { useOnline } from "../offline/useOnline";
 import { summarize, useSync } from "../sync/SyncContext";
 import { Banner, Button, Logo } from "./ui";
 import { pendingLocalCount } from "../offline/db";
+import { PinSetupPrompt } from "../auth/PinScreens";
 
 const NAV = [
-  { to: "/", label: "Assessments", end: true },
+  { to: "/", label: "Home", end: true },
+  { to: "/compare", label: "Compare", end: false },
   { to: "/clients", label: "Clients", end: false },
   { to: "/library", label: "Library", end: false },
 ];
@@ -112,6 +114,7 @@ export function AppShell() {
         </nav>
       </header>
       <OfflineBanner />
+      <PinSetupPrompt />
       {offlineSession && (
         <div className="px-4 pt-3">
           <Banner tone="info" title={`Working offline as ${session?.user.name ?? "you"}`}>

@@ -1,7 +1,6 @@
 /**
- * Risk display helpers. Level names, scale labels, and formatting live here so every screen (and
- * the tests) render scores the same way. Scale anchors: docs/risk-method.md does not exist yet and
- * packages/risk has no scale labels, so the generic Very low to Very high labels are used.
+ * Risk display helpers. Level names, scale anchors (from @sentinel/risk), and formatting live here
+ * so every screen (and the tests) render scores the same way.
  */
 import type { RiskLevel } from "@sentinel/shared";
 
@@ -27,19 +26,8 @@ export const LEVEL_CLASS: Record<RiskLevel, { chip: string; fill: string; cell: 
 /** Small glyph per level so the level reads in grayscale too (the text label is always present). */
 export const LEVEL_MARK: Record<RiskLevel, string> = { very_low: "▁", low: "▂", medium: "▄", high: "▆", very_high: "█" };
 
-export interface ScaleAnchor {
-  value: 1 | 2 | 3 | 4 | 5;
-  label: string;
-}
-const GENERIC: ScaleAnchor[] = [
-  { value: 1, label: "Very low" },
-  { value: 2, label: "Low" },
-  { value: 3, label: "Medium" },
-  { value: 4, label: "High" },
-  { value: 5, label: "Very high" },
-];
-export const LIKELIHOOD_SCALE = GENERIC;
-export const IMPACT_SCALE = GENERIC;
+/** Anchored 1 to 5 scales from the risk method (docs/risk-method.md, packages/risk). */
+export { LIKELIHOOD_SCALE, IMPACT_SCALE, levelFor, type ScaleAnchor } from "@sentinel/risk";
 
 /** Inherent and residual scores are likelihood times impact on 1 to 5 scales. */
 export const SCORE_MAX = 25;
@@ -69,3 +57,13 @@ export function changeSentence(inherent: { score: number; level: RiskLevel }, re
 export function effectivenessText(v: number | null): string {
   return v === null ? "Not assessed yet" : `${formatPercent(v)} effective`;
 }
+
+/**
+ * True when nothing is scored yet: the API then reports a placeholder "very_low" overall level,
+ * which must read "Not scored yet" instead (Head of Engineering display rule).
+ */
+export function isUnscored(r: { scenarios: unknown[] } | { byScenario: Record<string, unknown> }): boolean {
+  return "scenarios" in r ? r.scenarios.length === 0 : Object.keys(r.byScenario).length === 0;
+}
+
+export const NOT_SCORED = "Not scored yet";

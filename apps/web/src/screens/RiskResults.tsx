@@ -9,8 +9,8 @@ import { useApi } from "../auth/AuthContext";
 import { fetchRisk } from "../api/phase3";
 import { useField } from "../field/FieldContext";
 import { errorMessage, useAsync } from "../lib/useAsync";
-import { CATEGORY_LABEL, CONFIDENCE_LABEL, effectivenessText, formatPercent, formatScore } from "../risk/levels";
-import { BeforeAfter, LevelBadge, PercentMeter } from "../risk/RiskViz";
+import { CATEGORY_LABEL, CONFIDENCE_LABEL, effectivenessText, formatPercent, formatScore, isUnscored } from "../risk/levels";
+import { BeforeAfter, LevelBadge, NotScoredBadge, PercentMeter } from "../risk/RiskViz";
 import { Banner, ButtonLink, Card, Chip, EmptyState, Loading, PageHeader, categoryTone } from "../components/ui";
 
 const WEIGHT_LABEL: Record<number, string> = { 1: "low weight", 2: "medium weight", 3: "high weight" };
@@ -86,16 +86,19 @@ export function ScenarioCard({ s, findingTitle, assessmentId }: { s: ScenarioRes
 }
 
 export function OverallSummary({ r, locked }: { r: RiskResult; locked: boolean }) {
+  const unscored = isUnscored(r);
   return (
     <Card as="section" className="mb-4 border-primary">
       <h2 className="text-2xl font-bold">Overall</h2>
       <div className="mt-2 flex flex-wrap items-center gap-3">
         <span className="font-semibold">Overall residual risk</span>
-        <LevelBadge level={r.overall.level} score={r.overall.residual} className="text-xl" />
+        {unscored ? <NotScoredBadge /> : <LevelBadge level={r.overall.level} score={r.overall.residual} className="text-xl" />}
       </div>
-      <p className="mt-1">
-        Inherent {formatScore(r.overall.inherent)}, residual {formatScore(r.overall.residual)}.
-      </p>
+      {!unscored && (
+        <p className="mt-1">
+          Inherent {formatScore(r.overall.inherent)}, residual {formatScore(r.overall.residual)}.
+        </p>
+      )}
       {r.overall.explanation.length > 0 && (
         <ul className="mt-2 list-disc space-y-1 pl-6">
           {r.overall.explanation.map((l, n) => (

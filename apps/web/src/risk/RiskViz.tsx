@@ -5,7 +5,7 @@
  */
 import type { ReactNode } from "react";
 import type { RiskLevel } from "@sentinel/shared";
-import { barShare, changeSentence, formatPercent, formatScore, LEVEL_CLASS, LEVEL_LABEL, LEVEL_MARK, SCORE_MAX } from "./levels";
+import { barShare, changeSentence, formatPercent, formatScore, LEVEL_CLASS, LEVEL_LABEL, LEVEL_MARK, NOT_SCORED, SCORE_MAX } from "./levels";
 
 const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
 
@@ -20,6 +20,10 @@ export function LevelBadge({ level, score, className }: { level: RiskLevel; scor
       {score !== undefined && <span className="font-semibold">{formatScore(score)}</span>}
     </span>
   );
+}
+
+export function NotScoredBadge() {
+  return <span className="inline-flex items-center rounded-md border-2 border-dashed border-line px-2 py-0.5 text-base font-bold whitespace-nowrap text-ink">{NOT_SCORED}</span>;
 }
 
 function ScoreBar({ label, score, level, max = SCORE_MAX }: { label: string; score: number; level: RiskLevel; max?: number }) {

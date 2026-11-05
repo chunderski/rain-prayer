@@ -48,7 +48,7 @@ function table(header: string[], rows: string[][]): DocsRequest[] {
 function blockRequests(b: Block, uris: DocImageUris): DocsRequest[] {
   switch (b.type) {
     case "heading":
-      return paragraph(b.text, (["HEADING_1", "HEADING_2", "HEADING_3"] as const)[b.level - 1]);
+      return paragraph(b.text, (["HEADING_1", "HEADING_2", "HEADING_3"] as const)[b.level - 1]!);
     case "paragraph":
       return paragraph(b.tone === "notice" ? `Notice: ${b.text}` : b.text, "NORMAL_TEXT");
     case "placeholder":

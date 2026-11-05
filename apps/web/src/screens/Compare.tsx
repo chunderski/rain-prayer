@@ -12,8 +12,8 @@ import { cachedGet } from "../api/library";
 import { AssessmentSummary } from "../api/schemas";
 import { fetchComparison, fetchScenarios, SEVERITY_ORDER } from "../api/phase3";
 import { errorMessage, useAsync } from "../lib/useAsync";
-import { formatScore, LEVEL_CLASS, LEVEL_LABEL, LEVEL_MARK } from "../risk/levels";
-import { LevelBadge } from "../risk/RiskViz";
+import { formatScore, isUnscored, LEVEL_CLASS, LEVEL_LABEL, LEVEL_MARK } from "../risk/levels";
+import { LevelBadge, NotScoredBadge } from "../risk/RiskViz";
 import { Banner, Button, Card, Loading, PageHeader } from "../components/ui";
 import { statusLabel } from "./Assessments";
 
@@ -141,7 +141,7 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
               </th>
               {c.sites.map((s) => (
                 <td key={s.assessmentId} className="border-b-2 border-l-2 border-line p-2">
-                  <LevelBadge level={s.overall.level} score={s.overall.residual} />
+                  {isUnscored(s) ? <NotScoredBadge /> : <LevelBadge level={s.overall.level} score={s.overall.residual} />}
                 </td>
               ))}
             </tr>

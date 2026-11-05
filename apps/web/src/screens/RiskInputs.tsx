@@ -15,7 +15,7 @@ import { Banner, ButtonLink, Chip, Loading, PageHeader, TextArea, Toggle, catego
 
 type SaveState = "idle" | "local" | "sending" | "sent" | "offline" | "refused";
 
-function ScaleButtons({ label, scale, value, onChange, idBase }: { label: string; scale: ScaleAnchor[]; value: number | null; onChange: (v: number) => void; idBase: string }) {
+function ScaleButtons({ label, scale, value, onChange, idBase }: { label: string; scale: readonly ScaleAnchor[]; value: number | null; onChange: (v: number) => void; idBase: string }) {
   return (
     <div role="group" aria-labelledby={`${idBase}-l`}>
       <p id={`${idBase}-l`} className="mb-1 font-semibold">
@@ -42,6 +42,28 @@ function ScaleButtons({ label, scale, value, onChange, idBase }: { label: string
           );
         })}
       </div>
+      <p className="mt-1 min-h-6 text-base" data-testid={`${idBase}-anchor`}>
+        {value ? (
+          <>
+            <span className="font-semibold">{scale.find((a) => a.value === value)?.label}:</span> {scale.find((a) => a.value === value)?.description}
+          </>
+        ) : (
+          <span className="text-muted">Not set. Pick the description that fits best.</span>
+        )}
+      </p>
+      <details className="mt-1">
+        <summary className="inline-flex min-h-12 cursor-pointer items-center font-semibold text-primary underline underline-offset-4">What the {label.toLowerCase()} levels mean</summary>
+        <dl className="mt-1 flex flex-col gap-1 text-base">
+          {scale.map((a) => (
+            <div key={a.value}>
+              <dt className="inline font-semibold">
+                {a.value} {a.label}:{" "}
+              </dt>
+              <dd className="inline">{a.description}</dd>
+            </div>
+          ))}
+        </dl>
+      </details>
     </div>
   );
 }

@@ -15,22 +15,48 @@ import { PhotoDetail, PhotosList, PhotoTagScreen } from "./screens/Photos";
 import { FindingEdit, FindingsList } from "./screens/Findings";
 import { AreasScreen, AssessorsScreen } from "./screens/Admin";
 import { SyncReview } from "./screens/SyncReview";
+import { Dashboard } from "./screens/Dashboard";
+import { CompareScreen } from "./screens/Compare";
+import { RiskInputsScreen } from "./screens/RiskInputs";
+import { RiskResultsScreen } from "./screens/RiskResults";
+import { ReportScreen } from "./screens/Report";
+import { IntegrationsScreen } from "./screens/Settings";
+import { PinLock } from "./auth/PinScreens";
+import { useCanAdmin } from "./auth/AuthContext";
+import { Banner } from "./components/ui";
+
+/** Admins land on the dashboard; everyone else on the assessments list. */
+function Home() {
+  return useCanAdmin() ? <Dashboard /> : <AssessmentsHome />;
+}
 
 function Gate() {
-  const { status } = useAuth();
+  const { status, locked, notice } = useAuth();
   if (status === "loading") return <Loading label="Starting Sentinel Assess" />;
   if (status === "signed_out")
     return (
       <>
         <OfflineBanner />
+        {notice && (
+          <div className="px-4 pt-3">
+            <Banner tone="warn" live>
+              {notice}
+            </Banner>
+          </div>
+        )}
         <SignIn />
       </>
     );
+  // R2-5: nothing from the cached workspace renders (and nothing syncs) until the PIN is entered.
+  if (locked) return <PinLock />;
   return (
     <SyncProvider>
     <Routes>
       <Route element={<AppShell />}>
-        <Route index element={<AssessmentsHome />} />
+        <Route index element={<Home />} />
+        <Route path="dashboard" element={<Dashboard />} />
+        <Route path="compare" element={<CompareScreen />} />
+        <Route path="settings/integrations" element={<IntegrationsScreen />} />
         <Route path="assessments/new" element={<NewAssessment />} />
         <Route path="assessments/:id" element={<FieldLayout />}>
           <Route index element={<AssessmentDetail />} />
@@ -44,13 +70,16 @@ function Gate() {
           <Route path="findings/:findingId" element={<FindingEdit key="edit" />} />
           <Route path="assessors" element={<AssessorsScreen />} />
           <Route path="areas" element={<AreasScreen />} />
+          <Route path="risk" element={<RiskResultsScreen />} />
+          <Route path="risk/inputs" element={<RiskInputsScreen />} />
+          <Route path="report" element={<ReportScreen />} />
         </Route>
         <Route path="sync" element={<SyncReview />} />
         <Route path="clients" element={<ClientsList />} />
         <Route path="clients/:id" element={<ClientDetail />} />
         <Route path="library" element={<Library />} />
         <Route path="library/:controlId" element={<ControlDetailScreen />} />
-        <Route path="*" element={<AssessmentsHome />} />
+        <Route path="*" element={<Home />} />
       </Route>
     </Routes>
     </SyncProvider>

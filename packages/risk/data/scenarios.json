@@ -1,0 +1,265 @@
+{
+  "scenarioLibraryVersion": "1.0.0",
+  "methodVersion": "risk-method@1.0.0",
+  "controlLibraryVersion": "1.1.0",
+  "notes": "Mitigation weights: 3 = primary control for this scenario, 2 = significant, 1 = supporting. Weights are Sentinel analyst judgement, not taken from a published source; see docs/risk-method.md. References are the public sources the scenario description and control selection draw on.",
+  "scenarios": [
+    {
+      "id": "theft",
+      "name": "Theft of property or equipment",
+      "description": "An outsider enters the site or a restricted area and removes equipment, inventory, materials, or vehicles. Includes opportunistic theft through unlocked doors or the loading dock and planned theft after hours.",
+      "category": "physical",
+      "mitigations": [
+        { "controlId": "SC-ACC-001", "weight": 3 },
+        { "controlId": "SC-IDS-003", "weight": 3 },
+        { "controlId": "SC-ACC-005", "weight": 2 },
+        { "controlId": "SC-ACC-007", "weight": 2 },
+        { "controlId": "SC-PER-001", "weight": 2 },
+        { "controlId": "SC-PER-003", "weight": 2 },
+        { "controlId": "SC-IDS-001", "weight": 2 },
+        { "controlId": "SC-IDS-002", "weight": 2 },
+        { "controlId": "SC-LCK-002", "weight": 2 },
+        { "controlId": "SC-VSS-001", "weight": 2 },
+        { "controlId": "SC-VSS-002", "weight": 2 },
+        { "controlId": "SC-VSS-003", "weight": 1 },
+        { "controlId": "SC-LGT-001", "weight": 1 },
+        { "controlId": "SC-GRD-002", "weight": 1 },
+        { "controlId": "SC-ENV-001", "weight": 1 }
+      ],
+      "domains": ["PER", "ACC", "IDS", "LCK", "VSS", "LGT", "GRD"],
+      "references": [
+        "ASIS PAP.1-2012, Physical Asset Protection",
+        "NIST SP 800-53 Rev. 5, controls PE-3 (Physical Access Control) and PE-6 (Monitoring Physical Access)"
+      ]
+    },
+    {
+      "id": "forced-entry",
+      "name": "Forced entry",
+      "description": "An intruder defeats a door, window, gate, or fence by force (prying, breaking glass, cutting fabric, attacking hinges or locks) to enter a building or secured area, usually when the site is unoccupied.",
+      "category": "physical",
+      "mitigations": [
+        { "controlId": "SC-LCK-001", "weight": 3 },
+        { "controlId": "SC-LCK-003", "weight": 3 },
+        { "controlId": "SC-IDS-001", "weight": 3 },
+        { "controlId": "SC-IDS-003", "weight": 3 },
+        { "controlId": "SC-LCK-004", "weight": 2 },
+        { "controlId": "SC-PER-001", "weight": 2 },
+        { "controlId": "SC-PER-005", "weight": 2 },
+        { "controlId": "SC-ACC-004", "weight": 2 },
+        { "controlId": "SC-IDS-006", "weight": 1 },
+        { "controlId": "SC-LGT-002", "weight": 1 },
+        { "controlId": "SC-LGT-003", "weight": 1 },
+        { "controlId": "SC-VSS-002", "weight": 1 }
+      ],
+      "domains": ["LCK", "IDS", "PER", "ACC", "LGT"],
+      "references": [
+        "ASIS PAP.1-2012, Physical Asset Protection",
+        "UFC 4-022-03, Security Fencing and Gates",
+        "NIST SP 800-53 Rev. 5, control PE-3 (Physical Access Control)"
+      ]
+    },
+    {
+      "id": "vandalism",
+      "name": "Vandalism and malicious damage",
+      "description": "Deliberate damage to the building, fences, vehicles, lighting, or security equipment, including graffiti and damage to cameras. Often opportunistic and encouraged by poor upkeep, darkness, and areas that cannot be seen from occupied spaces.",
+      "category": "physical",
+      "mitigations": [
+        { "controlId": "SC-ENV-005", "weight": 3 },
+        { "controlId": "SC-LGT-001", "weight": 2 },
+        { "controlId": "SC-LGT-002", "weight": 2 },
+        { "controlId": "SC-ENV-001", "weight": 2 },
+        { "controlId": "SC-ENV-003", "weight": 2 },
+        { "controlId": "SC-VSS-002", "weight": 2 },
+        { "controlId": "SC-PER-001", "weight": 2 },
+        { "controlId": "SC-GRD-002", "weight": 2 },
+        { "controlId": "SC-ENV-002", "weight": 1 },
+        { "controlId": "SC-VSS-004", "weight": 1 },
+        { "controlId": "SC-LGT-004", "weight": 1 },
+        { "controlId": "SC-PER-006", "weight": 1 }
+      ],
+      "domains": ["ENV", "LGT", "VSS", "PER", "GRD"],
+      "references": [
+        "ISO 22341:2021, Security and resilience: Protective security: Guidelines for crime prevention through environmental design",
+        "Crowe and Fennelly, Crime Prevention Through Environmental Design, 3rd ed., 2013",
+        "Wilson and Kelling, Broken Windows, The Atlantic, March 1982"
+      ]
+    },
+    {
+      "id": "active-threat",
+      "name": "Active threat (armed assailant)",
+      "description": "A person enters or is already on site and attempts to injure or kill people, typically with a firearm or other weapon. Outcomes depend on how quickly entry can be restricted, people warned, help summoned, and staff act on a practiced plan.",
+      "category": "physical",
+      "mitigations": [
+        { "controlId": "SC-POL-003", "weight": 3 },
+        { "controlId": "SC-IDS-005", "weight": 3 },
+        { "controlId": "SC-ACC-001", "weight": 3 },
+        { "controlId": "SC-ACC-003", "weight": 2 },
+        { "controlId": "SC-ACC-005", "weight": 2 },
+        { "controlId": "SC-GRD-001", "weight": 2 },
+        { "controlId": "SC-GRD-004", "weight": 2 },
+        { "controlId": "SC-GRD-005", "weight": 2 },
+        { "controlId": "SC-POL-004", "weight": 2 },
+        { "controlId": "SC-VSS-001", "weight": 2 },
+        { "controlId": "SC-ENV-004", "weight": 1 },
+        { "controlId": "SC-PER-004", "weight": 1 }
+      ],
+      "domains": ["POL", "ACC", "GRD", "IDS", "VSS"],
+      "references": [
+        "CISA, Active Shooter Preparedness program",
+        "U.S. Department of Homeland Security, Active Shooter: How to Respond, 2008"
+      ]
+    },
+    {
+      "id": "insider-threat",
+      "name": "Insider threat",
+      "description": "An employee, contractor, or other trusted person misuses authorized physical or system access to steal property or data, sabotage operations, or help an outsider. Access that is never reviewed or removed is a common enabler.",
+      "category": "hybrid",
+      "mitigations": [
+        { "controlId": "SC-POL-005", "weight": 3 },
+        { "controlId": "SC-PRT-002", "weight": 3 },
+        { "controlId": "SC-ACC-002", "weight": 3 },
+        { "controlId": "SC-ACC-005", "weight": 2 },
+        { "controlId": "SC-LCK-002", "weight": 2 },
+        { "controlId": "SC-IDN-004", "weight": 2 },
+        { "controlId": "SC-DET-001", "weight": 2 },
+        { "controlId": "SC-DET-002", "weight": 2 },
+        { "controlId": "SC-DET-004", "weight": 2 },
+        { "controlId": "SC-POL-006", "weight": 1 },
+        { "controlId": "SC-POL-004", "weight": 1 },
+        { "controlId": "SC-VSS-003", "weight": 1 }
+      ],
+      "domains": ["POL", "ACC", "PRT", "DET"],
+      "references": [
+        "CISA, Insider Threat Mitigation Guide, November 2020",
+        "NIST SP 800-53 Rev. 5, controls PS-3 (Personnel Screening), AC-6 (Least Privilege), and AU-6 (Audit Record Review, Analysis, and Reporting)"
+      ]
+    },
+    {
+      "id": "cyber-intrusion",
+      "name": "Cyber intrusion",
+      "description": "An external attacker gains unauthorized access to the organization's networks, systems, or cloud services, for example through stolen credentials, phishing, or an unpatched internet-facing system, then moves laterally to steal data or disrupt operations.",
+      "category": "cyber",
+      "mitigations": [
+        { "controlId": "SC-PRT-001", "weight": 3 },
+        { "controlId": "SC-PRT-003", "weight": 3 },
+        { "controlId": "SC-IDN-005", "weight": 3 },
+        { "controlId": "SC-DET-002", "weight": 3 },
+        { "controlId": "SC-DET-003", "weight": 3 },
+        { "controlId": "SC-PRT-002", "weight": 2 },
+        { "controlId": "SC-PRT-004", "weight": 2 },
+        { "controlId": "SC-PRT-005", "weight": 2 },
+        { "controlId": "SC-DET-001", "weight": 2 },
+        { "controlId": "SC-IDN-001", "weight": 2 },
+        { "controlId": "SC-RSP-001", "weight": 2 },
+        { "controlId": "SC-RSP-005", "weight": 2 },
+        { "controlId": "SC-IDN-002", "weight": 1 },
+        { "controlId": "SC-PRT-006", "weight": 1 },
+        { "controlId": "SC-GOV-004", "weight": 1 },
+        { "controlId": "SC-VSS-006", "weight": 1 }
+      ],
+      "domains": ["PRT", "DET", "IDN", "RSP", "GOV"],
+      "references": [
+        "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0, February 2024",
+        "CISA, Cross-Sector Cybersecurity Performance Goals, 2023",
+        "NIST SP 800-30 Rev. 1, Guide for Conducting Risk Assessments, September 2012"
+      ]
+    },
+    {
+      "id": "ransomware",
+      "name": "Ransomware",
+      "description": "An attacker encrypts or steals the organization's data and demands payment, halting operations until systems are restored. Recovery depends on protected, tested backups and a practiced recovery plan as much as on preventing the initial intrusion.",
+      "category": "cyber",
+      "mitigations": [
+        { "controlId": "SC-RCV-001", "weight": 3 },
+        { "controlId": "SC-RCV-002", "weight": 3 },
+        { "controlId": "SC-PRT-001", "weight": 3 },
+        { "controlId": "SC-PRT-003", "weight": 3 },
+        { "controlId": "SC-DET-003", "weight": 3 },
+        { "controlId": "SC-PRT-004", "weight": 2 },
+        { "controlId": "SC-PRT-005", "weight": 2 },
+        { "controlId": "SC-PRT-006", "weight": 2 },
+        { "controlId": "SC-DET-002", "weight": 2 },
+        { "controlId": "SC-RSP-001", "weight": 2 },
+        { "controlId": "SC-RSP-005", "weight": 2 },
+        { "controlId": "SC-RCV-003", "weight": 1 },
+        { "controlId": "SC-RCV-004", "weight": 1 },
+        { "controlId": "SC-RSP-004", "weight": 1 }
+      ],
+      "domains": ["RCV", "PRT", "DET", "RSP"],
+      "references": [
+        "CISA, MS-ISAC, NSA, and FBI, #StopRansomware Guide, October 2023",
+        "NIST IR 8374, Ransomware Risk Management: A Cybersecurity Framework Profile, February 2022"
+      ]
+    },
+    {
+      "id": "harvest-now-decrypt-later",
+      "name": "Quantum-era data exposure (harvest now, decrypt later)",
+      "description": "An adversary records encrypted traffic or copies encrypted data today and stores it until a cryptographically relevant quantum computer can break the public-key algorithms that protect it. Data that must stay confidential for many years is exposed now, even though decryption happens later.",
+      "category": "cyber",
+      "mitigations": [
+        { "controlId": "SC-CRY-001", "weight": 3 },
+        { "controlId": "SC-CRY-002", "weight": 3 },
+        { "controlId": "SC-CRY-003", "weight": 3 },
+        { "controlId": "SC-CRY-005", "weight": 3 },
+        { "controlId": "SC-CRY-009", "weight": 3 },
+        { "controlId": "SC-CRY-006", "weight": 2 },
+        { "controlId": "SC-CRY-007", "weight": 2 },
+        { "controlId": "SC-CRY-008", "weight": 2 },
+        { "controlId": "SC-CRY-010", "weight": 2 },
+        { "controlId": "SC-IDN-004", "weight": 2 },
+        { "controlId": "SC-CRY-004", "weight": 1 },
+        { "controlId": "SC-PRT-005", "weight": 1 }
+      ],
+      "domains": ["CRY", "IDN"],
+      "references": [
+        "CISA, NSA, and NIST, Quantum-Readiness: Migration to Post-Quantum Cryptography, August 2023",
+        "NIST FIPS 203, FIPS 204, and FIPS 205 (post-quantum cryptography standards), August 2024",
+        "NIST IR 8547 ipd, Transition to Post-Quantum Cryptography Standards, November 2024"
+      ]
+    },
+    {
+      "id": "tailgating",
+      "name": "Unauthorized entry by tailgating",
+      "description": "A person without authorization follows an authorized person through a controlled door, gate, or loading dock, or is let in by staff who hold the door. Gives an outsider the same access as an employee without defeating any lock.",
+      "category": "physical",
+      "mitigations": [
+        { "controlId": "SC-ACC-006", "weight": 3 },
+        { "controlId": "SC-ACC-001", "weight": 3 },
+        { "controlId": "SC-ACC-004", "weight": 2 },
+        { "controlId": "SC-ACC-003", "weight": 2 },
+        { "controlId": "SC-ACC-007", "weight": 2 },
+        { "controlId": "SC-PER-003", "weight": 2 },
+        { "controlId": "SC-POL-004", "weight": 2 },
+        { "controlId": "SC-VSS-001", "weight": 2 },
+        { "controlId": "SC-GRD-001", "weight": 1 },
+        { "controlId": "SC-ENV-004", "weight": 1 }
+      ],
+      "domains": ["ACC", "POL", "GRD", "VSS"],
+      "references": [
+        "ASIS PAP.1-2012, Physical Asset Protection",
+        "NIST SP 800-53 Rev. 5, control PE-3 (Physical Access Control)"
+      ]
+    },
+    {
+      "id": "it-physical-tampering",
+      "name": "Physical tampering with IT equipment",
+      "description": "Someone gains physical access to servers, network equipment, or communications rooms and steals, damages, or tampers with them, for example by plugging in a rogue device. Links physical access weaknesses to cyber impact.",
+      "category": "hybrid",
+      "mitigations": [
+        { "controlId": "SC-ACC-005", "weight": 3 },
+        { "controlId": "SC-LCK-005", "weight": 3 },
+        { "controlId": "SC-IDS-002", "weight": 2 },
+        { "controlId": "SC-DET-004", "weight": 2 },
+        { "controlId": "SC-PRT-007", "weight": 2 },
+        { "controlId": "SC-PRT-005", "weight": 1 },
+        { "controlId": "SC-IDN-001", "weight": 1 },
+        { "controlId": "SC-VSS-001", "weight": 1 }
+      ],
+      "domains": ["ACC", "LCK", "IDS", "PRT", "DET"],
+      "references": [
+        "NIST CSWP 29, The NIST Cybersecurity Framework (CSF) 2.0, February 2024, subcategory PR.AA-06",
+        "NIST SP 800-53 Rev. 5, controls PE-3 (Physical Access Control) and PE-6 (Monitoring Physical Access)"
+      ]
+    }
+  ]
+}

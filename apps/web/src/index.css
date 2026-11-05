@@ -29,6 +29,18 @@
   --sa-cyber-soft: #dbeafe;
   --sa-hybrid: #581c87;
   --sa-hybrid-soft: #f3e8ff;
+  /* Risk levels, ordered very low to very high. Fills keep 3:1 against the surface; soft backgrounds
+     keep primary text above 7:1. Every use also prints the level name (never color alone). */
+  --sa-lv1: #047857;
+  --sa-lv1-soft: #d1fae5;
+  --sa-lv2: #4d7c0f;
+  --sa-lv2-soft: #ecfccb;
+  --sa-lv3: #a16207;
+  --sa-lv3-soft: #fef3c7;
+  --sa-lv4: #c2410c;
+  --sa-lv4-soft: #ffedd5;
+  --sa-lv5: #b91c1c;
+  --sa-lv5-soft: #fee2e2;
   color-scheme: light;
 }
 
@@ -57,6 +69,16 @@
     --sa-cyber-soft: #172554;
     --sa-hybrid: #d8b4fe;
     --sa-hybrid-soft: #3b0764;
+    --sa-lv1: #34d399;
+    --sa-lv1-soft: #022c22;
+    --sa-lv2: #a3e635;
+    --sa-lv2-soft: #1a2e05;
+    --sa-lv3: #facc15;
+    --sa-lv3-soft: #422006;
+    --sa-lv4: #fb923c;
+    --sa-lv4-soft: #431407;
+    --sa-lv5: #f87171;
+    --sa-lv5-soft: #450a0a;
     color-scheme: dark;
   }
 }
@@ -84,6 +106,16 @@
   --color-cyber-soft: var(--sa-cyber-soft);
   --color-hybrid: var(--sa-hybrid);
   --color-hybrid-soft: var(--sa-hybrid-soft);
+  --color-lv1: var(--sa-lv1);
+  --color-lv1-soft: var(--sa-lv1-soft);
+  --color-lv2: var(--sa-lv2);
+  --color-lv2-soft: var(--sa-lv2-soft);
+  --color-lv3: var(--sa-lv3);
+  --color-lv3-soft: var(--sa-lv3-soft);
+  --color-lv4: var(--sa-lv4);
+  --color-lv4-soft: var(--sa-lv4-soft);
+  --color-lv5: var(--sa-lv5);
+  --color-lv5-soft: var(--sa-lv5-soft);
 }
 
 @layer base {

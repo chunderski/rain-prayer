@@ -67,6 +67,8 @@ interface RequestOptions<S extends z.ZodTypeAny> {
   /** Binary body (photo bytes); sent as is with `contentType`. */
   rawBody?: Blob;
   contentType?: string;
+  /** Return the body as text (HTML report preview) instead of parsing JSON. */
+  text?: boolean;
 }
 
 export type RestoreResult = { kind: "ok"; session: SessionInfo } | { kind: "none" } | { kind: "offline" };
@@ -139,9 +141,9 @@ export function createApiClient(options: ApiClientOptions = {}) {
     path: string,
     opts: RequestOptions<S> = {},
   ): Promise<z.infer<S>> {
-    const { method = "GET", body, schema, auth = true, signal, rawBody, contentType } = opts;
+    const { method = "GET", body, schema, auth = true, signal, rawBody, contentType, text } = opts;
     const send = () => {
-      const headers: Record<string, string> = { Accept: "application/json" };
+      const headers: Record<string, string> = { Accept: text ? "text/html" : "application/json" };
       if (rawBody) headers["Content-Type"] = contentType ?? (rawBody.type || "application/octet-stream");
       else if (body !== undefined) headers["Content-Type"] = "application/json";
       if (auth && accessToken) headers.Authorization = `Bearer ${accessToken}`;
@@ -166,6 +168,7 @@ export function createApiClient(options: ApiClientOptions = {}) {
     }
     if (!res.ok) throw await toError(res);
     if (res.status === 204) return undefined as z.infer<S>;
+    if (text) return (await res.text()) as z.infer<S>;
     const json: unknown = await res.json();
     if (!schema) return json as z.infer<S>;
     const parsed = schema.safeParse(json);

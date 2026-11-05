@@ -98,6 +98,11 @@ export class SyncEngine {
     return () => this.listeners.delete(cb);
   }
 
+  /** (Re)start after stop(). React StrictMode mounts effects twice in development, so the provider calls this on every mount. */
+  start(): void {
+    this.stopped = false;
+  }
+
   stop(): void {
     this.stopped = true;
     if (this.retryHandle) this.o.clearTimer(this.retryHandle);

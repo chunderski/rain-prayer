@@ -123,6 +123,15 @@ describe("backoffDelay", () => {
 });
 
 describe("sync engine push", () => {
+  it("syncs again after stop() then start() (React StrictMode remount)", async () => {
+    const h = harness(okServer);
+    h.engine.stop();
+    h.engine.start();
+    await saveAnswer(ctx, answer());
+    await h.engine.syncNow();
+    expect(pushCalls(h.calls)).toHaveLength(1);
+  });
+
   it("applied: sends the op with client id, null baseVersion, and timestamp, then stores the version", async () => {
     const h = harness(okServer);
     const a = answer();

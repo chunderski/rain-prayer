@@ -57,6 +57,7 @@ export function SyncProvider({ children, intervalMs = SYNC_INTERVAL_MS }: { chil
       setStatus(EMPTY);
       return;
     }
+    engine.start();
     const unsub = engine.subscribe(setStatus);
     const run = () => void engine.syncNow();
     void engine.refreshCounts();

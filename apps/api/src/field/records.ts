@@ -10,7 +10,7 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import {
-  Answer, Area, Asset, Finding, PhotoMeta, type AnswerValue, type SyncEntity,
+  Answer, Area, Asset, Finding, PhotoMeta, hasRole, type AnswerValue, type SyncEntity,
 } from "@sentinel/shared";
 import { AppError } from "../lib/errors.js";
 import { audit } from "../lib/audit.js";
@@ -434,13 +434,16 @@ const after = (a: string, b: string | null | undefined) => !b || Date.parse(a) >
 
 export async function applyWrite(ctx: FieldCtx, entity: SyncEntity, op: WriteOp, deps: EngineDeps): Promise<WriteResult> {
   const def = ENTITIES[entity];
-  const at = new Date(op.clientUpdatedAt).toISOString();
+  // QA Phase 2: a device clock in the future must not pin field clocks forever, so clamp to server time.
+  const at = new Date(Math.min(Date.parse(op.clientUpdatedAt), Date.now())).toISOString();
   const existing = await loadRecord(ctx, def, op.id, true);
 
   // ---- delete
   if (op.action === "delete") {
     if (!existing) return { status: "applied", record: null, version: null, created: false, gpsDropped: false };
     await authorize(ctx, def, existing.data[def.scopeKey] as string);
+    // QA Phase 2: DELETE /areas is admin only; sync must not be a way around that.
+    if (entity === "area" && !hasRole(ctx.auth.role, "admin")) throw new AppError(403, "forbidden", "Requires role admin or higher");
     if (existing.meta.deleted) return { status: "applied", record: null, version: existing.meta.version, created: false, gpsDropped: false };
     checkBaseAhead(op, existing);
     if (isConflict(op, existing)) {

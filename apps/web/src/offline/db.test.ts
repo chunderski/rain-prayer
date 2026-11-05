@@ -90,11 +90,18 @@ describe("version 2 migration", () => {
 
   it("clearClientData wipes field data and the cached profile but keeps the library cache", async () => {
     await putLibrary("/frameworks", [1]);
+    await putLibrary("/controls?framework=x", [2]);
+    await putLibrary("/assessments", [{ title: "Tenant A secret site" }]);
+    await putLibrary("/assessments/abc", { title: "Tenant A secret site" });
     await setMeta("profile", { x: 1 });
     await saveDraft("d", "k", {});
     await clearClientData();
     expect(await getMeta("profile")).toBeUndefined();
     expect(await getDraft("d")).toBeUndefined();
     expect((await getLibrary("/frameworks"))?.data).toEqual([1]);
+    expect((await getLibrary("/controls?framework=x"))?.data).toEqual([2]);
+    // QA Phase 2: tenant data cached through the library store is wiped too.
+    expect(await getLibrary("/assessments")).toBeUndefined();
+    expect(await getLibrary("/assessments/abc")).toBeUndefined();
   });
 });

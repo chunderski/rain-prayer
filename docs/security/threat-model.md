@@ -1,6 +1,6 @@
 # Sentinel Assess threat model
 
-Owner: qa-security-reviewer. Method: STRIDE per component. Last reviewed: 2026-11-04 (Phase 1). Status keys: **mitigated** (control in code with test evidence), **partial**, **open** (no control yet), **future** (component not built; required control listed so the owning phase builds it in).
+Owner: qa-security-reviewer. Method: STRIDE per component. Last reviewed: 2026-11-05 (Phase 2). Status keys: **mitigated** (control in code with test evidence), **partial**, **open** (no control yet), **future** (component not built; required control listed so the owning phase builds it in).
 
 ## System overview
 
@@ -9,8 +9,8 @@ Owner: qa-security-reviewer. Method: STRIDE per component. Last reviewed: 2026-1
 | PWA (`apps/web`): standalone, iframe, `<sentinel-assess>` web component | 1 | Untrusted device and browser; may run inside a third-party host page |
 | API (`apps/api`, Fastify) | 1 | Only component that talks to the database, storage, and third parties |
 | Database (Postgres 16, RLS) | 1 | API connects as `sentinel_app` (RLS enforced); migrations as `sentinel_owner` |
-| Object storage (MinIO / S3) | 2 (future) | Photos; reachable only through signed URLs issued by the API |
-| AI pipeline (Anthropic vision and text) | 2 (future) | Third-party processor; inputs (photos, metadata) are attacker-influenced |
+| Object storage (MinIO / S3, local disk in dev) | 2 | Photos; reachable only through signed URLs issued by the API |
+| AI pipeline (Anthropic vision and text) | 2 | Third-party processor; inputs (photos, metadata) are attacker-influenced |
 | Google export (Docs, Sheets, Drive) | 3 (future) | Third-party processor using per-user OAuth grants |
 
 Primary assets: tenant assessment data (client names, site addresses, findings, photos of security weaknesses), credentials and sessions, audit trail, framework library integrity.
@@ -67,29 +67,51 @@ Primary threat actors: an external attacker on the internet; a user of tenant A 
 | D | Lockout counter abuse | See API, D | partial | |
 | E | `search_path` hijack in definer functions | `SET search_path = public, pg_temp`; app role has no CREATE on `public` | mitigated | live check: `has_schema_privilege('sentinel_app','public','CREATE') = f` |
 
-## Object storage (future, Phase 2)
+## Object storage and photo pipeline (Phase 2)
 
-| STRIDE | Threat | Required control |
-|---|---|---|
-| S | Guessable or long-lived photo URLs | Signed GET URLs, TTL at most 300 s (`SIGNED_URL_TTL_SECONDS`), issued only after an RLS-checked lookup |
-| T | Upload overwrites another tenant's object | Server-generated keys `tenant/<tenant_id>/<uuid>`; presigned PUT bound to key, content type, and max length |
-| R | Unattributed uploads | Audit row per upload and delete |
-| I | EXIF GPS and device data leak in exports | Strip EXIF on ingest, keep GPS in the database only when allowed |
-| I | Bucket made public | Block public access; bucket policy denies anonymous reads; encryption at rest |
-| D | Oversized or decompression-bomb images | Size limit before upload, pixel-count limit, re-encode server side |
-| E | Polyglot or SVG files executing in the app | Allow JPEG, PNG, HEIC only; verify magic bytes; serve with `Content-Disposition: attachment` and `nosniff` |
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| S | Guessable or long-lived photo URLs | S3 presigned GET or local HMAC token bound to one key with expiry; TTL `SIGNED_URL_TTL_SECONDS` (300); issued only after an RLS-checked lookup; storage key separate from JWT key (D-050) | mitigated | `apps/api/src/storage/local.ts`; `apps/api/test/photos.test.ts` (expiry, key swap, forgery, JWT-key token) |
+| T | Upload overwrites another tenant's object | Bytes go through the API (no presigned PUT); keys are server generated `tenants/<tid>/photos/<id>.jpg`, regex checked, path containment check | mitigated | `apps/api/src/storage/index.ts` `OBJECT_KEY`; `apps/api/test/isolation-phase2.test.ts` |
+| T | Re-upload replaces the image of a photo that already has an accepted AI suggestion | Audit row with sha256 per upload | partial | No lock after `stored`; recommendation R2-4 |
+| R | Unattributed uploads and deletes | `photo.upload`, `photo.delete` audit rows with sha256 and detected type | mitigated | `apps/api/src/routes/photos.ts` |
+| I | EXIF, XMP, GPS leak | Re-encode from decoded pixels, no metadata written; GPS stored only when `allowGps` | mitigated | `apps/api/src/photos/process.ts`; `photos.test.ts` (EXIF GPS removed, GPS dropped header) |
+| I | Bucket made public | Deployment control: block public access, SSE at rest | open (deploy) | No production bucket yet; Phase 5 hardening item |
+| I | Local files readable by other OS users | Files 0600, directories 0700 | mitigated | `apps/api/src/storage/local.ts` |
+| D | Oversized or decompression-bomb images | 15 MB body limit; `limitInputPixels` 100 MP; `failOn: error` | mitigated | `photos.test.ts` (413); `apps/api/test/qa-phase2.test.ts` (144 MP PNG gets 415; truncated JPEG 415) |
+| D | CPU exhaustion through many uploads | Per-user data limit 600/min | partial | One sharp job per upload, no concurrency cap; in-memory limiter only (D-051) |
+| E | Polyglot, SVG, or HTML executing in the app | Magic bytes allowlist (JPEG, PNG, WebP, HEIC); only re-encoded pixels stored; served as `image/jpeg` with `nosniff` | mitigated | `photos.test.ts` (svg, html, pdf, gif polyglot, appended script) |
 
-## AI pipeline (future, Phase 2)
+## AI pipeline (Phase 2)
 
-| STRIDE | Threat | Required control |
-|---|---|---|
-| S | Prompt injection via text in photos (signs, notes, QR codes) or metadata fields | Treat model output as untrusted suggestions; system prompt states image text is data; structured output validated by zod; no tool use with side effects |
-| T | AI output silently becomes a finding | Every AI suggestion stored as `suggested`; human accept required (mission rule 3); audit the accepting user |
-| R | Unknown provenance of a finding | Store model id, prompt version, and input hashes with each suggestion |
-| I | Tenant data sent to the model across tenants | One request per tenant context; no shared caches keyed without tenant; zero-retention terms with the processor |
-| I | Secrets in prompts | API key only in server env; never sent to the browser |
-| D | Cost exhaustion | Per-tenant quotas and rate limits on analysis requests |
-| E | Model output rendered as HTML (stored XSS) | Render as text only; no `dangerouslySetInnerHTML` |
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| S | Prompt injection via text in photos or metadata | Frozen system prompt says image text and tagged notes are data; notes and area name escaped (`&`, `<`, `>`, control chars) and length capped; structured output with zod; no tools | mitigated (residual) | `packages/ai/src/prompts/photo-analysis.v1.ts`; `packages/ai` tests. Residual: a model can still be steered within the schema, which is why review is mandatory |
+| T | AI output silently becomes a finding | Suggestions stored as `suggested`; findings only through `POST /suggestions/:id/review`; second review 409 (row locked `FOR UPDATE`); client cannot set `source` or `suggestionId` | mitigated | `apps/api/src/routes/ai.ts`; `ai.test.ts`; `qa-phase2.test.ts` (provenance spoofing ignored) |
+| T | Model invents control IDs | Dropped in `packages/ai` and again server side against the assessment scope | mitigated | `ai.test.ts` "drops controls outside the scope" |
+| R | Unknown provenance of a finding | `ai_suggestion` keeps model, prompt version, output, reviewer, reason; audit rows | mitigated | migration 004 |
+| I | Tenant data to the model | Stored stripped JPEG only; notes and area only when `aiShareContext` (default false); GPS never sent | mitigated | `ai.test.ts` "passes notes only when the tenant allows" |
+| D | Cost exhaustion | 30 analyses per user per hour | partial | Per user, not per tenant; in-memory (D-051) |
+| E | Model output rendered as HTML | React text nodes only; no `dangerouslySetInnerHTML` in `apps/web/src` | mitigated | grep of `apps/web/src`; D-041 |
+
+## Sync and field records (Phase 2)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| S | Replay of another user's opId | `sync_operation` keyed by (tenant, opId); another user's opId is `rejected forbidden` | mitigated | `apps/api/src/routes/sync.ts` |
+| T | Cross-tenant ids inside op payloads (areaId, assetId, findingId) | Reference checks run under RLS; composite FKs | mitigated | `qa-phase2.test.ts` |
+| T | Future-dated `clientUpdatedAt` pins fields so later edits always lose | Clamped to server time (QA fix) | mitigated | `apps/api/src/field/records.ts`; `qa-phase2.test.ts` |
+| E | Assessor deletes areas through sync though REST is admin only | Admin check in the engine delete path (QA fix) | mitigated | `qa-phase2.test.ts` |
+| E | Unassigned assessor writes | `requireAssessmentWrite` in every write path | mitigated | `sync.test.ts`, `field.test.ts` |
+| I | change_log leaks other tenants through cursors | change_log under forced RLS; cursor is only a sequence number | mitigated | `sync.test.ts` "only returns the requested tenant's changes" |
+| D | Oversized batches | 200 ops, 2 MB body, 120 pushes/min per user | mitigated | `packages/shared/src/field.ts` |
+
+## PWA offline store (Phase 2)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| I | Cached tenant data left on a shared device after sign out | Sign out wipes field stores, profile, and (QA fix) tenant entries in the library cache | mitigated | `apps/web/src/offline/db.ts`; `db.test.ts` |
+| S | Offline start from cached profile (D-039) | Accepted risk: up to 30 days of offline read and write without a password; no API access without the refresh cookie | accepted | D-039; device lock is the control; local PIN recommended (R2-5) |
 
 ## Google export (future, Phase 3)
 

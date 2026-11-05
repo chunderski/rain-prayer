@@ -1,6 +1,6 @@
 # OWASP ASVS 4.0.3 checklist (Level 2 target)
 
-Owner: qa-security-reviewer. Last reviewed: 2026-11-04 (Phase 1). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
+Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
 
 ## V2 Authentication
 
@@ -51,9 +51,9 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-04 (Phase 1). Status: **met*
 |---|---|---|---|
 | 4.1.1 | Enforced on a trusted service layer | met | `requireRole` preHandler plus Postgres RLS |
 | 4.1.2 | User and data attributes cannot be manipulated by users | met | Role and tenant read from membership per request; body `tenant_id` ignored, `apps/api/test/isolation.test.ts` |
-| 4.1.3 | Least privilege | met | Route minimum roles match `docs/api-phase1.md`; `sentinel_app` has only needed grants |
+| 4.1.3 | Least privilege | met | Route minimum roles match `docs/api-phase1.md` and `docs/api-phase2.md`; assessor assignment (D-048); sync area delete now admin only like REST (QA Phase 2 fix) |
 | 4.1.5 | Fail securely | met | Missing tenant setting yields zero rows; errors become 401, 403, 404 |
-| 4.2.1 | Protection against IDOR | met | RLS plus 404 for foreign ids; composite FKs; live probe as tenant A against tenant B client, site, assessment ids |
+| 4.2.1 | Protection against IDOR | met | RLS plus 404 for foreign ids; composite FKs; Phase 2 tables in `isolation-phase2.test.ts`; foreign ids inside sync payloads in `qa-phase2.test.ts` |
 | 4.2.2 | Anti-CSRF | met | Bearer tokens for data routes; SameSite=Strict and `Origin` check on cookie routes; JSON content type required |
 | 4.3.1 | MFA for administrative interfaces | not yet | See 2.7.x |
 | 4.3.2 | No directory browsing or metadata exposure | met | API has no static serving |
@@ -96,7 +96,7 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-04 (Phase 1). Status: **met*
 | 8.2.2 | Sensitive data in browser storage minimized | partial | IndexedDB holds the reference library, drafts (cleared at sign out) and the outbox (not cleared at sign out) |
 | 8.2.3 | Client storage cleared after session ends | partial | Drafts cleared; outbox to be handled by the Phase 2 sync design |
 | 8.3.1 | Sensitive data in body or headers, not URL | met | Credentials and tokens never in query strings |
-| 8.3.4 | Sensitive data identified and policy defined | not yet | Data classification (photos of security weaknesses, site addresses) to be written with Phase 2 |
+| 8.3.4 | Sensitive data identified and policy defined | partial | GPS opt-in and AI context sharing settings exist (`tenant_settings`); written data classification still missing (R2-6) |
 | 8.3.x | Encryption at rest | not yet | Deployment item: encrypted volumes and bucket encryption |
 
 ## V9 Communications
@@ -107,16 +107,20 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-04 (Phase 1). Status: **met*
 | 9.1.2, 9.1.3 | Strong TLS versions and ciphers | not yet | Deployment item |
 | 9.2.1 | TLS for server-to-server connections | partial | Google over HTTPS; `DATABASE_URL` does not require `sslmode`; require it in production |
 
-## V12 Files and resources (future, Phase 2 photo upload)
+## V12 Files and resources (Phase 2 photo upload)
 
 | ID | Requirement (summary) | Status | Evidence or gap |
 |---|---|---|---|
-| 12.1.1 | Reject oversized files | partial | JSON body limit 256 KB today; photo limits are Phase 2 |
-| 12.1.2 | Check compressed files (zip bombs, pixel floods) | not yet | Phase 2 |
-| 12.2.1 | Validate file type by content | not yet | Phase 2: magic bytes, allow JPEG, PNG, HEIC |
-| 12.3.1 | User-supplied file names not used for paths | not yet | Phase 2: server-generated keys |
-| 12.4.1 | Files stored outside the web root, isolated | not yet | Phase 2: private bucket |
-| 12.5.1, 12.5.2 | Serve only allowed types; attachments not executed | not yet | Phase 2: `Content-Disposition: attachment`, `nosniff` |
+| 12.1.1 | Reject oversized files | met | 15 MB `bodyLimit` on `PUT /photos/:id/content`, `apps/api/src/routes/photos.ts`; `photos.test.ts` (413) |
+| 12.1.2 | Check compressed files (zip bombs, pixel floods) | met | `limitInputPixels` 100 MP, `apps/api/src/photos/process.ts`; `qa-phase2.test.ts` (144 MP PNG rejected) |
+| 12.1.3 | Per-user file size quota | partial | Per-file limit and per-user rate limit only; no storage quota per user or tenant |
+| 12.2.1 | Validate file type by content | met | file-type magic bytes allowlist, then a full decode; `photos.test.ts` |
+| 12.3.1 | User-supplied file names not used for paths | met | Keys from tenant id and photo UUID only, regex checked |
+| 12.3.2 | User-supplied metadata not used for paths or commands | met | Same |
+| 12.4.1 | Files stored outside the web root, isolated | met | Local driver outside the web root, 0600; S3 private bucket (deployment item) |
+| 12.4.2 | Files scanned for malicious content | partial | Not AV scanned; every file is re-encoded from decoded pixels, which removes embedded payloads |
+| 12.5.1 | Only allowed file types served | met | Only re-encoded JPEG; served as `image/jpeg` |
+| 12.5.2 | Uploaded files not executed as HTML or script | met | `nosniff` (helmet), fixed `image/jpeg`; `Content-Disposition: inline` is acceptable because the content is always a re-encoded JPEG |
 | 12.6.1 | SSRF allow list for fetched resources | met | No user-supplied URLs fetched |
 
 ## V13 API and web service

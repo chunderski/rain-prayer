@@ -247,11 +247,21 @@ export async function deleteMeta(key: string): Promise<void> {
   await (await getDb()).delete("meta", key);
 }
 
+/** Library cache keys that hold global reference data (no tenant content). */
+const isReferenceKey = (key: string) => /^\/(frameworks|controls)(\/|\?|$)/.test(key);
+
 /** Wipe every store that can hold client data (sign out, or a different user signing in). */
 export async function clearClientData(): Promise<void> {
   const db = await getDb();
   const tx = db.transaction([...CLIENT_DATA_STORES], "readwrite");
   await Promise.all([...CLIENT_DATA_STORES.map((s) => tx.objectStore(s).clear()), tx.done]);
+  // QA Phase 2: the library store also caches tenant data (/assessments list and detail). Keep only
+  // global reference data (framework library) so nothing of the previous workspace survives sign out.
+  const lib = db.transaction("library", "readwrite");
+  for (const key of await lib.store.getAllKeys()) {
+    if (!isReferenceKey(String(key))) await lib.store.delete(key);
+  }
+  await lib.done;
   notifyLocalChange();
 }
 

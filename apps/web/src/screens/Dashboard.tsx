@@ -70,7 +70,7 @@ export function Dashboard() {
           <Card as="section" className="md:col-span-2">
             <h2 className="mb-3 text-xl font-bold">Top residual risks</h2>
             {d.topResidual.length === 0 ? (
-              <p className="text-muted">No scored scenarios yet. Add risk inputs to an assessment to see its residual risk here.</p>
+              <p className="text-muted">No completed assessments yet. Top risks appear here once an assessment is completed and its scores are frozen; open an assessment to see its live scores.</p>
             ) : (
               <ol className="flex flex-col gap-2">
                 {d.topResidual.map((t, n) => (

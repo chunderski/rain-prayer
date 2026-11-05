@@ -2,6 +2,7 @@
  * Sync review: conflicts (both copies side by side, keep the server copy or send mine again) and
  * changes the server refused (with its reason; discard). Reached from the header status.
  */
+import { refusalMessage } from "../field/Lock";
 import { useAuth, useWriteCtx } from "../auth/AuthContext";
 import { useOnline } from "../offline/useOnline";
 import { useLocal } from "../lib/useLocal";
@@ -100,7 +101,7 @@ export function SyncReview() {
                   <Card>
                     <p className="font-semibold">{ENTITY_LABEL[o.op.entity] ?? o.op.entity}</p>
                     <p>
-                      {o.error?.code === "forbidden" ? "You are not assigned to this assessment, or your role cannot change it." : o.error?.message ?? "The server did not accept this change."}
+                      {refusalMessage(o.error?.code, o.error?.message)}
                     </p>
                     <Button variant="secondary" className="mt-2" onClick={() => void engine?.discardRejected(o.opId)}>
                       Discard this change

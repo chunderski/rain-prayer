@@ -4,7 +4,7 @@
  * whenever local data changes. Screens never wait on the network to render cached work.
  */
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Outlet, useParams } from "react-router-dom";
+import { Outlet, useLocation, useParams } from "react-router-dom";
 import type { Answer, Area, Asset, Finding, PhotoMeta } from "@sentinel/shared";
 import { useApi, useWriteCtx } from "../auth/AuthContext";
 import type { AssessmentDetail } from "../api/schemas";
@@ -15,6 +15,7 @@ import type { LocalPhoto, LocalRecord } from "../offline/db";
 import { Banner, Loading } from "../components/ui";
 import { listAreas, listRecords, type WriteCtx } from "./repo";
 import { fetchAssessment, fetchTenantSettings, loadWalkthrough } from "./walkthrough";
+import { LockedNotice, LockRejections } from "./Lock";
 import type { TenantSettings, WalkthroughControl, WalkthroughSection, WalkthroughStructure } from "./schemas";
 
 export interface FieldData {
@@ -34,6 +35,10 @@ export interface FieldData {
   assets: LocalRecord<Asset>[];
   ctx: WriteCtx | null;
   online: boolean;
+  /** Complete assessments are locked: every field write is refused (CW decision, D-057). */
+  locked: boolean;
+  /** Fetch the assessment again (after complete or reopen). */
+  reload: () => void;
 }
 
 const FieldCtx = createContext<FieldData | null>(null);
@@ -98,8 +103,19 @@ export function FieldLayout({ children }: { children?: ReactNode }) {
       controls.set(c.id, c);
       sectionOf.set(c.id, s);
     }
-    return { assessmentId: id, ...base, controls, sectionOf, ...records.data, ctx, online };
+    return {
+      assessmentId: id,
+      ...base,
+      controls,
+      sectionOf,
+      ...records.data,
+      ctx,
+      online,
+      locked: base.assessment.status === "complete",
+      reload: () => setAttempt((n) => n + 1),
+    };
   }, [base, records.data, ctx, online, id]);
+  const { pathname } = useLocation();
 
   if (error && !base)
     return (
@@ -108,7 +124,18 @@ export function FieldLayout({ children }: { children?: ReactNode }) {
       </Banner>
     );
   if (!value) return <Loading label="Loading assessment" />;
-  return <FieldCtx.Provider value={value}>{children ?? <Outlet />}</FieldCtx.Provider>;
+  // The detail page shows its own lock panel; report and results screens stay usable when locked.
+  const isIndex = /^\/assessments\/[^/]+\/?$/.test(pathname);
+  const readOnlyOk = isIndex || /\/(report|risk)\/?$/.test(pathname);
+  return (
+    <FieldCtx.Provider value={value}>
+      <LockRejections />
+      {!isIndex && <LockedNotice />}
+      <fieldset disabled={value.locked && !readOnlyOk} className="m-0 min-w-0 border-0 p-0">
+        {children ?? <Outlet />}
+      </fieldset>
+    </FieldCtx.Provider>
+  );
 }
 
 export const areaKeyOf = (areaId: string | null) => areaId ?? "site";

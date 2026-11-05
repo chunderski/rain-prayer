@@ -6,7 +6,7 @@ import { randomUUID } from "node:crypto";
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
 import { AssignAssessors, CreateArea, Uuid } from "@sentinel/shared";
-import { assessmentScope, requireAssessmentWrite, type FieldCtx } from "../field/context.js";
+import { assessmentLocked, assessmentScope, requireAssessmentWrite, type FieldCtx } from "../field/context.js";
 import { ENTITIES, applyWrite, listLive, loadRecord } from "../field/records.js";
 import { guard } from "../lib/access.js";
 import { audit } from "../lib/audit.js";
@@ -150,15 +150,35 @@ export async function fieldRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
     const { id } = parse(IdParams, req.params);
     const body = parse(PatchAssessment, req.body ?? {});
     return inField(db, req, async (ctx) => {
-      const scope = await requireAssessmentWrite(ctx, id);
+      const scope = await requireAssessmentWrite(ctx, id, { allowLocked: true });
+      if (scope.status === "complete") throw assessmentLocked();
       if (body.status && body.status !== scope.status && STATUS_NEXT[scope.status] !== body.status) {
         throw new AppError(409, "invalid_transition", `Status can move from ${scope.status} only to ${STATUS_NEXT[scope.status] ?? "nothing"}`);
       }
+      const completing = body.status === "complete" && scope.status !== "complete";
+      // Freeze the numbers before locking (D-058); an engine failure leaves the assessment open (503).
+      const snapshot = completing ? await deps.risk.snapshot(ctx, id) : null;
       await ctx.tx.query(
         "UPDATE assessment SET status = COALESCE($2, status), title = COALESCE($3, title), updated_at = now() WHERE id = $1",
         [id, body.status ?? null, body.title ?? null],
       );
       await auditField(ctx, "assessment.update", "assessment", id, { from: scope.status, ...body });
+      if (snapshot) {
+        await auditField(ctx, "assessment.lock", "assessment", id, { methodVersion: snapshot.methodVersion, overall: snapshot.overall.level });
+      }
+      return assessmentDetail(ctx.tx, id);
+    });
+  });
+
+  const Reopen = z.object({ reason: z.string().trim().min(3).max(1000) }).strict();
+  app.post("/assessments/:id/reopen", role("admin"), async (req) => {
+    const { id } = parse(IdParams, req.params);
+    const { reason } = parse(Reopen, req.body ?? {});
+    return inField(db, req, async (ctx) => {
+      const scope = await assessmentScope(ctx, id);
+      if (scope.status !== "complete") throw new AppError(409, "invalid_transition", "Only a complete assessment can be reopened");
+      await ctx.tx.query("UPDATE assessment SET status = 'in_review', updated_at = now() WHERE id = $1", [id]);
+      await auditField(ctx, "assessment.reopen", "assessment", id, { from: "complete", to: "in_review", reason });
       return assessmentDetail(ctx.tx, id);
     });
   });

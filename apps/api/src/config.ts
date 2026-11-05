@@ -59,6 +59,21 @@ export const ConfigSchema = z
     // Anthropic vision.
     ANTHROPIC_API_KEY: z.string().optional(),
     ANTHROPIC_VISION_MODEL: z.string().min(1).default("claude-sonnet-5-5"),
+    ANTHROPIC_TEXT_MODEL: z.string().min(1).default("claude-opus-5-5"),
+    AI_NARRATIVE_RATE_LIMIT_PER_HOUR: z.coerce.number().int().min(1).default(30),
+    // Google export (Phase 3). GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET are shared with sign-in.
+    /** 32 bytes, base64: AES-256-GCM key for stored Google refresh tokens. */
+    GOOGLE_TOKEN_KEY: z.string().optional(),
+    /** Redirect URI registered for the Drive connection; defaults to API_PUBLIC_URL/integrations/google/callback. */
+    GOOGLE_INTEGRATION_REDIRECT_URI: z.string().url().optional(),
+    /**
+     * How Docs exports get photos into the document (Google must fetch them over the internet):
+     * auto = signed storage URL with STORAGE_DRIVER=s3, Drive temporary link with local storage.
+     */
+    GOOGLE_DOCS_IMAGE_MODE: z.enum(["auto", "signed_url", "drive_temporary_link"]).default("auto"),
+    EXPORT_RATE_LIMIT_PER_HOUR: z.coerce.number().int().min(1).default(20),
+    /** Concurrent photo decode and re-encode jobs per API instance (QA R2-3). */
+    PHOTO_MAX_CONCURRENCY: z.coerce.number().int().min(1).max(16).default(2),
   })
   .superRefine((c, ctx) => {
     if (c.NODE_ENV === "production") {
@@ -85,6 +100,9 @@ export const ConfigSchema = z
         else if (c.NODE_ENV === "production" && PLACEHOLDER.test(c[k]!)) ctx.addIssue({ code: z.ZodIssueCode.custom, path: [k], message: "placeholder in production" });
       }
     }
+    if (c.GOOGLE_TOKEN_KEY && !PLACEHOLDER.test(c.GOOGLE_TOKEN_KEY) && Buffer.from(c.GOOGLE_TOKEN_KEY, "base64").length !== 32) {
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["GOOGLE_TOKEN_KEY"], message: "must be 32 bytes, base64; generate one with: openssl rand -base64 32" });
+    }
     if (c.STORAGE_SIGNING_SECRET && PLACEHOLDER.test(c.STORAGE_SIGNING_SECRET)) {
       ctx.addIssue({ code: z.ZodIssueCode.custom, path: ["STORAGE_SIGNING_SECRET"], message: "still a placeholder; generate one with: openssl rand -base64 48 (or leave unset)" });
     }
@@ -94,6 +112,8 @@ const splitOrigins = (v: string) => v.split(",").map((s) => s.trim()).filter(Boo
 
 export type Config = z.infer<typeof ConfigSchema> & {
   google: GoogleConfig | null;
+  /** Drive export integration: null (routes answer 503 google_not_configured) unless client credentials and GOOGLE_TOKEN_KEY are real. */
+  googleExport: GoogleExportConfig | null;
   /** Parsed EMBED_ORIGINS. */
   embedOrigins: string[];
   /** ANTHROPIC_API_KEY when it is a real value, else null (analyze answers 503 ai_not_configured). */
@@ -106,6 +126,13 @@ export interface GoogleConfig {
   clientId: string;
   clientSecret: string;
   redirectUri: string;
+}
+
+export interface GoogleExportConfig {
+  clientId: string;
+  clientSecret: string;
+  redirectUri: string;
+  tokenKey: Buffer;
 }
 
 /** Google sign-in is active only when both credentials are set to non-placeholder values. */
@@ -126,11 +153,20 @@ export function loadConfig(env: Record<string, string | undefined> = process.env
     throw new Error(`Invalid configuration:\n${lines}`);
   }
   const key = r.data.ANTHROPIC_API_KEY?.trim();
+  const publicUrl = (r.data.API_PUBLIC_URL ?? `http://localhost:${r.data.API_PORT}`).replace(/\/+$/, "");
+  const g = googleConfig(r.data);
+  const tk = r.data.GOOGLE_TOKEN_KEY?.trim();
+  const googleExport: GoogleExportConfig | null =
+    g && tk && !PLACEHOLDER.test(tk)
+      ? { clientId: g.clientId, clientSecret: g.clientSecret, tokenKey: Buffer.from(tk, "base64"),
+          redirectUri: r.data.GOOGLE_INTEGRATION_REDIRECT_URI ?? `${publicUrl}/integrations/google/callback` }
+      : null;
   return {
     ...r.data,
-    google: googleConfig(r.data),
+    google: g,
+    googleExport,
     embedOrigins: splitOrigins(r.data.EMBED_ORIGINS),
     anthropicApiKey: key && !PLACEHOLDER.test(key) ? key : null,
-    publicUrl: (r.data.API_PUBLIC_URL ?? `http://localhost:${r.data.API_PORT}`).replace(/\/+$/, ""),
+    publicUrl,
   };
 }

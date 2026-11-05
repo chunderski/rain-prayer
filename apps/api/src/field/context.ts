@@ -100,11 +100,22 @@ export async function assessmentScope(ctx: FieldCtx, assessmentId: string): Prom
 
 export const notAssigned = () => new AppError(403, "forbidden", "You are not assigned to this assessment");
 
-/** Throws 404 when the assessment is not visible, 403 when an assessor is not assigned to it. */
-export async function requireAssessmentWrite(ctx: FieldCtx, assessmentId: string): Promise<AssessmentScope> {
+export const assessmentLocked = () =>
+  new AppError(409, "assessment_locked", "This assessment is complete and locked; an admin can reopen it");
+
+/**
+ * Throws 404 when the assessment is not visible, 403 when an assessor is not assigned to it, and
+ * 409 assessment_locked when it is complete (D-057). Every field write (REST, sync, photos, AI review,
+ * risk inputs, narrative) passes through here; only the status route opts out with allowLocked.
+ */
+export async function requireAssessmentWrite(ctx: FieldCtx, assessmentId: string, opts: { allowLocked?: boolean } = {}): Promise<AssessmentScope> {
   const scope = await assessmentScope(ctx, assessmentId);
   if (!hasRole(ctx.auth.role, "assessor")) throw new AppError(403, "forbidden", "Requires role assessor or higher");
-  if (hasRole(ctx.auth.role, "admin")) return scope;
+  const check = () => {
+    if (scope.status === "complete" && !opts.allowLocked) throw assessmentLocked();
+    return scope;
+  };
+  if (hasRole(ctx.auth.role, "admin")) return check();
   let ok = ctx.cache.assigned.get(assessmentId);
   if (ok === undefined) {
     const r = await ctx.tx.query("SELECT 1 FROM assessment_assessor WHERE assessment_id = $1 AND user_id = $2", [assessmentId, ctx.auth.userId]);
@@ -112,7 +123,7 @@ export async function requireAssessmentWrite(ctx: FieldCtx, assessmentId: string
     ctx.cache.assigned.set(assessmentId, ok);
   }
   if (!ok) throw notAssigned();
-  return scope;
+  return check();
 }
 
 /** Areas belong to a site: assessors may write them when assigned to any assessment at that site. */

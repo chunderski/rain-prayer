@@ -11,6 +11,7 @@ import { createHash } from "node:crypto";
 import { fileTypeFromBuffer } from "file-type";
 import sharp, { type OutputInfo } from "sharp";
 import { AppError } from "../lib/errors.js";
+import { createSemaphore } from "../lib/semaphore.js";
 
 export const MAX_PHOTO_BYTES = 15 * 1024 * 1024;
 export const MAX_LONG_EDGE = 4096;
@@ -39,7 +40,16 @@ export interface ProcessedPhoto {
 
 const unsupported = (message: string) => new AppError(415, "unsupported_media", message);
 
+/** QA R2-3: bounds CPU and memory under upload bursts (PHOTO_MAX_CONCURRENCY, default 2 per instance). */
+export const photoGate = createSemaphore(2);
+
 export async function processPhoto(input: Buffer): Promise<ProcessedPhoto> {
+  if (input.length === 0) throw unsupported("Empty upload");
+  if (input.length > MAX_PHOTO_BYTES) throw new AppError(413, "payload_too_large", "Photos are limited to 15 MB");
+  return photoGate.run(() => processPhotoNow(input));
+}
+
+async function processPhotoNow(input: Buffer): Promise<ProcessedPhoto> {
   if (input.length === 0) throw unsupported("Empty upload");
   if (input.length > MAX_PHOTO_BYTES) throw new AppError(413, "payload_too_large", "Photos are limited to 15 MB");
   const ft = await fileTypeFromBuffer(input);

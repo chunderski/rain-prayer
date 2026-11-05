@@ -4,6 +4,7 @@ import { useApi, useCanAdmin } from "../auth/AuthContext";
 import { AssessmentSummary } from "../api/schemas";
 import { cachedGet } from "../api/library";
 import { useField } from "../field/FieldContext";
+import { LockPanel } from "../field/Lock";
 import { getPosition } from "../field/walkthrough";
 import { useLocal } from "../lib/useLocal";
 import { errorMessage, useAsync } from "../lib/useAsync";
@@ -17,20 +18,30 @@ export const statusLabel: Record<string, string> = {
   archived: "Archived",
 };
 
-export function AssessmentsHome() {
+/** The assessments list; `embedded` renders it as a section of the admin dashboard. */
+export function AssessmentsHome({ embedded = false }: { embedded?: boolean }) {
   const api = useApi();
   const { data: cached, error, loading, reload } = useAsync(() => cachedGet(api, "/assessments", z.array(AssessmentSummary)), [api]);
   const data = cached?.data;
   return (
     <>
-      <PageHeader
-        title="Assessments"
-        actions={
+      {embedded ? (
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+          <h2 className="text-2xl font-bold">Assessments</h2>
           <ButtonLink to="/assessments/new" size="lg">
             <span aria-hidden="true">+</span> New assessment
           </ButtonLink>
-        }
-      />
+        </div>
+      ) : (
+        <PageHeader
+          title="Assessments"
+          actions={
+            <ButtonLink to="/assessments/new" size="lg">
+              <span aria-hidden="true">+</span> New assessment
+            </ButtonLink>
+          }
+        />
+      )}
       {error ? (
         <Banner tone="error" action={<button className="min-h-12 underline" onClick={reload}>Try again</button>}>
           {errorMessage(error)}
@@ -53,7 +64,11 @@ export function AssessmentsHome() {
             <li key={a.id}>
               <Link to={`/assessments/${a.id}`} className="block rounded-xl border-2 border-line bg-surface p-4 no-underline">
                 <div className="flex flex-wrap items-center justify-between gap-2">
-                  <h2 className="text-xl font-bold text-primary underline underline-offset-4">{a.title}</h2>
+                  {embedded ? (
+                    <h3 className="text-xl font-bold text-primary underline underline-offset-4">{a.title}</h3>
+                  ) : (
+                    <h2 className="text-xl font-bold text-primary underline underline-offset-4">{a.title}</h2>
+                  )}
                   <Chip>{statusLabel[a.status] ?? a.status}</Chip>
                 </div>
                 <p className="text-muted">
@@ -90,6 +105,7 @@ export function AssessmentDetail() {
           <Banner tone="info">Showing the copy saved on this device.</Banner>
         </div>
       )}
+      <LockPanel />
       <Card as="section" className="mb-4 border-primary">
         <h2 className="text-xl font-bold">Next steps</h2>
         <div className="mt-3 flex flex-col gap-2">
@@ -106,6 +122,15 @@ export function AssessmentDetail() {
             </ButtonLink>
             <ButtonLink to={`${base}/areas`} variant="secondary" size="lg" block>
               Areas ({f.areas.length})
+            </ButtonLink>
+            <ButtonLink to={`${base}/risk/inputs`} variant="secondary" size="lg" block>
+              Risk inputs
+            </ButtonLink>
+            <ButtonLink to={`${base}/risk`} variant="secondary" size="lg" block>
+              Risk results
+            </ButtonLink>
+            <ButtonLink to={`${base}/report`} variant="secondary" size="lg" block>
+              Report and export
             </ButtonLink>
             {isAdmin && (
               <ButtonLink to={`${base}/assessors`} variant="secondary" size="lg" block>

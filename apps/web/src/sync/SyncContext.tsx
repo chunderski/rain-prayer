@@ -10,6 +10,7 @@ import { useAuth } from "../auth/AuthContext";
 import { onFieldWrite } from "../field/repo";
 import { createApiTransport } from "./transport";
 import { SyncEngine, type SyncStatus } from "./engine";
+import { flushAllRiskDrafts } from "../risk/inputsStore";
 
 export const SYNC_TAG = "sentinel-sync";
 export const SYNC_INTERVAL_MS = 30_000;
@@ -59,7 +60,11 @@ export function SyncProvider({ children, intervalMs = SYNC_INTERVAL_MS }: { chil
     }
     engine.start();
     const unsub = engine.subscribe(setStatus);
-    const run = () => void engine.syncNow();
+    const run = () => {
+      void engine.syncNow();
+      // Risk inputs are REST writes saved locally first (src/risk/inputsStore.ts).
+      if (navigator.onLine && api.hasToken()) void flushAllRiskDrafts(api).catch(() => undefined);
+    };
     void engine.refreshCounts();
     run(); // app start
 
@@ -97,7 +102,7 @@ export function SyncProvider({ children, intervalMs = SYNC_INTERVAL_MS }: { chil
       navigator.serviceWorker?.removeEventListener?.("message", onMessage);
       engine.stop();
     };
-  }, [engine, intervalMs]);
+  }, [engine, intervalMs, api]);
 
   // A session restored after an offline start: sync as soon as the token exists.
   useEffect(() => {

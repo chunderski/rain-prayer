@@ -3,6 +3,7 @@ import type { LoginRequest, SessionInfo } from "@sentinel/shared";
 import { createApiClient, type ApiClient } from "../api/client";
 import { clearClientData } from "../offline/db";
 import { loadProfile, saveProfile } from "./profile";
+import { hasPin, shouldLockAfterBackground } from "./pin";
 
 type Status = "loading" | "signed_out" | "signed_in";
 
@@ -16,7 +17,13 @@ interface AuthValue {
    */
   offlineSession: boolean;
   signIn: (req: LoginRequest) => Promise<void>;
-  signOut: () => Promise<void>;
+  /** Signs out and wipes local data; `notice` is shown on the sign-in screen. */
+  signOut: (notice?: string) => Promise<void>;
+  /** The local PIN screen covers the app (offline start or after 5 minutes in the background). */
+  locked: boolean;
+  unlock: () => void;
+  /** Message for the sign-in screen (PIN wipe, offline access without a PIN). */
+  notice: string | null;
 }
 
 const AuthContext = createContext<AuthValue | null>(null);
@@ -25,6 +32,8 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
   const [session, setSession] = useState<SessionInfo | null>(null);
   const [status, setStatus] = useState<Status>("loading");
   const [offlineSession, setOfflineSession] = useState(false);
+  const [locked, setLocked] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const api = useMemo(
     () =>
@@ -57,10 +66,17 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
         const profile = await loadProfile().catch(() => null);
         if (cancelled) return;
         if (profile) {
-          setSession(profile);
-          setOfflineSession(true);
-          setStatus("signed_in");
-          return;
+          // R2-5: cached work opens offline only behind the local PIN.
+          if (await hasPin().catch(() => false)) {
+            if (cancelled) return;
+            setSession(profile);
+            setOfflineSession(true);
+            setLocked(true);
+            setStatus("signed_in");
+            return;
+          }
+          if (cancelled) return;
+          setNotice("You are offline. Work saved on this device opens offline only after you set a PIN; sign in when you are back online.");
         }
       }
       setSession(null);
@@ -71,12 +87,33 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
     };
   }, [api]);
 
+  // Lock again after 5 minutes in the background when a PIN is set.
+  useEffect(() => {
+    if (status !== "signed_in") return;
+    let hiddenAt: number | null = null;
+    const onVis = () => {
+      if (document.visibilityState === "hidden") {
+        hiddenAt = Date.now();
+        return;
+      }
+      if (shouldLockAfterBackground(hiddenAt, Date.now())) {
+        void hasPin().then((p) => p && setLocked(true), () => undefined);
+      }
+      hiddenAt = null;
+    };
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, [status]);
+
   const value = useMemo<AuthValue>(
     () => ({
       api,
       status,
       session,
       offlineSession,
+      locked,
+      notice,
+      unlock: () => setLocked(false),
       async signIn(req) {
         const previous = await loadProfile({ ignoreAge: true }).catch(() => null);
         const s = await api.login(req);
@@ -87,18 +124,22 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
         await saveProfile(s).catch(() => undefined);
         setSession(s);
         setOfflineSession(false);
+        setLocked(false);
+        setNotice(null);
         setStatus("signed_in");
       },
-      async signOut() {
+      async signOut(message) {
         await api.logout();
         // Drafts, queued changes, cached field records, photos, and the cached profile (QA R-11).
         await clearClientData().catch(() => undefined);
         setSession(null);
         setOfflineSession(false);
+        setLocked(false);
+        setNotice(message ?? null);
         setStatus("signed_out");
       },
     }),
-    [api, status, session, offlineSession],
+    [api, status, session, offlineSession, locked, notice],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

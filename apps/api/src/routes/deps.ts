@@ -7,6 +7,7 @@ import type { Limiters } from "../lib/access.js";
 import { authOf } from "../lib/auth.js";
 import type { WalkthroughDef } from "../lib/walkthrough.js";
 import type { ObjectStorage } from "../storage/index.js";
+import type { RiskService } from "../risk/service.js";
 
 export interface FieldRouteDeps {
   cfg: Config;
@@ -16,6 +17,7 @@ export interface FieldRouteDeps {
   walkthrough: WalkthroughDef | null;
   /** Returns the vision client, or null when AI is not configured (no real ANTHROPIC_API_KEY). */
   vision: () => VisionClient | null;
+  risk: RiskService;
 }
 
 /** Runs fn in the caller's tenant transaction with a field context; runs after-commit actions. */

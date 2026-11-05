@@ -9,6 +9,8 @@ export interface Limiters {
   data: UserLimiter;
   sync: UserLimiter;
   analyze: UserLimiter;
+  narrative: UserLimiter;
+  exports: UserLimiter;
 }
 
 export function createLimiters(cfg: Config): Limiters {
@@ -17,6 +19,8 @@ export function createLimiters(cfg: Config): Limiters {
     data: createUserLimiter("data", cfg.DATA_RATE_LIMIT_MAX, win),
     sync: createUserLimiter("sync", cfg.SYNC_RATE_LIMIT_MAX, win),
     analyze: createUserLimiter("photo analysis", cfg.AI_ANALYZE_RATE_LIMIT_PER_HOUR, 3_600_000),
+    narrative: createUserLimiter("narrative draft", cfg.AI_NARRATIVE_RATE_LIMIT_PER_HOUR, 3_600_000),
+    exports: createUserLimiter("export", cfg.EXPORT_RATE_LIMIT_PER_HOUR, 3_600_000),
   };
 }
 

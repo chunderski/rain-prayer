@@ -97,6 +97,22 @@ export async function tenantId(slug: string): Promise<string> {
 }
 
 /** Runs fn inside a tenant transaction as sentinel_app (rolled back), for raw SQL isolation checks. */
+/** Like asAppInTenant, but COMMITs, for tests that need the rows to exist afterwards. */
+export async function asAppInTenantCommit<T>(tid: string, fn: (q: (sql: string, p?: unknown[]) => Promise<{ rows: any[]; rowCount: number | null }>) => Promise<T>): Promise<T> {
+  return withClient(APP_URL, async (c) => {
+    await c.query("BEGIN");
+    try {
+      await c.query("SELECT set_config('app.tenant_id', $1, true)", [tid]);
+      const out = await fn((sql, p) => c.query(sql, p));
+      await c.query("COMMIT");
+      return out;
+    } catch (err) {
+      await c.query("ROLLBACK");
+      throw err;
+    }
+  });
+}
+
 export async function asAppInTenant<T>(tid: string, fn: (q: (sql: string, p?: unknown[]) => Promise<{ rows: any[]; rowCount: number | null }>) => Promise<T>): Promise<T> {
   return withClient(APP_URL, async (c) => {
     await c.query("BEGIN");

@@ -113,14 +113,49 @@ Primary threat actors: an external attacker on the internet; a user of tenant A 
 | I | Cached tenant data left on a shared device after sign out | Sign out wipes field stores, profile, and (QA fix) tenant entries in the library cache | mitigated | `apps/web/src/offline/db.ts`; `db.test.ts` |
 | S | Offline start from cached profile (D-039) | Accepted risk: up to 30 days of offline read and write without a password; no API access without the refresh cookie | accepted | D-039; device lock is the control; local PIN recommended (R2-5) |
 
-## Google export (future, Phase 3)
+## Risk scoring and dashboard (Phase 3)
 
-| STRIDE | Threat | Required control |
-|---|---|---|
-| S | Export to the wrong Google account | Per-user OAuth consent with `drive.file` scope (least privilege); show target account before export |
-| T | Tampered export content | Generated server side from the database, not from client-supplied documents |
-| R | Exports untracked | Audit row per export with destination file id |
-| I | OAuth refresh tokens leaked | Encrypt at rest with a key outside the database; scope per user and tenant; revoke on unlink |
-| I | Over-broad sharing of exported files | Create files private to the exporting user; no domain-wide sharing by default |
-| D | Google API quota exhaustion | Queue with backoff; per-tenant limits |
-| E | Export job runs with another tenant's grant | Job carries tenant id and runs inside `withTenant`; grant lookup through RLS |
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| T | Scores changed after completion | Snapshot at completion; `risk_snapshot` is SELECT and INSERT only for `sentinel_app` | mitigated | `isolation-phase3.test.ts` "append-only" |
+| T | Risk inputs written to a locked assessment | `requireAssessmentWrite` (409 `assessment_locked`) | mitigated | D-068; `phase3.test.ts` |
+| I | `/risk/compare` reveals another tenant's site | Each id passes `assessmentScope` under RLS; one foreign id fails the whole request with 404 | mitigated | `isolation-phase3.test.ts` (QA P3 mixed-id test) |
+| I | Dashboard aggregates span tenants | Aggregates run inside `withTenant`, forced RLS | mitigated | `isolation-phase3.test.ts` |
+| I | Dashboard shows assessors aggregates of unassigned assessments | Reads are tenant wide by design (Phase 2) | accepted | D-048 |
+| D | Large compare lists | Max 20 ids, length capped in the zod schema | mitigated | `apps/api/src/routes/risk.ts` |
+
+## Report preview and narrative (Phase 3)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| T | Stored XSS via finding, area, client, photo caption, or narrative text | Every string HTML-escaped; class tokens from enums; no script, style, or handler in output; CSP `default-src 'none'`; PWA shows it in `<iframe sandbox="" srcdoc>` | mitigated | `report/html.ts`; `phase3.test.ts` hostile strings; D-067, D-071 |
+| T | Hostile text alters Google Doc structure or Sheets formulas | Docs text inserted literally; Sheets `valueInputOption=RAW` | mitigated | `google-export.test.ts` (`=IMPORTXML` stays literal) |
+| T | Prompt injection through finding text, names, or style notes | Facts escaped and delimited; system prompt treats them as data; grounding checks for frameworks and overall level; human approval before export | mitigated | `packages/ai/src/prompts/narrative.v1.ts`, `narrative.ts`; D-063 |
+| T | Unapproved AI draft reaches the client | Preview shows a placeholder; export uses only `edited` or `approved` | mitigated | `report/model.ts`; `google-export.test.ts` (QA P3) |
+| T | AI draft silently overwrites human text | 409 `narrative_exists` unless `replace` | mitigated | `routes/report.ts` |
+| R | Narrative approval untracked | Audit `narrative.draft`, `narrative.update`, `narrative.approve` with from and to status | mitigated | `routes/report.ts` |
+| I | Signed photo URLs in preview outlive the view | TTL `SIGNED_URL_TTL_SECONDS`; `referrerpolicy=no-referrer` | mitigated | `routes/report.ts` |
+
+## Google export (Phase 3)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| S | OAuth login CSRF or code injection on connect | JWE state (tenant, nonce, PKCE verifier, cookie binding hash); single-use 10 minute DB row bound to the admin; admin role rechecked at callback; fixed redirect URI from config | mitigated | `routes/integrations.ts`; `google-export.test.ts` "rejects tampered state ... replays" |
+| I | Refresh token leaked from the database | AES-256-GCM, random 96-bit IV per write, tenant id as AAD, key from env (separate HMAC-derived key for state) | mitigated | `google/tokens.ts`; `google-export.test.ts` "bound to the tenant" |
+| I | Token in responses or logs | Never selected into responses; errors mapped to safe messages | mitigated | `google-export.test.ts` "no API response ever contained a token" |
+| I | Over-broad Drive access | `drive.file` scope only; callback refuses missing scope; other scopes not stored | mitigated | `google/client.ts` |
+| I | Photos public via "anyone with link" during Docs export (local storage mode) | Permission added per image right before insertion and removed in `finally`, including on failure | mitigated (residual: link live for the duration of the batches; removal failure is only logged) | `google/exports.ts`; `google-export.test.ts` (QA P3) |
+| R | Exports untracked | `export.create` and `export.finish` audit rows | mitigated | `google-export.test.ts` |
+| E | Export job runs with another tenant's grant | Job keyed by tenant, runs inside `withTenant`; token AAD is the tenant id | mitigated | `google/exports.ts` |
+| D | Google quota or job pile up | One job per tenant at a time; one retry on 429 and 5xx; per-user export limiter | mitigated | D-074 |
+| I | Disconnect leaves a usable grant | Revoke at Google, then delete token and folder cache even if revoke fails | mitigated | `google-export.test.ts` "disconnect" |
+
+## Assessment lock and local PIN (Phase 3)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| T | Writes to a complete assessment via REST, sync, photos, AI review, risk inputs, or narrative | Single gate `requireAssessmentWrite` | mitigated | D-068; `phase3.test.ts` |
+| E | Non-admin reopens | `POST /reopen` admin only, reason required, audited | mitigated | `routes/field.ts` |
+| T | Race: write committed while another request completes the assessment | Status read without row lock | open (low) | recommendation R3-2 |
+| S | Offline cached work opened by someone else | PBKDF2-SHA256 310000 iterations verifier in IndexedDB; counter written before check; wipe on 5 failures | mitigated | `apps/web/src/auth/pin.ts`, D-064 |
+| I | Cached data read from disk or devtools | PIN is a gate, not encryption of IndexedDB | accepted | D-064; recommendation R3-3 |

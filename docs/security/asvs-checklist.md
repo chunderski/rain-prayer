@@ -1,6 +1,6 @@
 # OWASP ASVS 4.0.3 checklist (Level 2 target)
 
-Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
+Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 3). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
 
 ## V2 Authentication
 
@@ -57,6 +57,8 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met*
 | 4.2.2 | Anti-CSRF | met | Bearer tokens for data routes; SameSite=Strict and `Origin` check on cookie routes; JSON content type required |
 | 4.3.1 | MFA for administrative interfaces | not yet | See 2.7.x |
 | 4.3.2 | No directory browsing or metadata exposure | met | API has no static serving |
+| 4.1.3 (P3) | Least privilege for Phase 3 | met | Reopen and Google connect admin only; narrative, risk inputs, exports assessor; reads viewer; complete assessments locked (D-068) |
+| 4.2.1 (P3) | IDOR on Phase 3 resources | met | `apps/api/test/isolation-phase3.test.ts` (RLS forced on all 7 tables; 404 on foreign ids, mixed-id compare) |
 
 ## V5 Validation, sanitization, and encoding
 
@@ -72,6 +74,14 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met*
 | 5.3.4 | Parameterized queries | met | All SQL uses `$n` parameters; `LIKE` wildcards escaped in `/controls?q=` |
 | 5.5.2 | XML parsers restrict XXE | N/A | JSON only |
 | 5.5.3 | Safe deserialization | met | `JSON.parse` then zod; Fastify prototype-poisoning protection on by default |
+
+### Phase 3 encoding
+
+| ID | Requirement (summary) | Status | Evidence or gap |
+|---|---|---|---|
+| 5.3.1 / 5.3.3 | Context-aware output encoding, stored XSS | met | `apps/api/src/report/html.ts` escapes all text; `phase3.test.ts` hostile strings |
+| 5.3.x (Sheets) | Formula injection | met | `valueInputOption=RAW`; `google-export.test.ts` |
+| (LLM) | Prompt injection into narrative | met | Escaped delimited facts, grounding checks, human approval (D-063, D-060) |
 
 ## V7 Error handling and logging
 
@@ -97,7 +107,8 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met*
 | 8.2.3 | Client storage cleared after session ends | partial | Drafts cleared; outbox to be handled by the Phase 2 sync design |
 | 8.3.1 | Sensitive data in body or headers, not URL | met | Credentials and tokens never in query strings |
 | 8.3.4 | Sensitive data identified and policy defined | partial | GPS opt-in and AI context sharing settings exist (`tenant_settings`); written data classification still missing (R2-6) |
-| 8.3.x | Encryption at rest | not yet | Deployment item: encrypted volumes and bucket encryption |
+| 8.3.x | Encryption at rest | partial | Google refresh tokens AES-256-GCM with tenant AAD (`apps/api/src/google/tokens.ts`); volumes and bucket encryption remain a deployment item |
+| 8.2.2 (P3) | Offline data on device | partial | Local PIN gate with wipe after 5 failures (D-064); IndexedDB itself not encrypted |
 
 ## V9 Communications
 
@@ -147,7 +158,7 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 2). Status: **met*
 | 14.3.2 | Debug modes off in production | met | Pretty logging only in development; generic errors |
 | 14.3.3 | Headers do not expose versions | met | No `X-Powered-By` |
 | 14.4.1 | Content-Type with charset | met | `application/json; charset=utf-8` |
-| 14.4.3 | Content Security Policy | partial | Helmet CSP on the API (live probe); none on the PWA yet (deployment headers) |
+| 14.4.3 | Content Security Policy | partial | Helmet CSP on the API; report preview has its own strict CSP (`default-src 'none'`, img-src signed URL origins only, `frame-ancestors` allowlist) and a meta copy for srcdoc; PWA CSP still a deployment header |
 | 14.4.4 | `X-Content-Type-Options: nosniff` | met | API |
 | 14.4.5 | HSTS | met | API, `max-age=31536000; includeSubDomains` |
 | 14.4.6 | Referrer-Policy | met | `no-referrer` on the API |

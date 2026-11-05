@@ -10,7 +10,7 @@ import { createSemaphore } from "../src/lib/semaphore.js";
 import { renderDocsRequests } from "../src/report/gdocs.js";
 import { TEMPLATE_VERSION, type ReportDoc } from "../src/report/model.js";
 import { FIXTURE_SCENARIOS } from "./fixtures/scenarios.js";
-import { WEB_ORIGIN, asAppInTenant, auth, fieldFixture, login, makeApp, nowIso, tenantId, type FieldFixture } from "./helpers.js";
+import { WEB_ORIGIN, asAppInTenant, asAppInTenantCommit, auth, fieldFixture, login, makeApp, nowIso, tenantId, type FieldFixture } from "./helpers.js";
 
 const TOKEN_KEY = randomBytes(32).toString("base64");
 const REFRESH = "1//refresh-SECRET-token-value";
@@ -261,6 +261,49 @@ describe("export jobs", () => {
     expect(job.results[0]).toMatchObject({ target: "sheets", status: "failed", url: null });
     expect(job.results[0]!.error).toBe("Google API 500 UNAVAILABLE");
     expect(g.failures).toHaveLength(0);
+  });
+
+  it("QA P3: a failed Docs batch still removes the temporary anyone-with-link permission", async () => {
+    g.calls.length = 0;
+    g.failures.push({ frag: "docs.googleapis.com/v1/documents/", status: 503 }, { frag: "docs.googleapis.com/v1/documents/", status: 500 });
+    const { job } = await runExport(["docs"]);
+    expect(job.status).toBe("failed");
+    const grants = g.calls.filter((c) => c.url.includes("/permissions") && c.method === "POST");
+    const removals = g.calls.filter((c) => c.url.includes("/permissions/") && c.method === "DELETE");
+    expect(grants.length).toBeGreaterThan(0);
+    expect(removals).toHaveLength(grants.length);
+    // The grant is created only after the batch that needs it is ready, and removed after the failure.
+    const lastGrant = g.calls.lastIndexOf(grants.at(-1)!);
+    expect(g.calls.findIndex((c, i) => i > lastGrant && c.method === "DELETE" && c.url.includes("/permissions/"))).toBeGreaterThan(lastGrant);
+    g.failures.length = 0;
+  });
+
+  it("QA P3: an unapproved AI draft never reaches the exported Doc", async () => {
+    await asAppInTenantCommit(acmeId, (q) =>
+      q(`INSERT INTO narrative (tenant_id, assessment_id, section, text, status) VALUES ($1, $2, 'executive_summary', 'UNAPPROVED-DRAFT-MARKER', 'ai_draft')
+         ON CONFLICT (assessment_id, section) DO UPDATE SET text = EXCLUDED.text, status = 'ai_draft'`, [acmeId, fx.assessmentId]),
+    );
+    g.calls.length = 0;
+    const { job } = await runExport(["docs", "sheets"]);
+    expect(job.status, JSON.stringify(job.results)).toBe("succeeded");
+    expect(g.calls.some((c) => c.body.includes("UNAPPROVED-DRAFT-MARKER"))).toBe(false);
+    const preview = await app.inject({ url: `/assessments/${fx.assessmentId}/report/preview`, headers: auth(viewer) });
+    expect(preview.body).not.toContain("UNAPPROVED-DRAFT-MARKER");
+    expect(preview.body).toContain("An AI draft exists for this section"); // proves the row exists
+  });
+
+  it("edited but unapproved narrative text stays out of exports and is flagged in the preview", async () => {
+    await asAppInTenantCommit(acmeId, (q) =>
+      q(`INSERT INTO narrative (tenant_id, assessment_id, section, text, status) VALUES ($1, $2, 'key_findings', 'EDITED-NOT-APPROVED-MARKER', 'edited')
+         ON CONFLICT (assessment_id, section) DO UPDATE SET text = EXCLUDED.text, status = 'edited'`, [acmeId, fx.assessmentId]),
+    );
+    g.calls.length = 0;
+    const { job } = await runExport(["docs", "sheets"]);
+    expect(job.status, JSON.stringify(job.results)).toBe("succeeded");
+    expect(g.calls.some((c) => c.body.includes("EDITED-NOT-APPROVED-MARKER"))).toBe(false);
+    const preview = await app.inject({ url: `/assessments/${fx.assessmentId}/report/preview`, headers: auth(viewer) });
+    expect(preview.body).toContain("EDITED-NOT-APPROVED-MARKER");
+    expect(preview.body).toContain("not yet approved");
   });
 
   it("no API response ever contained a token", () => {

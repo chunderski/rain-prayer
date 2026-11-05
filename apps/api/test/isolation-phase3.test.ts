@@ -125,6 +125,14 @@ describe("through the API", () => {
     }
   });
 
+  it("QA P3: compare with one own and one foreign assessment id answers 404 and leaks nothing", async () => {
+    for (const ids of [`${a.assessmentId},${b.assessmentId}`, `${b.assessmentId},${a.assessmentId}`]) {
+      const res = await app.inject({ url: `/risk/compare?assessmentIds=${ids}`, headers: auth(acme) });
+      expect(res.statusCode, ids).toBe(404);
+      expect(res.body).not.toContain("Blue iso 3");
+    }
+  });
+
   it("the dashboard counts only the caller's tenant", async () => {
     const d = (await app.inject({ url: "/dashboard", headers: auth(acme) })).json();
     expect(JSON.stringify(d)).not.toContain("Blue iso 3");

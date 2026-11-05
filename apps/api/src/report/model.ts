@@ -90,13 +90,16 @@ const pct = (n: number) => `${Math.round(n * 100)}%`;
 const num = (n: number) => (Math.round(n * 10) / 10).toString();
 
 /**
- * Human text for a narrative section. Only edited or approved text is used (D-060); an ai_draft
- * becomes a placeholder in the preview and is left out of exports.
+ * Human text for a narrative section. Exports use approved text only; the preview also shows edited
+ * text with a not-approved note. An ai_draft becomes a placeholder in the preview and is left out of exports.
  */
 function narrativeBlocks(data: ReportData, section: NarrativeSection, mode: "preview" | "export", fallback?: Block[]): Block[] {
   const n = data.narratives[section];
-  if (n && (n.status === "edited" || n.status === "approved")) {
-    return n.text.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean).map((text) => ({ type: "paragraph" as const, text }));
+  const paragraphs = (t: string) => t.split(/\n{2,}/).map((p) => p.trim()).filter(Boolean).map((text) => ({ type: "paragraph" as const, text }));
+  // Client documents carry approved text only (QA R3-1). The preview also shows edited text so a reviewer can read it.
+  if (n && n.status === "approved") return paragraphs(n.text);
+  if (n && n.status === "edited" && mode === "preview") {
+    return [{ type: "placeholder", text: "Edited, not yet approved: this section is left out of exports until it is approved." }, ...paragraphs(n.text)];
   }
   if (fallback) return fallback;
   if (mode === "preview") return [{ type: "placeholder", text: n?.status === "ai_draft" ? DRAFT_PLACEHOLDER : EMPTY_PLACEHOLDER }];

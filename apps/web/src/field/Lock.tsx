@@ -143,7 +143,7 @@ export function LockPanel() {
             </p>
           )}
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <Button disabled={busy || !f.online} onClick={() => void run(() => completeAssessment(api, f.assessmentId), "Assessment completed and locked.")}>
+            <Button disabled={busy || !f.online} onClick={() => void run(() => completeAssessment(api, f.assessmentId, f.assessment.status), "Assessment completed and locked.")}>
               Yes, complete and lock
             </Button>
             <Button variant="secondary" onClick={() => setMode("idle")}>

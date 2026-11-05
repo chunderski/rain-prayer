@@ -68,8 +68,17 @@ export function toPutBody(inputs: ScenarioInputState[]) {
 export const putRiskInputs = (api: ApiClient, id: string, inputs: ScenarioInputState[]) =>
   api.request(`/assessments/${enc(id)}/risk/inputs`, { method: "PUT", body: toPutBody(inputs), schema: RiskInputsResponse });
 
-export const completeAssessment = (api: ApiClient, id: string) =>
-  api.request(`/assessments/${enc(id)}`, { method: "PATCH", body: { status: "complete" } });
+/** The API moves status one step at a time (draft, in_progress, in_review, complete); walk the remaining steps. */
+const STATUS_STEPS = ["draft", "in_progress", "in_review", "complete"] as const;
+export async function completeAssessment(api: ApiClient, id: string, currentStatus: string) {
+  const from = STATUS_STEPS.indexOf(currentStatus as (typeof STATUS_STEPS)[number]);
+  if (from < 0) throw new Error(`Cannot complete an assessment with status ${currentStatus}`);
+  let last: unknown;
+  for (const status of STATUS_STEPS.slice(from + 1)) {
+    last = await api.request(`/assessments/${enc(id)}`, { method: "PATCH", body: { status } });
+  }
+  return last;
+}
 export const reopenAssessment = (api: ApiClient, id: string, reason: string) =>
   api.request(`/assessments/${enc(id)}/reopen`, { method: "POST", body: { reason } });
 

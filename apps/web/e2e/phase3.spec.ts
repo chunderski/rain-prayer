@@ -168,7 +168,7 @@ test.describe("Phase 3 lock", () => {
     await expect(page.getByText("Complete this assessment?")).toBeVisible();
     await page.getByRole("button", { name: "Yes, complete and lock" }).click();
     await expect(page.getByText("Assessment completed and locked.")).toBeVisible();
-    expect(p3.state.patches).toEqual([{ status: "complete" }]);
+    expect(p3.state.patches).toEqual([{ status: "in_review" }, { status: "complete" }]);
     await expect(page.getByTestId("locked-banner")).toContainText("Assessment complete: locked");
 
     await page.getByRole("link", { name: "Risk inputs" }).click();

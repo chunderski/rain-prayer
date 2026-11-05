@@ -98,7 +98,11 @@ export function createPhase3Mock(opts: Phase3Options = {}) {
     if (p === A && m === "GET") return done(reply(200, { ...SEEDED_ASSESSMENT, status: state.status }));
     if (p === A && m === "PATCH") {
       state.patches.push(req.postDataJSON());
-      state.status = (req.postDataJSON() as { status: string }).status;
+      const next = (req.postDataJSON() as { status: string }).status;
+      // Same rule as the real API: status moves one step at a time.
+      const NEXT: Record<string, string> = { draft: "in_progress", in_progress: "in_review", in_review: "complete" };
+      if (NEXT[state.status] !== next) return err(409, "invalid_transition", `Status can move from ${state.status} only to ${NEXT[state.status] ?? "nothing"}`);
+      state.status = next;
       return done(reply(200, { ...SEEDED_ASSESSMENT, status: state.status }));
     }
     if (p === `${A}/reopen` && m === "POST") {

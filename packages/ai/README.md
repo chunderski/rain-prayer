@@ -48,6 +48,17 @@ Add `test/fixtures/<case>.json`:
 
 `responses` are replayed in order; a string is sent as raw text (use it for invalid JSON), an object is serialized. `expect.error` with `calls` tests failure paths. Record real responses with the smoke script and strip anything identifying before committing. Images are not needed: the fake client ignores the bytes.
 
+## Narrative drafting (Phase 3)
+
+`draftNarrative({ section, facts, styleNotes? }, { client, model })` in `src/narrative.ts` drafts one report section (`executive_summary`, `methodology`, `key_findings`, `recommendations`) for client facility and IT leadership. The prompt is `src/prompts/narrative.v1.ts` (`NARRATIVE_PROMPT_VERSION` `narrative@1.0.0`); the model ID comes from configuration, and `createAnthropicTextClient` is the SDK transport (cached system prompt, effort `low` by default).
+
+- **Grounding**: facts go in as JSON (client, site, title, frameworks with versions, the computed `RiskResult`, confirmed findings only). The model may only state what is there, must not invent findings, standards, or compliance claims, and says "not assessed" instead of guessing.
+- **Untrusted text**: every fact string is escaped (`&`, `<`, `>`, control characters) and delimited in `<assessment_facts>` and `<confirmed_findings>`; `styleNotes` go in `<style_notes>`. Instructions inside them are data and are ignored.
+- **Post-processing**: em and en dashes become commas (numeric ranges become "1 to 5"); headings, bold, and italics are stripped; bullets become `- ` lines; text is trimmed to the section word limit (250, 250, 450, 350) at a sentence boundary.
+- **Post-checks**: a draft is rejected if it names a framework or standard not in the facts (including a wrong CSF version such as 3.0) or states an overall risk level other than `risk.overall.level`. One retry with feedback, then `NarrativeError` (`code: "invalid_output"`, `reason: "ungrounded_framework" | "inconsistent_risk_level" | "empty_output"`). Transport errors map to `model_error`, `timeout`, `refused` as for vision. The checks are pattern based; they catch the common failures, not every possible ungrounded sentence, which is why human approval is required.
+- **Human approval rule**: a draft is only a suggestion. The API stores it with status `ai_draft`; only text an assessor has edited or approved (`PUT /assessments/:id/narrative/:section`) appears in any export or client document. This is enforced by the API, not by this package.
+- **Tests**: `test/narrative.test.ts` uses a fake `TextClient` and a recording `fetch`; no network or API key.
+
 ## Live smoke test
 
 `ANTHROPIC_API_KEY=... ANTHROPIC_VISION_MODEL=... npx tsx packages/ai/src/smoke.ts photo.jpg`. Without a key it prints a message and exits 0.

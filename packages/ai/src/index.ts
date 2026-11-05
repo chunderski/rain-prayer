@@ -37,11 +37,7 @@ export interface VisionClient {
   analyze(req: { model: string; system: string; userText: string; image: Uint8Array; mediaType: "image/jpeg"; maxTokens: number }): Promise<{ text: string; usage?: { inputTokens: number; outputTokens: number } }>;
 }
 
-export class VisionError extends Error {
-  constructor(public code: "model_error" | "invalid_output" | "refused" | "timeout", message: string) {
-    super(message);
-  }
-}
+export { VisionError } from "./errors.js";
 
 export { analyzePhoto, createAnthropicVisionClient, PROMPT_VERSION } from "./vision.js";
 export type { AnalyzePhotoDeps, AnthropicVisionClientOptions } from "./vision.js";
@@ -76,3 +72,5 @@ export interface TextClient {
 }
 
 export { draftNarrative, createAnthropicTextClient, NARRATIVE_PROMPT_VERSION } from "./narrative.js";
+export { NarrativeError, checkGrounding, cleanNarrative } from "./narrative.js";
+export type { DraftNarrativeDeps, AnthropicTextClientOptions, NarrativeErrorReason } from "./narrative.js";

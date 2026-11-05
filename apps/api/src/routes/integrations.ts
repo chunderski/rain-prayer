@@ -1,8 +1,8 @@
 /**
  * Google Drive connection (per tenant) and export jobs.
  *
- * Connect flow: an admin calls GET /integrations/google/connect (with the bearer token, so the PWA uses
- * fetch with `Accept: application/json` and gets `{url}`; other callers get the 302). The API stores a
+ * Connect flow: an admin calls GET /integrations/google/connect with the bearer token and gets JSON
+ * `{url}` (the consent URL), which the PWA then navigates to. The API stores a
  * single-use state row bound to that admin, sets an HttpOnly browser-binding cookie, and seals
  * {tenant, nonce, PKCE verifier, binding hash} into the encrypted `state`. The callback accepts only a
  * state that decrypts, matches the cookie, matches an unexpired row for the same admin (deleted on use),
@@ -91,9 +91,7 @@ export async function integrationRoutes(app: FastifyInstance, deps: IntegrationD
       );
     });
     reply.setCookie(CONNECT_COOKIE, binding, { ...cookieOpts, maxAge: STATE_TTL_SECONDS });
-    const url = client.authorizeUrl(state, b64url(createHash("sha256").update(verifier).digest()));
-    if (String(req.headers.accept ?? "").includes("application/json")) return { url };
-    return reply.redirect(url, 302);
+    return { url: client.authorizeUrl(state, b64url(createHash("sha256").update(verifier).digest())) };
   });
 
   app.get("/integrations/google/callback", { config: authRateLimit }, async (req: FastifyRequest, reply: FastifyReply) => {

@@ -58,6 +58,9 @@ function blockRequests(b: Block, uris: DocImageUris): DocsRequest[] {
       return [...b.items].reverse().flatMap((i) => paragraph(`• ${i}`, "NORMAL_TEXT"));
     case "table":
       return table(b.header, b.rows);
+    case "finding":
+      // Inserted at index 1 in reverse, so the heading ends up first.
+      return [...b.blocks].reverse().flatMap((x) => blockRequests(x, uris)).concat(paragraph(b.title, "HEADING_3"));
     case "image": {
       const uri = uris.get(b.image.photoId);
       const caption = paragraph(b.image.caption || "Finding photo", "NORMAL_TEXT");

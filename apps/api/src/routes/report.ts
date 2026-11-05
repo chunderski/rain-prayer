@@ -35,7 +35,7 @@ export async function reportRoutes(app: FastifyInstance, deps: ReportRouteDeps) 
     for (const img of docImages(doc)) {
       if (!urls.has(img.photoId)) urls.set(img.photoId, (await storage.signedUrl(img.storageKey, cfg.SIGNED_URL_TTL_SECONDS)).url);
     }
-    const { html, csp } = renderHtml(doc, urls, [cfg.WEB_ORIGIN, ...cfg.embedOrigins]);
+    const { html, csp } = renderHtml(doc, urls, { webOrigin: cfg.WEB_ORIGIN, frameAncestors: [cfg.WEB_ORIGIN, ...cfg.embedOrigins] });
     return reply
       .header("content-type", "text/html; charset=utf-8")
       .header("content-security-policy", csp)

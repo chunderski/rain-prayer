@@ -79,6 +79,15 @@ describe("risk inputs and results (real engine)", () => {
     expect((await app.inject({ method: "PUT", url, headers: H(viewer), payload: { scenarios: [] } })).statusCode).toBe(403);
   });
 
+  it("reports null likelihood and impact for excluded scenarios", async () => {
+    const url = `/assessments/${fx.assessmentId}/risk/inputs`;
+    const put = await app.inject({ method: "PUT", url, headers: H(assessor), payload: { scenarios: [{ scenarioId: "fixture-crypto", likelihood: 1, impact: 1, excluded: true }] } });
+    expect(put.statusCode).toBe(200);
+    expect(put.json().scenarios[1]).toEqual({ scenarioId: "fixture-crypto", likelihood: null, impact: null, excluded: true });
+    const r = RiskResult.parse((await app.inject({ url: `/assessments/${fx.assessmentId}/risk`, headers: H(viewer) })).json());
+    expect(r.scenarios.map((s) => s.scenarioId)).not.toContain("fixture-crypto");
+  });
+
   it("stores inputs and scores with the real engine", async () => {
     expect((await putAnswer(assessor, "no")).statusCode).toBe(201);
     const put = await app.inject({
@@ -166,8 +175,12 @@ describe("report preview and narrative", () => {
     expect(html).not.toContain("DRAFT-FINDING-NOT-CONFIRMED");
     expect(html).toContain("pending expert review");
     expect(html).toMatch(/<img src="http:\/\/api\.test\/files\/[A-Za-z0-9_.-]+"/);
+    expect(html).not.toMatch(/<style|style=/i);
+    expect(html).toContain('<link rel="stylesheet" href="http://localhost:5173/report-preview.css">');
+    for (const cls of ["report-title", "report-section", "risk-table", "class=\"finding severity-high\"", "finding-photo", "notice", "level-"]) expect(html, cls).toContain(cls);
     const csp = String(res.headers["content-security-policy"]);
     expect(csp).toContain("default-src 'none'");
+    expect(csp).toContain("style-src http://localhost:5173");
     expect(csp).toContain("img-src http://api.test");
     expect(csp).not.toContain("unsafe-inline");
     expect(csp).not.toContain("script-src");

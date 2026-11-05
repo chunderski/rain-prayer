@@ -69,7 +69,7 @@ const capture = async (p: Promise<{ body: string }>) => {
 };
 
 async function startConnect(token = owner) {
-  const res = await capture(app.inject({ url: "/integrations/google/connect", headers: { ...auth(token), accept: "application/json" } }));
+  const res = await capture(app.inject({ url: "/integrations/google/connect", headers: auth(token) }));
   expect(res.statusCode).toBe(200);
   const url = new URL(res.json().url);
   const cookie = res.cookies.find((c) => c.name === "sa_gconn")!.value;
@@ -128,8 +128,7 @@ describe("token encryption", () => {
 describe("connect", () => {
   it("is admin only and asks for drive.file with PKCE and offline access", async () => {
     expect((await app.inject({ url: "/integrations/google/connect", headers: auth(assessor) })).statusCode).toBe(403);
-    const redirect = await app.inject({ url: "/integrations/google/connect", headers: auth(owner) });
-    expect(redirect.statusCode).toBe(302);
+    expect((await app.inject({ url: "/integrations/google/connect" })).statusCode).toBe(401);
     const { url } = await startConnect();
     expect(url.origin + url.pathname).toBe("https://accounts.google.com/o/oauth2/v2/auth");
     expect(url.searchParams.get("scope")).toBe(DRIVE_FILE_SCOPE);

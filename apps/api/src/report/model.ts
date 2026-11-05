@@ -3,7 +3,7 @@
  * to HTML (preview) or Google Docs batchUpdate requests (export). Builders never emit markup; every
  * string in the model is plain text and each renderer escapes or inserts it literally.
  */
-import type { RiskResult } from "@sentinel/shared";
+import type { RiskLevel, RiskResult } from "@sentinel/shared";
 
 /** Bump when the structure or wording of the template changes; recorded on every export. */
 export const TEMPLATE_VERSION = "report-template@1.0.0";
@@ -19,11 +19,14 @@ export interface ReportImage {
 
 export type Block =
   | { type: "heading"; level: 1 | 2 | 3; text: string }
-  | { type: "paragraph"; text: string; tone?: "normal" | "muted" | "notice" }
+  | { type: "paragraph"; text: string; tone?: "normal" | "muted" | "notice"; level?: RiskLevel }
   | { type: "bullets"; items: string[] }
-  | { type: "table"; header: string[]; rows: string[][] }
+  /** variant "risk" marks the risk summary; rowLevels gives each row's residual level (for level-* classes). */
+  | { type: "table"; header: string[]; rows: string[][]; variant?: "risk"; rowLevels?: RiskLevel[] }
   | { type: "image"; image: ReportImage }
-  | { type: "placeholder"; text: string };
+  | { type: "placeholder"; text: string }
+  /** One finding in the register: its title and body blocks (renderers may wrap it). */
+  | { type: "finding"; title: string; severity: string; blocks: Block[] };
 
 export interface ReportDoc {
   templateVersion: string;
@@ -112,7 +115,8 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
   const a = data.assessment;
   const blocks: Block[] = [];
   const h = (level: 1 | 2 | 3, text: string) => blocks.push({ type: "heading", level, text });
-  const p = (text: string, tone: "normal" | "muted" | "notice" = "normal") => blocks.push({ type: "paragraph", text, tone });
+  const p = (text: string, tone: "normal" | "muted" | "notice" = "normal", level?: RiskLevel) =>
+    blocks.push({ type: "paragraph", text, tone, ...(level ? { level } : {}) });
 
   // Title page details.
   p(`Prepared by ${data.tenantName} for ${a.clientName}`);
@@ -138,10 +142,12 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
   if (!r) {
     blocks.push({ type: "placeholder", text: `Risk scores are not available${data.riskError ? `: ${data.riskError}` : ""}.` });
   } else {
-    p(`Overall residual risk: ${LEVEL_LABEL[r.overall.level] ?? r.overall.level} (inherent ${num(r.overall.inherent)}, residual ${num(r.overall.residual)}). Method ${r.methodVersion}.`);
+    p(`Overall residual risk: ${LEVEL_LABEL[r.overall.level] ?? r.overall.level} (inherent ${num(r.overall.inherent)}, residual ${num(r.overall.residual)}). Method ${r.methodVersion}.`, "normal", r.overall.level);
     for (const line of r.overall.explanation) p(line, "muted");
     blocks.push({
       type: "table",
+      variant: "risk",
+      rowLevels: r.scenarios.map((s) => s.residual.level),
       header: ["Scenario", "Inherent", "Control effectiveness", "Residual", "Level", "Confidence"],
       rows: r.scenarios.map((s) => [
         s.name, `${num(s.inherent.score)} (L${s.inherent.likelihood} x I${s.inherent.impact})`, pct(s.controlEffectiveness.value),
@@ -167,14 +173,15 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
     if (!list.length) continue;
     h(2, `${SEVERITY_LABEL[sev]} (${list.length})`);
     for (const f of list) {
-      h(3, f.title);
+      const body: Block[] = [];
       const meta = [`Severity: ${SEVERITY_LABEL[f.severity]}`, `Status: ${f.status}`, f.areaName ? `Area: ${f.areaName}` : null].filter(Boolean).join("; ");
-      p(meta, "muted");
-      if (f.description) p(f.description);
-      if (f.recommendation) p(`Recommendation: ${f.recommendation}`);
+      body.push({ type: "paragraph", text: meta, tone: "muted" });
+      if (f.description) body.push({ type: "paragraph", text: f.description });
+      if (f.recommendation) body.push({ type: "paragraph", text: `Recommendation: ${f.recommendation}` });
       const reqs = f.frameworks.map((x) => `${x.frameworkId} ${x.requirementCode} (${x.relationship})`);
-      p(`Counts toward: ${reqs.length ? reqs.join(", ") : "no mapped framework requirement"}. Controls: ${f.controlIds.join(", ")}.`, "muted");
-      for (const img of f.photos) blocks.push({ type: "image", image: img });
+      body.push({ type: "paragraph", text: `Counts toward: ${reqs.length ? reqs.join(", ") : "no mapped framework requirement"}. Controls: ${f.controlIds.join(", ")}.`, tone: "muted" });
+      for (const img of f.photos) body.push({ type: "image", image: img });
+      blocks.push({ type: "finding", title: f.title, severity: f.severity, blocks: body });
     }
   }
 
@@ -212,5 +219,7 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
 }
 
 /** Every image in the document, in order. */
-export const docImages = (doc: ReportDoc): ReportImage[] =>
-  doc.blocks.flatMap((b) => (b.type === "image" ? [b.image] : []));
+export const docImages = (doc: ReportDoc): ReportImage[] => {
+  const walk = (bs: Block[]): ReportImage[] => bs.flatMap((b) => (b.type === "image" ? [b.image] : b.type === "finding" ? walk(b.blocks) : []));
+  return walk(doc.blocks);
+};

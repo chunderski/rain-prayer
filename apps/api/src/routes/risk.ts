@@ -29,10 +29,12 @@ export async function riskRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
     return {
       scenarios: scenarios.map((s) => {
         const i = stored.get(s.id);
+        // Excluded scenarios carry placeholder numbers (the PWA sends 1 and 1); they mean nothing, so report null.
+        const scored = i && !i.excluded;
         return {
           scenarioId: s.id,
-          likelihood: i?.likelihood ?? null,
-          impact: i?.impact ?? null,
+          likelihood: scored ? i.likelihood : null,
+          impact: scored ? i.impact : null,
           ...(i?.rationale ? { rationale: i.rationale } : {}),
           excluded: i?.excluded ?? false,
         };

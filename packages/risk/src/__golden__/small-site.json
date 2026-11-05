@@ -1,0 +1,319 @@
+{
+  "methodVersion": "risk-method@1.0.0",
+  "assessmentId": "00000000-0000-4000-8000-0000000000aa",
+  "computedAt": "2026-11-05T12:00:00Z",
+  "scenarios": [
+    {
+      "scenarioId": "theft",
+      "name": "Theft of property or equipment",
+      "category": "physical",
+      "inherent": {
+        "likelihood": 4,
+        "impact": 3,
+        "score": 12,
+        "level": "medium"
+      },
+      "controlEffectiveness": {
+        "value": 0.661,
+        "coverage": 1,
+        "contributors": [
+          {
+            "controlId": "SC-PER-001",
+            "title": "Perimeter fence height and condition",
+            "weight": 2,
+            "effectiveness": 0.25,
+            "evidence": "1 of 2 scored answers fully met, 1 partly met; 1 open finding (1 high), capping it at 25%",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0001"
+            ]
+          },
+          {
+            "controlId": "SC-PER-003",
+            "title": "Perimeter gate control",
+            "weight": 2,
+            "effectiveness": 0.25,
+            "evidence": "1 of 2 scored answers fully met; 1 open finding (1 high), capping it at 25%",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0001"
+            ]
+          },
+          {
+            "controlId": "SC-VSS-001",
+            "title": "Entrance identification coverage",
+            "weight": 2,
+            "effectiveness": 0.5,
+            "evidence": "0 of 1 scored answer fully met, 1 partly met",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-ACC-001",
+            "title": "Controlled entry points",
+            "weight": 3,
+            "effectiveness": 0.75,
+            "evidence": "1 of 2 scored answers fully met, 1 partly met across 2 areas",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-IDS-003",
+            "title": "Alarm monitoring and response",
+            "weight": 3,
+            "effectiveness": 1,
+            "evidence": "1 of 1 scored answer fully met",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-IDS-001",
+            "title": "Exterior opening detection",
+            "weight": 2,
+            "effectiveness": 1,
+            "evidence": "1 of 1 scored answer fully met; 1 N/A answer excluded",
+            "findingIds": []
+          }
+        ]
+      },
+      "residual": {
+        "score": 5.7,
+        "level": "low"
+      },
+      "confidence": "high",
+      "explanation": [
+        "Inherent risk for Theft of property or equipment is 12 of 25 (medium): the assessor rated likelihood 4 (Likely) and impact 3 (Moderate), which are multiplied.",
+        "The 6 relevant controls with evidence are 66% effective on a weighted basis, with evidence covering 100% of the weighted relevance in scope; 9 further mitigating controls are outside the frameworks selected for this assessment.",
+        "Perimeter fence height and condition (a significant control) is rated weak at 25% because 1 of 2 scored checks was fully met and 1 partly met, and a high finding is open, which limits the rating to 25%: Fence fabric cut near gate post.",
+        "Perimeter gate control (a significant control) is rated weak at 25% because 1 of 2 scored checks was fully met, and a high finding is open, which limits the rating to 25%: Fence fabric cut near gate post.",
+        "Entrance identification coverage (a significant control) is rated partly effective at 50% because its one scored check was only partly met.",
+        "Residual risk is 5.7 of 25 (low), calculated as 12 x (1 - 0.661 x 0.8), because controls are credited with removing at most 80% of inherent risk; confidence is high because evidence covers most of the relevant controls."
+      ]
+    },
+    {
+      "scenarioId": "forced-entry",
+      "name": "Forced entry",
+      "category": "physical",
+      "inherent": {
+        "likelihood": 3,
+        "impact": 3,
+        "score": 9,
+        "level": "medium"
+      },
+      "controlEffectiveness": {
+        "value": 0.813,
+        "coverage": 1,
+        "contributors": [
+          {
+            "controlId": "SC-PER-001",
+            "title": "Perimeter fence height and condition",
+            "weight": 2,
+            "effectiveness": 0.25,
+            "evidence": "1 of 2 scored answers fully met, 1 partly met; 1 open finding (1 high), capping it at 25%",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0001"
+            ]
+          },
+          {
+            "controlId": "SC-IDS-001",
+            "title": "Exterior opening detection",
+            "weight": 3,
+            "effectiveness": 1,
+            "evidence": "1 of 1 scored answer fully met; 1 N/A answer excluded",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-IDS-003",
+            "title": "Alarm monitoring and response",
+            "weight": 3,
+            "effectiveness": 1,
+            "evidence": "1 of 1 scored answer fully met",
+            "findingIds": []
+          }
+        ]
+      },
+      "residual": {
+        "score": 3.1,
+        "level": "very_low"
+      },
+      "confidence": "medium",
+      "explanation": [
+        "Inherent risk for Forced entry is 9 of 25 (medium): the assessor rated likelihood 3 (Possible) and impact 3 (Moderate), which are multiplied.",
+        "The 3 relevant controls with evidence are 81% effective on a weighted basis, with evidence covering 100% of the weighted relevance in scope; 9 further mitigating controls are outside the frameworks selected for this assessment.",
+        "Perimeter fence height and condition (a significant control) is rated weak at 25% because 1 of 2 scored checks was fully met and 1 partly met, and a high finding is open, which limits the rating to 25%: Fence fabric cut near gate post.",
+        "Exterior opening detection (a primary control) is rated effective at 100% because its one scored check was fully met.",
+        "Alarm monitoring and response (a primary control) is rated effective at 100% because its one scored check was fully met.",
+        "Residual risk is 3.1 of 25 (very low), calculated as 9 x (1 - 0.813 x 0.8), because controls are credited with removing at most 80% of inherent risk; confidence is medium because evidence covers 100% of the relevant controls in scope and the selected frameworks include 33% of this scenario's mitigations."
+      ]
+    },
+    {
+      "scenarioId": "ransomware",
+      "name": "Ransomware",
+      "category": "cyber",
+      "inherent": {
+        "likelihood": 3,
+        "impact": 5,
+        "score": 15,
+        "level": "high"
+      },
+      "controlEffectiveness": {
+        "value": 0.5,
+        "coverage": 1,
+        "contributors": [
+          {
+            "controlId": "SC-RCV-001",
+            "title": "Protected and tested backups",
+            "weight": 3,
+            "effectiveness": 0,
+            "evidence": "0 of 2 scored answers fully met, 1 partly met; 1 open finding (1 critical), capping it at 0%",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0004"
+            ]
+          },
+          {
+            "controlId": "SC-PRT-001",
+            "title": "Multi-factor authentication",
+            "weight": 3,
+            "effectiveness": 1,
+            "evidence": "1 of 1 scored answer fully met",
+            "findingIds": []
+          }
+        ]
+      },
+      "residual": {
+        "score": 9,
+        "level": "medium"
+      },
+      "confidence": "medium",
+      "explanation": [
+        "Inherent risk for Ransomware is 15 of 25 (high): the assessor rated likelihood 3 (Possible) and impact 5 (Severe), which are multiplied.",
+        "The 2 relevant controls with evidence are 50% effective on a weighted basis, with evidence covering 100% of the weighted relevance in scope; 12 further mitigating controls are outside the frameworks selected for this assessment.",
+        "Protected and tested backups (a primary control) is rated weak at 0% because 0 of 2 scored checks were fully met and 1 partly met, and a critical finding is open, which limits the rating to 0%: Backups stored on the same domain with no offline copy.",
+        "Multi-factor authentication (a primary control) is rated effective at 100% because its one scored check was fully met.",
+        "Residual risk is 9 of 25 (medium), calculated as 15 x (1 - 0.5 x 0.8), because controls are credited with removing at most 80% of inherent risk; confidence is medium because evidence covers 100% of the relevant controls in scope and the selected frameworks include 20% of this scenario's mitigations."
+      ]
+    },
+    {
+      "scenarioId": "harvest-now-decrypt-later",
+      "name": "Quantum-era data exposure (harvest now, decrypt later)",
+      "category": "cyber",
+      "inherent": {
+        "likelihood": 2,
+        "impact": 4,
+        "score": 8,
+        "level": "medium"
+      },
+      "controlEffectiveness": {
+        "value": 0.167,
+        "coverage": 1,
+        "contributors": [
+          {
+            "controlId": "SC-CRY-003",
+            "title": "Data longevity and harvest-now-decrypt-later exposure",
+            "weight": 3,
+            "effectiveness": 0,
+            "evidence": "0 of 1 scored answer fully met",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-CRY-001",
+            "title": "Cryptographic inventory",
+            "weight": 3,
+            "effectiveness": 0.333,
+            "evidence": "0 of 1 scored answer fully met, 1 partly met",
+            "findingIds": []
+          }
+        ]
+      },
+      "residual": {
+        "score": 6.9,
+        "level": "low"
+      },
+      "confidence": "medium",
+      "explanation": [
+        "Inherent risk for Quantum-era data exposure (harvest now, decrypt later) is 8 of 25 (medium): the assessor rated likelihood 2 (Unlikely) and impact 4 (Major), which are multiplied.",
+        "The 2 relevant controls with evidence are 17% effective on a weighted basis, with evidence covering 100% of the weighted relevance in scope; 10 further mitigating controls are outside the frameworks selected for this assessment.",
+        "Data longevity and harvest-now-decrypt-later exposure (a primary control) is rated weak at 0% because its one scored check was not met.",
+        "Cryptographic inventory (a primary control) is rated weak at 33% because its one scored check was only partly met.",
+        "Residual risk is 6.9 of 25 (low), calculated as 8 x (1 - 0.167 x 0.8), because controls are credited with removing at most 80% of inherent risk; confidence is medium because evidence covers 100% of the relevant controls in scope and the selected frameworks include 22% of this scenario's mitigations."
+      ]
+    },
+    {
+      "scenarioId": "tailgating",
+      "name": "Unauthorized entry by tailgating",
+      "category": "physical",
+      "inherent": {
+        "likelihood": 4,
+        "impact": 2,
+        "score": 8,
+        "level": "medium"
+      },
+      "controlEffectiveness": {
+        "value": 0.375,
+        "coverage": 1,
+        "contributors": [
+          {
+            "controlId": "SC-ACC-006",
+            "title": "Anti-tailgating at main entry",
+            "weight": 3,
+            "effectiveness": 0,
+            "evidence": "0 of 1 scored answer fully met; 1 open finding (1 medium)",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0002"
+            ]
+          },
+          {
+            "controlId": "SC-PER-003",
+            "title": "Perimeter gate control",
+            "weight": 2,
+            "effectiveness": 0.25,
+            "evidence": "1 of 2 scored answers fully met; 1 open finding (1 high), capping it at 25%",
+            "findingIds": [
+              "00000000-0000-4000-8000-0000000f0001"
+            ]
+          },
+          {
+            "controlId": "SC-VSS-001",
+            "title": "Entrance identification coverage",
+            "weight": 2,
+            "effectiveness": 0.5,
+            "evidence": "0 of 1 scored answer fully met, 1 partly met",
+            "findingIds": []
+          },
+          {
+            "controlId": "SC-ACC-001",
+            "title": "Controlled entry points",
+            "weight": 3,
+            "effectiveness": 0.75,
+            "evidence": "1 of 2 scored answers fully met, 1 partly met across 2 areas",
+            "findingIds": []
+          }
+        ]
+      },
+      "residual": {
+        "score": 5.6,
+        "level": "low"
+      },
+      "confidence": "high",
+      "explanation": [
+        "Inherent risk for Unauthorized entry by tailgating is 8 of 25 (medium): the assessor rated likelihood 4 (Likely) and impact 2 (Minor), which are multiplied.",
+        "The 4 relevant controls with evidence are 38% effective on a weighted basis, with evidence covering 100% of the weighted relevance in scope; 6 further mitigating controls are outside the frameworks selected for this assessment.",
+        "Anti-tailgating at main entry (a primary control) is rated weak at 0% because its one scored check was not met, and a medium finding is open: Staff hold the lobby door for visitors.",
+        "Perimeter gate control (a significant control) is rated weak at 25% because 1 of 2 scored checks was fully met, and a high finding is open, which limits the rating to 25%: Fence fabric cut near gate post.",
+        "Entrance identification coverage (a significant control) is rated partly effective at 50% because its one scored check was only partly met.",
+        "Residual risk is 5.6 of 25 (low), calculated as 8 x (1 - 0.375 x 0.8), because controls are credited with removing at most 80% of inherent risk; confidence is high because evidence covers most of the relevant controls."
+      ]
+    }
+  ],
+  "overall": {
+    "inherent": 11.1,
+    "residual": 6.4,
+    "level": "medium",
+    "explanation": [
+      "5 scenarios scored, 4 awaiting likelihood and impact, 1 excluded as not applicable.",
+      "Overall residual risk is medium, set by the highest scenario, Ransomware, at 9 of 25.",
+      "Weighting each scenario by its inherent score, the average is 11.1 of 25 before controls and 6.4 after, a reduction of 42%."
+    ]
+  },
+  "missingInputs": [
+    "vandalism",
+    "insider-threat",
+    "cyber-intrusion",
+    "it-physical-tampering"
+  ]
+}

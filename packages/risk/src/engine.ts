@@ -171,6 +171,7 @@ export interface ControlEvaluation {
   partlyMet: number;
   notMet: number;
   naAnswers: number;
+  /** Distinct named areas with scored answers (site-wide answers are not counted as an area). */
   areas: number;
   /** True when no question of the control can be scored by this method (numbers and text only). */
   noScorableQuestions: boolean;
@@ -202,7 +203,7 @@ export function evaluateControl(control: ScoringControl, answers: Answer[], find
     if (r.score >= 1) fullyMet++;
     else if (r.score <= 0) notMet++;
     else partlyMet++;
-    areas.add(a.areaId ?? "site");
+    if (a.areaId) areas.add(a.areaId);
     const list = perQuestion.get(a.questionId) ?? [];
     list.push(r.score);
     perQuestion.set(a.questionId, list);
@@ -284,6 +285,7 @@ function contributorSentence(ev: ControlEvaluation, weight: number): string {
   const reasons: string[] = [];
   if (ev.scoredAnswers > 0) {
     if (ev.fullyMet === ev.scoredAnswers) reasons.push(`${ev.scoredAnswers === 1 ? "its one scored check was" : `all ${ev.scoredAnswers} scored checks were`} fully met`);
+    else if (ev.scoredAnswers === 1) reasons.push(`its one scored check was ${ev.partlyMet ? "only partly met" : "not met"}`);
     else {
       let s = `${ev.fullyMet} of ${plural(ev.scoredAnswers, "scored check")} ${ev.fullyMet === 1 ? "was" : "were"} fully met`;
       if (ev.partlyMet) s += ` and ${ev.partlyMet} partly met`;
@@ -384,7 +386,7 @@ function scoreScenario(
     );
   } else {
     let s = fallback
-      ? `No listed mitigating control is in scope, so ${plural(rows.length, "control")} from the same security domains stand in at equal weight; `
+      ? `No listed mitigating control is in scope, so ${plural(rows.length, "control")} from the same security domains ${rows.length === 1 ? "stands" : "stand"} in at equal weight; `
       : "";
     s += `the ${plural(withEvidence.length, "relevant control")} with evidence ${withEvidence.length === 1 ? "is" : "are"} ${pct(effectiveness)} effective on a weighted basis, with evidence covering ${pct(coverage)} of the weighted relevance in scope`;
     if (unknown.length) s += ` (not yet assessed: ${listNames(unknown.map((u) => u.ev.title))})`;

@@ -34,3 +34,18 @@ export interface CompareInput {
 }
 
 export { METHOD_VERSION, scoreAssessment, compareSites, loadScenarios, scenariosForControls } from "./engine.js";
+export {
+  MAX_REDUCTION,
+  FINDING_CAPS,
+  LEVEL_BANDS,
+  LIKELIHOOD_SCALE,
+  IMPACT_SCALE,
+  SCENARIO_LIBRARY_VERSION,
+  SCENARIO_CONTROL_LIBRARY_VERSION,
+  levelFor,
+  levelLabel,
+  scoreAnswer,
+  evaluateControl,
+  type ControlEvaluation,
+  type ScaleAnchor,
+} from "./engine.js";

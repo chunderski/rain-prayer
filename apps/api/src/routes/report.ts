@@ -1,7 +1,7 @@
 /** Phase 3 report routes: HTML preview and narrative sections (AI drafted, human approved, D-060). */
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { draftNarrative, VisionError, type DraftNarrativeInput, type TextClient } from "@sentinel/ai";
+import { draftNarrative, NarrativeError, VisionError, type DraftNarrativeInput, type TextClient } from "@sentinel/ai";
 import { NarrativeSection, PutNarrative, Uuid } from "@sentinel/shared";
 import { assessmentScope, requireAssessmentWrite, type FieldCtx } from "../field/context.js";
 import { guard } from "../lib/access.js";
@@ -96,7 +96,12 @@ export async function reportRoutes(app: FastifyInstance, deps: ReportRouteDeps) 
       draft = await draftNarrative({ section, facts, styleNotes: null }, { client, model: cfg.ANTHROPIC_TEXT_MODEL });
     } catch (err) {
       req.log.warn({ err: (err as Error).message }, "narrative draft failed");
-      throw new AppError(502, "ai_failed", `The AI draft could not be produced (${err instanceof VisionError ? err.code : "model_error"}); try again or write the section by hand`);
+      if (err instanceof NarrativeError) {
+        // The model output did not match the facts twice (for example a framework or risk level not in the assessment).
+        throw new AppError(422, "ai_draft_rejected", "The AI draft did not match the assessment facts and was discarded; try again or write the section by hand", { reason: err.reason });
+      }
+      const code = err instanceof VisionError ? err.code : "model_error";
+      throw new AppError(502, "ai_failed", code === "timeout" ? "The AI service timed out; try again in a moment" : "The AI draft could not be produced; try again or write the section by hand", { reason: code });
     }
     return inField(db, req, async (ctx) => {
       await requireAssessmentWrite(ctx, id); // the assessment may have been completed meanwhile

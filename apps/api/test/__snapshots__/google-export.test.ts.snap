@@ -1,0 +1,291 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Docs request builder > matches the snapshot 1`] = `
+[
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Photo unavailable: Missing
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 28,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Gate
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 6,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 2,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertInlineImage": {
+      "location": {
+        "index": 1,
+      },
+      "objectSize": {
+        "width": {
+          "magnitude": 440,
+          "unit": "PT",
+        },
+      },
+      "uri": "https://img.example/p1.jpg",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "• two
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 7,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "• one
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 7,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertTable": {
+      "columns": 2,
+      "location": {
+        "index": 1,
+      },
+      "rows": 3,
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 2,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 17,
+      },
+      "text": "4",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 15,
+      },
+      "text": "3",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 10,
+      },
+      "text": "1",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 7,
+      },
+      "text": "B",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 5,
+      },
+      "text": "A",
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Notice: Line with control char
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 32,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Findings
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "HEADING_1",
+      },
+      "range": {
+        "endIndex": 10,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Acme
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "NORMAL_TEXT",
+      },
+      "range": {
+        "endIndex": 6,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Client, Site
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "SUBTITLE",
+      },
+      "range": {
+        "endIndex": 14,
+        "startIndex": 1,
+      },
+    },
+  },
+  {
+    "insertText": {
+      "location": {
+        "index": 1,
+      },
+      "text": "Report <T>
+",
+    },
+  },
+  {
+    "updateParagraphStyle": {
+      "fields": "namedStyleType",
+      "paragraphStyle": {
+        "namedStyleType": "TITLE",
+      },
+      "range": {
+        "endIndex": 12,
+        "startIndex": 1,
+      },
+    },
+  },
+]
+`;

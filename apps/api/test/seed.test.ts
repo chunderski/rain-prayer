@@ -20,7 +20,7 @@ describe("migrations and seed", () => {
   it("re-running migrations is a no-op", async () => {
     const r = await runMigrations(OWNER_URL);
     expect(r.applied).toEqual([]);
-    expect(r.skipped).toEqual(["001_reference.sql", "002_tenant.sql", "003_auth_functions.sql", "004_field.sql"]);
+    expect(r.skipped).toEqual(["001_reference.sql", "002_tenant.sql", "003_auth_functions.sql", "004_field.sql", "005_risk_report.sql"]);
   });
 
   it("re-running the seed is idempotent", async () => {

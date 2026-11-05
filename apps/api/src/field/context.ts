@@ -111,6 +111,12 @@ export const assessmentLocked = () =>
 export async function requireAssessmentWrite(ctx: FieldCtx, assessmentId: string, opts: { allowLocked?: boolean } = {}): Promise<AssessmentScope> {
   const scope = await assessmentScope(ctx, assessmentId);
   if (!hasRole(ctx.auth.role, "assessor")) throw new AppError(403, "forbidden", "Requires role assessor or higher");
+  if (!opts.allowLocked) {
+    // QA R3-2: re-read the status under a share lock so a write cannot race a concurrent completion.
+    // Completion's UPDATE waits for this transaction, and this read waits for an in-flight completion.
+    const live = await ctx.tx.query<{ status: string }>("SELECT status FROM assessment WHERE id = $1 FOR SHARE", [assessmentId]);
+    if (live.rows[0]) scope.status = live.rows[0].status;
+  }
   const check = () => {
     if (scope.status === "complete" && !opts.allowLocked) throw assessmentLocked();
     return scope;

@@ -2,11 +2,13 @@
 import { z } from "zod";
 import { FrameworkId } from "./frameworks.js";
 
-export const Role = z.enum(["owner", "admin", "assessor", "viewer"]);
+/** client_viewer is a read-only login for one client (Phase 4). It ranks below viewer, so every
+ * route guarded by hasRole(..., "viewer") refuses it; only the client portal routes admit it. */
+export const Role = z.enum(["owner", "admin", "assessor", "viewer", "client_viewer"]);
 export type Role = z.infer<typeof Role>;
 
 /** Higher number means more privilege. */
-export const ROLE_RANK: Record<Role, number> = { viewer: 1, assessor: 2, admin: 3, owner: 4 };
+export const ROLE_RANK: Record<Role, number> = { client_viewer: 0, viewer: 1, assessor: 2, admin: 3, owner: 4 };
 export const hasRole = (actual: Role, required: Role) => ROLE_RANK[actual] >= ROLE_RANK[required];
 
 export const Uuid = z.string().uuid();

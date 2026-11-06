@@ -1,6 +1,6 @@
 # Sentinel Assess: Delivery Plan
 
-Owner: CW (product owner). Engineering lead: Head of Engineering (Claude). Status: Phase 1 complete (QA PASS, CW go-ahead 2026-11-04); Phase 2 complete (QA PASS 2026-11-05); Phase 3 complete (QA PASS 2026-11-05), awaiting CW go-ahead for Phase 4.
+Owner: CW (product owner). Engineering lead: Head of Engineering (Claude). Status: Phase 1 complete (QA PASS, CW go-ahead 2026-11-04); Phase 2 complete (QA PASS 2026-11-05); Phase 3 complete (QA PASS 2026-11-05); Phase 4 in progress (CW go-ahead 2026-11-06).
 
 Sentinel Assess is an AI-native physical and cyber security assessment platform sold through systems integrators. It combines guided field walkthroughs with photos (EasySet style) and quantified inherent, control, and residual risk (Circadian Risk style), and adds AI photo analysis, physical and cyber in one assessment, and integrator-first quoting.
 
@@ -119,7 +119,8 @@ Scope: risk engine, dashboards, Google Docs, Sheets, and Drive export with photo
 - frontend: dashboards, explanation views, site comparison
 - vision-ai: narrative drafting for reports (human review before export)
 
-### Phase 4: Channel
+### Phase 4: Channel (in progress)
+Contract: [docs/api-phase4.md](docs/api-phase4.md).
 Scope: integrator workspaces and branding, clients within, findings-to-quote, portfolio comparison.
 - channel-pm: price book and quote design, branding rules
 - backend: branding, price book, quotes, client viewer role

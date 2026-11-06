@@ -246,6 +246,26 @@ exports[`Docs request builder > matches the snapshot 1`] = `
     },
   },
   {
+    "updateTextStyle": {
+      "fields": "foregroundColor",
+      "range": {
+        "endIndex": 5,
+        "startIndex": 1,
+      },
+      "textStyle": {
+        "foregroundColor": {
+          "color": {
+            "rgbColor": {
+              "blue": 0.5686274509803921,
+              "green": 0.23921568627450981,
+              "red": 0.043137254901960784,
+            },
+          },
+        },
+      },
+    },
+  },
+  {
     "insertText": {
       "location": {
         "index": 1,
@@ -284,6 +304,26 @@ exports[`Docs request builder > matches the snapshot 1`] = `
       "range": {
         "endIndex": 12,
         "startIndex": 1,
+      },
+    },
+  },
+  {
+    "updateTextStyle": {
+      "fields": "foregroundColor",
+      "range": {
+        "endIndex": 11,
+        "startIndex": 1,
+      },
+      "textStyle": {
+        "foregroundColor": {
+          "color": {
+            "rgbColor": {
+              "blue": 0.5686274509803921,
+              "green": 0.23921568627450981,
+              "red": 0.043137254901960784,
+            },
+          },
+        },
       },
     },
   },

@@ -17,13 +17,19 @@ import pg from "pg";
 import { DATA_DIR, checkIntegrity, loadLibrary, type Library } from "@sentinel/frameworks";
 import { Crosswalk, FrameworkVersion, SharedControlLibrary, type CrosswalkEntry, type SharedControl } from "@sentinel/shared";
 import { hashPassword } from "../lib/auth.js";
+import { DEFAULT_TEMPLATE_PATH, importTemplateItems, loadPriceBookTemplate } from "../quotes/pricebook.js";
 
 type Log = (msg: string) => void;
 
 export const DEV_PASSWORD = "Sentinel-dev-2026!";
 export const DEV_TENANTS = [
-  { slug: "acme-integrators", name: "Acme Integrators" },
-  { slug: "bluefield-security", name: "Bluefield Security" },
+  { slug: "acme-integrators", name: "Acme Integrators", plan: "partner", client: "Northwind Logistics" },
+  { slug: "bluefield-security", name: "Bluefield Security", plan: "standard", client: "Harbor Medical Group" },
+] as const;
+/** Phase 4 client logins: one client_viewer per tenant, bound to the seeded client above. */
+export const DEV_CLIENT_VIEWERS = [
+  { email: "viewer@client.acme.test", name: "Casey Client", tenant: "acme-integrators" },
+  { email: "viewer@client.bluefield.test", name: "Bailey Client", tenant: "bluefield-security" },
 ] as const;
 export const DEV_USERS = [
   { email: "owner@acme.test", name: "Avery Owner", tenant: "acme-integrators", role: "owner" },
@@ -227,7 +233,7 @@ export async function seedLibrary(db: pg.ClientBase, lib: Library, log: Log): Pr
 
 // ---------------------------------------------------------------- dev tenants and users
 
-export async function seedDevData(db: pg.ClientBase, log: Log): Promise<Record<string, string>> {
+export async function seedDevData(db: pg.ClientBase, log: Log, templatePath: string | null = DEFAULT_TEMPLATE_PATH): Promise<Record<string, string>> {
   if (process.env.NODE_ENV === "production") throw new Error("Refusing to seed dev users when NODE_ENV=production");
   const tenantIds: Record<string, string> = {};
   for (const t of DEV_TENANTS) {
@@ -238,9 +244,12 @@ export async function seedDevData(db: pg.ClientBase, log: Log): Promise<Record<s
       const id = existing.rows[0]?.id ?? (await db.query<{ id: string }>("SELECT gen_random_uuid() AS id")).rows[0]!.id;
       await db.query("SELECT set_config('app.tenant_id', $1, true)", [id]);
       await db.query(
-        "INSERT INTO tenant (id, slug, name) VALUES ($1, $2, $3) ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, updated_at = now()",
-        [id, t.slug, t.name],
+        `INSERT INTO tenant (id, slug, name, plan) VALUES ($1, $2, $3, $4)
+         ON CONFLICT (id) DO UPDATE SET name = EXCLUDED.name, plan = EXCLUDED.plan, updated_at = now()`,
+        [id, t.slug, t.name, t.plan],
       );
+      const client = await db.query<{ id: string }>("SELECT id FROM client WHERE name = $1 ORDER BY created_at LIMIT 1", [t.client]);
+      if (!client.rowCount) await db.query("INSERT INTO client (tenant_id, name, industry) VALUES ($1, $2, 'Demo client')", [id, t.client]);
       await db.query("COMMIT");
       tenantIds[t.slug] = id;
     } catch (err) {
@@ -271,7 +280,50 @@ export async function seedDevData(db: pg.ClientBase, log: Log): Promise<Record<s
       throw err;
     }
   }
-  log(`dev data: ${DEV_TENANTS.length} tenants, ${DEV_USERS.length} users (password ${DEV_PASSWORD}; dev only)`);
+  for (const u of DEV_CLIENT_VIEWERS) {
+    const hash = await hashPassword(DEV_PASSWORD);
+    const tenantId = tenantIds[u.tenant]!;
+    const clientName = DEV_TENANTS.find((t) => t.slug === u.tenant)!.client;
+    await db.query("BEGIN");
+    try {
+      const { rows } = await db.query<{ id: string }>(
+        `INSERT INTO app_user (email, name, password_hash) VALUES ($1, $2, $3)
+         ON CONFLICT (email) DO UPDATE SET name = EXCLUDED.name, password_hash = EXCLUDED.password_hash,
+           failed_login_count = 0, locked_until = NULL, disabled_at = NULL
+         RETURNING id`,
+        [u.email, u.name, hash],
+      );
+      await db.query("SELECT set_config('app.tenant_id', $1, true)", [tenantId]);
+      const client = await db.query<{ id: string }>("SELECT id FROM client WHERE name = $1 ORDER BY created_at LIMIT 1", [clientName]);
+      await db.query(
+        `INSERT INTO membership (tenant_id, user_id, role, client_id, status) VALUES ($1, $2, 'client_viewer', $3, 'active')
+         ON CONFLICT (tenant_id, user_id) DO UPDATE SET role = EXCLUDED.role, client_id = EXCLUDED.client_id, status = 'active'`,
+        [tenantId, rows[0]!.id, client.rows[0]!.id],
+      );
+      await db.query("COMMIT");
+    } catch (err) {
+      await db.query("ROLLBACK");
+      throw err;
+    }
+  }
+  // Acme (partner plan) gets the illustrative price book template when it is installed.
+  if (templatePath) {
+    const tpl = loadPriceBookTemplate(templatePath);
+    if (tpl) {
+      const acme = tenantIds["acme-integrators"]!;
+      await db.query("BEGIN");
+      try {
+        await db.query("SELECT set_config('app.tenant_id', $1, true)", [acme]);
+        const r = await importTemplateItems((sql, p) => db.query(sql, p), acme, null, tpl.items);
+        await db.query("COMMIT");
+        log(`price book template: ${r.added} added, ${r.skipped} already present, ${tpl.invalid} invalid (acme-integrators)`);
+      } catch (err) {
+        await db.query("ROLLBACK");
+        throw err;
+      }
+    }
+  }
+  log(`dev data: ${DEV_TENANTS.length} tenants, ${DEV_USERS.length + DEV_CLIENT_VIEWERS.length} users (password ${DEV_PASSWORD}; dev only)`);
   return tenantIds;
 }
 
@@ -280,6 +332,8 @@ export interface SeedOptions {
   dataDir?: string;
   strict?: boolean;
   devData?: boolean;
+  /** Price book template imported into acme-integrators; null skips it (tests). */
+  priceBookTemplate?: string | null;
   log?: Log;
 }
 
@@ -302,7 +356,7 @@ export async function seed(opts: SeedOptions): Promise<void> {
     else log("library: no valid library data found; reference tables left unchanged");
     if (opts.devData !== false) {
       if (process.env.NODE_ENV === "production") log("dev data: skipped (NODE_ENV=production; dev users are never seeded in production)");
-      else await seedDevData(client, log);
+      else await seedDevData(client, log, opts.priceBookTemplate === undefined ? DEFAULT_TEMPLATE_PATH : opts.priceBookTemplate);
     }
   } finally {
     await client.end();

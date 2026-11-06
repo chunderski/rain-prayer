@@ -330,6 +330,7 @@ describe("export jobs", () => {
 describe("Docs request builder", () => {
   const doc: ReportDoc = {
     templateVersion: TEMPLATE_VERSION, title: "Report <T>", subtitle: "Client, Site", brandName: "Acme", generatedAt: "2026-11-05T00:00:00.000Z",
+    brand: { displayName: "Acme", primaryColor: "#0b3d91", accentColor: "#0f766e", footer: "", contact: "", poweredBy: false, logoKey: null },
     blocks: [
       { type: "heading", level: 1, text: "Findings" },
       { type: "paragraph", text: "Line with\u0007 control char", tone: "notice" },

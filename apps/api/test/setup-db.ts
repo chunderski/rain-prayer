@@ -45,5 +45,5 @@ GRANT CONNECT, TEMPORARY ON DATABASE ${TEST_DB} TO sentinel_app;
 `);
   const quiet = () => {};
   await runMigrations(OWNER_URL, { log: quiet });
-  await seed({ databaseUrl: OWNER_URL, dataDir: FIXTURES_DIR, strict: true, devData: true, log: quiet });
+  await seed({ databaseUrl: OWNER_URL, dataDir: FIXTURES_DIR, strict: true, devData: true, priceBookTemplate: null, log: quiet });
 }

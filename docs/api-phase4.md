@@ -63,3 +63,12 @@ Extends phases 1 to 3 (same auth, envelope, `no-store`, rate limits). Schemas: `
 ## Portfolio
 
 `GET /portfolio?clientId=` (viewer): `Portfolio` built from risk snapshots of complete assessments plus open findings and quote values; caveats when method or library versions differ across the history.
+
+## Head of Engineering additions (2026-11-06)
+
+- Expiry: a sent quote whose `validUntil` date has passed reads as status `expired` (computed on read, persisted the next time an action touches it). accept or decline on it returns 409 `quote_expired`; revise still works and the new draft gets a fresh validity when the old date has passed.
+- Price book responses carry `fromTemplate: boolean` (response only, not part of `UpsertPriceBookItem`): true for items copied from the template until an admin changes materialCost, laborHours, or defaultMarginPct, so the PWA can show a "Placeholder price" badge.
+- Quote responses also carry `acceptedTier` and `declineReason` (response only).
+- Setup link: `MemberInvite.setupUrl` is `<WEB_ORIGIN>/setup#token=<token>`. For an email that already has an account, POST /auth/setup expects that account's current password (401 `invalid_credentials` otherwise) and never sets a new one; 409 `existing_account` when that account has no password (Google only). Re-inviting a still-invited member issues a new link and voids the old one.
+- Errors added: 409 `member_exists`, 409 `last_owner`, 409 `invite_pending` (PATCH status active on an invited member), 403 `member_disabled` on login, 400 `invalid_setup_token`, 400 `unknown_client`, 503 `template_unavailable`, 400 `unknown_finding` and `unknown_price_book_item` on PUT /quotes/:id.
+- Brand colors in preview HTML: CSS custom properties `--brand-primary`, `--brand-accent`, `--brand-on-primary` in a hashed `<style>` block; new classes `report-logo`, `report-footer-text`, `report-contact`, `report-powered-by`, and quote classes listed in `apps/api/src/quotes/render.ts`.

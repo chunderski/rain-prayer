@@ -20,12 +20,12 @@ describe("migrations and seed", () => {
   it("re-running migrations is a no-op", async () => {
     const r = await runMigrations(OWNER_URL);
     expect(r.applied).toEqual([]);
-    expect(r.skipped).toEqual(["001_reference.sql", "002_tenant.sql", "003_auth_functions.sql", "004_field.sql", "005_risk_report.sql"]);
+    expect(r.skipped).toEqual(["001_reference.sql", "002_tenant.sql", "003_auth_functions.sql", "004_field.sql", "005_risk_report.sql", "006_channel.sql"]);
   });
 
   it("re-running the seed is idempotent", async () => {
     const before = await counts();
-    await seed({ databaseUrl: OWNER_URL, dataDir: FIXTURES_DIR, strict: true, log: () => {} });
+    await seed({ databaseUrl: OWNER_URL, dataDir: FIXTURES_DIR, strict: true, priceBookTemplate: null, log: () => {} });
     expect(await counts()).toEqual(before);
   });
 

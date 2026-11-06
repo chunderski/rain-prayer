@@ -47,6 +47,7 @@ interface JobState {
   docBatches?: number;
   sheetId?: string;
   sheetTabs?: boolean;
+  logoFileId?: string;
 }
 
 export interface ExportQueueDeps {
@@ -237,6 +238,22 @@ export function createExportQueue(deps: ExportQueueDeps) {
               const fileId = await ensurePhoto(p);
               grants.push({ fileId, permissionId: await api.addAnyoneReader(fileId) });
               uris.set(img.photoId, driveDownloadUrl(fileId));
+            }
+          }
+          // Phase 4 branding: the logo is resolved the same way as photos.
+          if (doc.brand.logoKey) {
+            if (mode === "signed_url") {
+              uris.set(LOGO_IMAGE_ID, (await storage.signedUrl(doc.brand.logoKey, cfg.SIGNED_URL_TTL_SECONDS)).url);
+            } else {
+              if (!state.logoFileId) {
+                if (!state.photosFolderId) {
+                  state.photosFolderId = await db.withTenant(tenantId, (tx) => withFolder(tx, tenantId, api, [...segments, "Photos"]));
+                }
+                state.logoFileId = await api.upload("logo.png", "image/png", await storage.get(doc.brand.logoKey), state.photosFolderId);
+                await save();
+              }
+              grants.push({ fileId: state.logoFileId, permissionId: await api.addAnyoneReader(state.logoFileId) });
+              uris.set(LOGO_IMAGE_ID, driveDownloadUrl(state.logoFileId));
             }
           }
           const batches = chunkRequests(renderDocsRequests(doc, uris));

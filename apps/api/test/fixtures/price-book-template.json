@@ -1,0 +1,11 @@
+{
+  "templateVersion": "test",
+  "note": "Test fixture only; illustrative numbers.",
+  "items": [
+    { "sku": "FX-INV-1", "name": "Crypto inventory workshop", "description": "Fixture item", "category": "service", "unit": "lot",
+      "materialCost": 0, "laborHours": 8, "defaultMarginPct": 40, "controlIds": ["SC-PER-002"], "assetTypes": [], "tier": "any", "active": true },
+    { "sku": "FX-INV-2", "name": "Inventory tooling subscription", "description": "Fixture item", "category": "subscription", "unit": "year",
+      "materialCost": 1200, "laborHours": 2, "defaultMarginPct": 30, "controlIds": ["SC-PER-002"], "assetTypes": [], "tier": "best", "active": true },
+    { "sku": "", "name": "Invalid: empty sku", "category": "service", "unit": "lot", "materialCost": 0, "laborHours": 0, "defaultMarginPct": 0 }
+  ]
+}

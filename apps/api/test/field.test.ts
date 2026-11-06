@@ -158,7 +158,7 @@ describe("answers, assets, findings", () => {
     expect(res.json()).toMatchObject({ source: "assessor", suggestionId: null, status: "draft", controlIds: ["SC-PER-001"] });
     const list = (await app.inject({ url: `/assessments/${fx.assessmentId}/findings`, headers: auth(viewer) })).json();
     const f = list.find((x: { id: string }) => x.id === id);
-    expect(f.frameworks).toEqual([{ frameworkId: "test-fw", requirementCode: "TF-01", relationship: "satisfies" }]);
+    expect(f.frameworks).toEqual([expect.objectContaining({ frameworkId: "test-fw", requirementCode: "TF-01", relationship: "satisfies", shortName: "TESTFW" })]);
     expect((await app.inject({ method: "DELETE", url: `/assessments/${fx.assessmentId}/findings/${id}`, headers: auth(assessor) })).statusCode).toBe(204);
     const after = (await app.inject({ url: `/assessments/${fx.assessmentId}/findings`, headers: auth(viewer) })).json();
     expect(after.find((x: { id: string }) => x.id === id)).toBeUndefined();

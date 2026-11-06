@@ -27,6 +27,12 @@ import { fieldRoutes } from "./routes/field.js";
 import { photoRoutes } from "./routes/photos.js";
 import { syncRoutes } from "./routes/sync.js";
 import { createStorage, type ObjectStorage } from "./storage/index.js";
+import { DEFAULT_TEMPLATE_PATH } from "./quotes/pricebook.js";
+import { brandingRoutes } from "./routes/branding.js";
+import { memberRoutes } from "./routes/members.js";
+import { portalRoutes } from "./routes/portal.js";
+import { priceBookRoutes } from "./routes/pricebook.js";
+import { quoteRoutes } from "./routes/quotes.js";
 
 export interface AppDeps {
   db?: Db;
@@ -44,6 +50,13 @@ export interface AppDeps {
   text?: TextClient | null;
   /** Google Drive, Docs, and Sheets transport for exports; tests inject a fake. */
   googleApi?: { transport?: Transport; sleep?: (ms: number) => Promise<void> };
+  /** Price book template file; defaults to apps/api/data/price-book-template.json. */
+  priceBookTemplatePath?: string;
+}
+
+export interface RegisteredRoute {
+  method: string;
+  url: string;
 }
 
 declare module "fastify" {
@@ -51,6 +64,8 @@ declare module "fastify" {
     limiters: Limiters;
     storage: ObjectStorage;
     exportQueue: ExportQueue | null;
+    /** Every registered route (tests walk it to prove client_viewer is refused outside the portal). */
+    routeRegistry: RegisteredRoute[];
   }
 }
 
@@ -70,6 +85,12 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
       redact: ["req.headers.authorization", "req.headers.cookie", 'res.headers["set-cookie"]'],
       ...(cfg.NODE_ENV === "development" ? { transport: { target: "pino-pretty", options: { colorize: true } } } : {}),
     },
+  });
+
+  const routeRegistry: RegisteredRoute[] = [];
+  app.decorate("routeRegistry", routeRegistry);
+  app.addHook("onRoute", (r) => {
+    for (const m of [r.method].flat()) if (m !== "HEAD") routeRegistry.push({ method: m, url: r.url ?? r.path });
   });
 
   const db = deps.db ?? createDb(cfg.DATABASE_URL);
@@ -180,6 +201,12 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   await app.register(riskRoutes, fieldDeps);
   await app.register(reportRoutes, { ...fieldDeps, text: getText });
   await app.register(integrationRoutes, { ...fieldDeps, google, exportQueue });
+  const channelDeps = { ...fieldDeps, templatePath: deps.priceBookTemplatePath ?? DEFAULT_TEMPLATE_PATH };
+  await app.register(brandingRoutes, fieldDeps);
+  await app.register(memberRoutes, fieldDeps);
+  await app.register(priceBookRoutes, channelDeps);
+  await app.register(quoteRoutes, channelDeps);
+  await app.register(portalRoutes, channelDeps);
   return app;
 }
 

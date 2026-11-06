@@ -94,3 +94,9 @@ export async function processLogo(input: Buffer): Promise<{ png: Buffer; width: 
     throw new AppError(415, "unsupported_media", "The file is not a decodable PNG or JPEG image");
   }
 }
+
+/** The brand as the report, quote, and portal renderers use it. */
+export const reportBrandOf = (b: StoredBranding) => ({
+  displayName: b.displayName, primaryColor: b.primaryColor, accentColor: b.accentColor, footer: b.reportFooter,
+  contact: contactLine(b), poweredBy: b.poweredBy, logoKey: b.logoKey,
+});

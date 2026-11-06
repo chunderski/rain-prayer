@@ -8,7 +8,7 @@
  * starts at L + 4 + r * (2 * columns + 1) + 2 * c. Cells are filled last to first so earlier indexes hold.
  * Text is inserted literally (no markup), so hostile finding text cannot change document structure.
  */
-import type { Block, ReportDoc } from "./model.js";
+import { LOGO_IMAGE_ID, POWERED_BY, type Block, type ReportDoc } from "./model.js";
 
 export type DocsRequest = Record<string, unknown>;
 /** Image URI by photo id: a URL Google can fetch once at insertion time (see exports.ts). */
@@ -74,12 +74,33 @@ function blockRequests(b: Block, uris: DocImageUris): DocsRequest[] {
   }
 }
 
+const rgb = (hex: string) => {
+  const m = /^#([0-9a-fA-F]{2})([0-9a-fA-F]{2})([0-9a-fA-F]{2})$/.exec(hex);
+  if (!m) return null;
+  return { red: parseInt(m[1]!, 16) / 255, green: parseInt(m[2]!, 16) / 255, blue: parseInt(m[3]!, 16) / 255 };
+};
+
+/** A paragraph whose text is set in a brand color (validated #RRGGBB; plain when invalid). */
+function coloredParagraph(text: string, style: Named, hex: string): DocsRequest[] {
+  const reqs = paragraph(text, style);
+  const color = rgb(hex);
+  const len = clean(text).length;
+  if (!color || !len) return reqs;
+  return [...reqs, { updateTextStyle: { range: { startIndex: 1, endIndex: 1 + len }, textStyle: { foregroundColor: { color: { rgbColor: color } } }, fields: "foregroundColor" } }];
+}
+
 export function renderDocsRequests(doc: ReportDoc, uris: DocImageUris): DocsRequest[] {
+  const brand = doc.brand;
+  const logo = uris.get(LOGO_IMAGE_ID);
   const blocks: { req: DocsRequest[] }[] = [
-    { req: paragraph(doc.title, "TITLE") },
+    ...(logo ? [{ req: [...paragraph("", "NORMAL_TEXT"), { insertInlineImage: { location: { index: 1 }, uri: logo, objectSize: { height: { magnitude: 48, unit: "PT" } } } }] }] : []),
+    { req: coloredParagraph(doc.title, "TITLE", brand.primaryColor) },
     { req: paragraph(doc.subtitle, "SUBTITLE") },
-    { req: paragraph(doc.brandName, "NORMAL_TEXT") },
+    { req: coloredParagraph(doc.brandName, "NORMAL_TEXT", brand.primaryColor) },
     ...doc.blocks.map((b) => ({ req: blockRequests(b, uris) })),
+    ...(brand.footer ? [{ req: paragraph(brand.footer, "NORMAL_TEXT") }] : []),
+    ...(brand.contact ? [{ req: paragraph(brand.contact, "NORMAL_TEXT") }] : []),
+    ...(brand.poweredBy ? [{ req: paragraph(POWERED_BY, "NORMAL_TEXT") }] : []),
   ];
   return blocks.reverse().flatMap((b) => b.req);
 }

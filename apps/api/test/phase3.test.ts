@@ -176,7 +176,10 @@ describe("report preview and narrative", () => {
     expect(html).not.toContain("DRAFT-FINDING-NOT-CONFIRMED");
     expect(html).toContain("pending expert review");
     expect(html).toMatch(/<img src="http:\/\/api\.test\/files\/[A-Za-z0-9_.-]+"/);
-    expect(html).not.toMatch(/<style|style=/i);
+    // Phase 4: one <style> block holding only the validated brand custom properties, allowed by its CSP hash.
+    expect(html).not.toMatch(/style=/i);
+    expect(html.match(/<style>/g)).toHaveLength(1);
+    expect(html).toMatch(/<style>:root\{--brand-primary:#[0-9a-f]{6};--brand-accent:#[0-9a-f]{6};--brand-on-primary:#ffffff\}<\/style>/);
     expect(html).toContain('<link rel="stylesheet" href="http://localhost:5173/report-preview.css">');
     for (const cls of ["report-title", "report-section", "risk-table", "class=\"finding severity-high\"", "finding-photo", "notice", "level-"]) expect(html, cls).toContain(cls);
     const csp = String(res.headers["content-security-policy"]);

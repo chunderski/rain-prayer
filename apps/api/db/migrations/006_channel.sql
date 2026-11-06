@@ -71,6 +71,8 @@ CREATE TABLE price_book_item (
   asset_types         text[] NOT NULL DEFAULT '{}' CHECK (cardinality(asset_types) <= 10),
   tier                text NOT NULL DEFAULT 'any' CHECK (tier IN ('good', 'better', 'best', 'any')),
   active              boolean NOT NULL DEFAULT true,
+  -- Imported from the illustrative template; cleared when an admin edits the prices (placeholder badge).
+  from_template       boolean NOT NULL DEFAULT false,
   created_by          uuid,
   created_at          timestamptz NOT NULL DEFAULT now(),
   updated_by          uuid,

@@ -261,6 +261,11 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
    * (password, Google link, or another active workspace) proves its current password instead, so an
    * invite can never take over an account. The token is single use and expires after 72 hours.
    */
+  const isLocked = async (email: string) => {
+    const u = await findUser(db, email);
+    return !!(u?.locked_until && new Date(u.locked_until) > new Date());
+  };
+
   app.post("/auth/setup", { config: strict }, async (req, reply) => {
     const body = parse(CompleteSetup, req.body);
     const hash = sha256(body.token);
@@ -279,6 +284,11 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
     } else if (!t.password_hash) {
       await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "existing_account_without_password" });
       throw new AppError(409, "existing_account", "This email already has an account that signs in another way; sign in with it, then ask your administrator to add you again");
+    } else if (await isLocked(t.email)) {
+      // QA P4-1: the setup link must honor the sign-in lockout, or its holder gets an unlimited password oracle.
+      await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "locked" });
+      await verifyPassword(null, body.password); // equalize timing
+      throw new AppError(429, "account_locked", "Too many failed sign-in attempts. Try again later.");
     } else if (!(await verifyPassword(t.password_hash, body.password))) {
       await db.query("SELECT auth_register_login_failure($1, $2, $3)", [t.user_id, cfg.LOGIN_MAX_FAILURES, cfg.LOGIN_LOCKOUT_SECONDS]);
       await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "bad_existing_password" });

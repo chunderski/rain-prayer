@@ -7,12 +7,16 @@ import { loadLibraryLenient, seed } from "../src/db/seed.js";
 import { OWNER_URL, withClient } from "./helpers.js";
 import { FIXTURES_DIR } from "./setup-db.js";
 
+const SEEDED_EMAILS = ["owner@acme.test", "assessor@acme.test", "viewer@acme.test", "owner@bluefield.test", "viewer@client.acme.test", "viewer@client.bluefield.test"];
+
 const counts = () =>
   withClient(OWNER_URL, async (c) => {
     const out: Record<string, number> = {};
-    for (const t of ["framework_version", "requirement", "shared_control", "question", "crosswalk", "app_user"]) {
+    for (const t of ["framework_version", "requirement", "shared_control", "question", "crosswalk"]) {
       out[t] = (await c.query(`SELECT count(*)::int AS n FROM ${t}`)).rows[0].n;
     }
+    // Only the seeded accounts: other test files create users in the same database concurrently (QA R4-6).
+    out.seeded_users = (await c.query("SELECT count(*)::int AS n FROM app_user WHERE email = ANY($1)", [SEEDED_EMAILS])).rows[0].n;
     return out;
   });
 

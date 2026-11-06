@@ -98,6 +98,8 @@ describe("branding", () => {
     expect(low.statusCode).toBe(422);
     expect(errCode(low)).toBe("contrast_too_low");
     expect((await call(owner, "PUT", "/branding", { ...base, primaryColor: "#777777" })).statusCode).toBe(422); // 4.48:1, just under
+    // QA P4-2: only http(s) websites are storable.
+    for (const website of ["javascript:alert(1)", "data:text/html,<script>alert(1)</script>"]) expect((await call(owner, "PUT", "/branding", { ...base, website })).statusCode).toBe(400);
     expect((await call(assessor, "PUT", "/branding", base)).statusCode).toBe(403);
     const gated = await call(blueOwner, "PUT", "/branding", { ...base, showPoweredBy: false });
     expect(gated.statusCode).toBe(403);
@@ -211,6 +213,18 @@ describe("members and setup links", () => {
     await login(app, "p4-existing@acme.test", "acme-integrators"); // original password still works
   });
 
+  it("QA P4-1: a setup link for an existing account honors the sign-in lockout", async () => {
+    await createUser("p4-lock@acme.test", [{ slug: "acme-integrators", role: "viewer" }]);
+    const inv = MemberInvite.parse(ok(await call(blueOwner, "POST", "/members", { email: "p4-lock@acme.test", name: "Lock", role: "viewer" }), 201));
+    const token = inv.setupUrl.split("#token=")[1];
+    for (let i = 0; i < 5; i++) expect((await app.inject({ method: "POST", url: "/auth/setup", payload: { token, password: `Wrong-guess-${i}-xyz` } })).statusCode).toBe(401);
+    // Locked now: even the right password is refused, through the link and through sign-in.
+    const r = await app.inject({ method: "POST", url: "/auth/setup", payload: { token, password: DEV_PASSWORD } });
+    expect(r.statusCode).toBe(429);
+    expect(errCode(r)).toBe("account_locked");
+    expect((await app.inject({ method: "POST", url: "/auth/login", payload: { email: "p4-lock@acme.test", password: DEV_PASSWORD } })).statusCode).toBe(429);
+  });
+
   it("last active owner cannot be demoted or disabled; admins cannot change owners", async () => {
     const members = ok(await call(blueOwner, "GET", "/members"));
     const self = members.find((m: Member) => m.email === "owner@bluefield.test").userId;
@@ -249,6 +263,22 @@ describe("client_viewer is refused outside the portal", () => {
       const url = r.url.replace(/:[A-Za-z]+/g, () => randomUUID());
       const res = await app.inject({ method: r.method as "GET", url, headers: auth(cv), ...(["POST", "PUT", "PATCH"].includes(r.method) ? { payload: {} } : {}) });
       if (![401, 403, 404].includes(res.statusCode)) failures.push(`${r.method} ${r.url} -> ${res.statusCode}`);
+    }
+    expect(failures).toEqual([]);
+  });
+
+  it("QA P4: the walk with the viewer's own real ids is refused by role (403), never masked by a 404", async () => {
+    // Random UUIDs let a 404 hide a missing role check; real ids of the client's own data cannot.
+    const routes = app.routeRegistry.filter((r) => r.method !== "OPTIONS" && !r.url.startsWith("/portal/") && !r.url.startsWith("/auth/") && !PUBLIC.has(r.url) && !(r.method === "GET" && r.url === "/branding") && !(r.method === "POST" && r.url === "/quotes/:id/actions"));
+    const failures: string[] = [];
+    for (const r of routes) {
+      for (const id of [aDone, northwind, siteN]) {
+        const url = r.url.replace(/:[A-Za-z]+/g, () => id);
+        for (const qs of ["", `?clientId=${northwind}&assessmentId=${aDone}&siteId=${siteN}`]) {
+          const res = await app.inject({ method: r.method as "GET", url: url + qs, headers: auth(cv), ...(["POST", "PUT", "PATCH"].includes(r.method) ? { payload: {} } : {}) });
+          if (![401, 403].includes(res.statusCode)) failures.push(`${r.method} ${url}${qs} -> ${res.statusCode}`);
+        }
+      }
     }
     expect(failures).toEqual([]);
   });

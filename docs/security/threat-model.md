@@ -159,3 +159,28 @@ Primary threat actors: an external attacker on the internet; a user of tenant A 
 | T | Race: write committed while another request completes the assessment | Status read without row lock | open (low) | recommendation R3-2 |
 | S | Offline cached work opened by someone else | PBKDF2-SHA256 310000 iterations verifier in IndexedDB; counter written before check; wipe on 5 failures | mitigated | `apps/web/src/auth/pin.ts`, D-064 |
 | I | Cached data read from disk or devtools | PIN is a gate, not encryption of IndexedDB | accepted | D-064; recommendation R3-3 |
+
+## Channel: members, setup links, client portal, branding, quotes (Phase 4)
+
+| STRIDE | Threat | Control | Status | Evidence |
+|---|---|---|---|---|
+| S | Setup link guessed or replayed | 256 bit random token, only SHA-256 stored, 72 h expiry, single use (all links of the membership burned on use), token in URL fragment | mitigated | `routes/members.ts`, `auth_complete_setup` in `006_channel.sql`, D-082, D-094 |
+| S | Invite of an existing email takes over the account | Not claimable when the account has a password, Google link, or an active membership elsewhere; then the current password is required | mitigated | `phase4.test.ts` "existing account" |
+| S | Setup link used as an unlimited password oracle for an existing account | Lockout checked before verify; failures count toward lockout | mitigated (fixed in review) | QA P4-1 test in `phase4.test.ts` |
+| S | Pre-claim: admin of tenant B invites an email still pending in tenant A and sets its global password first | Only active memberships block claiming | open (medium) | recommendation R4-1 |
+| I | Invite reveals that an email has an account and its stored name | Global identities by design; response echoes the existing name | accepted (low), see R4-2 | `member_invite_user` |
+| E | Admin creates or promotes owners or admins, or changes an admin | Owner-only for privileged roles, both target and current role | mitigated | `phase4.test.ts` |
+| D | Last owner demoted or disabled, also under concurrency | Owner rows locked FOR UPDATE, 409 `last_owner` | mitigated | `phase4.test.ts` |
+| S | Disabled member keeps a session | Per-request membership check; refresh tokens of that tenant revoked; open setup links burned | mitigated | `phase4.test.ts` "disabled members" |
+| E | client_viewer reaches staff routes | Ranks below viewer; route walk with random and real ids, with query variants, demands 401 or 403 | mitigated | `phase4.test.ts` route walks (QA P4 real-id walk added) |
+| I | client_viewer of client A sees client B in the same tenant | `clientScope` forces the membership client on list, detail, report, quotes, preview, and accept or decline | mitigated | `phase4.test.ts`, `isolation-phase4.test.ts` |
+| I | Cost or margin reaches a client | `clientQuoteView` for portal JSON and client actions; quote HTML prints prices only; portfolio and CSV are viewer and above | mitigated | D-096; `phase4.test.ts` key scan |
+| T | Stored XSS through branding text or website | Escaped text everywhere, never an href; website limited to http(s) | mitigated | `report/html.ts`, `quotes/render.ts`; QA P4-2 |
+| T | Malicious logo (SVG, polyglot, bomb) | Declared and sniffed type must be PNG or JPEG; 2 MB; 40 MP decode limit; re-encode to PNG, metadata dropped | mitigated | `lib/branding.ts`, `phase4.test.ts` |
+| E | Plan gate on "Powered by" bypassed | Checked at write and recomputed at read (`poweredBy`) | mitigated | `lib/branding.ts` |
+| T | Client sends forged totals or prices | Server recomputes totals with shared `quoteTotals`; bounds on every number; margin below minimum goes to owner approval | mitigated | `routes/quotes.ts` |
+| T | Lines reference another tenant's price book or another assessment's findings | RLS-scoped lookups, 400 on unknown ids | mitigated | `isolation-phase4.test.ts` |
+| T | Edits after submit; out-of-order transitions | Draft-only PUT under row lock; explicit transition table | mitigated | `phase4.test.ts` |
+| T | CSV formula injection | Leading `= + - @ tab CR` prefixed with a quote | mitigated | `phase4.test.ts` |
+| T | Duplicate quote numbers under concurrency | Per-tenant advisory transaction lock | mitigated | `quotes/service.ts` |
+| R | An owner submits and approves their own below-margin quote | Allowed (owners hold final authority); audited with actor | accepted | R4-4 |

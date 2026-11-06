@@ -25,7 +25,8 @@ export const Branding = z.object({
   reportFooter: z.string().max(500).default(""),
   contactEmail: z.email().max(254).nullable().default(null),
   contactPhone: z.string().max(40).nullable().default(null),
-  website: z.url().max(200).nullable().default(null),
+  /** http or https only (QA P4-2): a javascript: or data: URL must never be storable, even though renderers print it as text. */
+  website: z.url({ protocol: /^https?$/ }).max(200).nullable().default(null),
   /** "Powered by Sentinel Assess" on reports and portal. Only the partner plan may turn it off. */
   showPoweredBy: z.boolean().default(true),
 });

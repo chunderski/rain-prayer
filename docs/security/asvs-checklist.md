@@ -1,6 +1,6 @@
 # OWASP ASVS 4.0.3 checklist (Level 2 target)
 
-Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 3). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
+Owner: qa-security-reviewer. Last reviewed: 2026-11-06 (Phase 4). Status: **met**, **partial**, **not yet**, **N/A**. Evidence paths are relative to the repository root. Requirements are summarized, not quoted; see the ASVS 4.0.3 text for exact wording. Items marked "not yet" are not Phase 1 blockers unless `docs/security/phase1-review.md` says so.
 
 ## V2 Authentication
 
@@ -166,3 +166,22 @@ Owner: qa-security-reviewer. Last reviewed: 2026-11-05 (Phase 3). Status: **met*
 | 14.5.1 | Only allowed HTTP methods | met | |
 | 14.5.3 | CORS origin allow list | met | Exact `WEB_ORIGIN` match, `apps/api/test/routes.test.ts`, live preflight from a foreign origin gets no `Access-Control-Allow-Origin` |
 | (config) | API refuses a role that can bypass RLS; placeholder secrets refused | met | `assertAppRoleSafe`, `apps/api/src/config.ts` |
+
+## Phase 4 additions (channel)
+
+| ID | Requirement (summary) | Status | Evidence or gap |
+|---|---|---|---|
+| 2.1.1 | Passwords at least 12 characters | met | Setup sets the first password through `CompleteSetup` (shared schema) |
+| 2.2.1 | Anti-automation and lockout | met | Lockout now also enforced on `/auth/setup` for existing accounts (QA P4-1); strict rate limit on the route |
+| 2.3.1 | Initial secrets random, short lived, single use | met | 32 byte setup token, SHA-256 at rest, 72 h, single use; fragment delivery (D-082, D-094) |
+| 2.5.x / 3.x | Account pre-hijacking through pending invites | partial | R4-1: an invite elsewhere does not block claiming |
+| 3.3.1 | Logout and invalidation on disable | met | Refresh tokens revoked, membership checked per request |
+| 4.1.3 | Least privilege | met | client_viewer below viewer; owner-only privileged role changes; last-owner rule |
+| 4.2.1 | Protection against IDOR | met | Real-id and random-id route walks; client scope on every portal route |
+| 4.3.x | Sensitive business data restricted | met | Prices-only client view (D-096) |
+| 5.1.3 | Input validation, URL scheme allow list | met | Branding website http(s) only (QA P4-2) |
+| 5.2.x | Output encoding in report, quote HTML, PWA | met | `escapeHtml`, React text nodes, CSP `default-src 'none'` |
+| 5.3.x | CSV injection | met | `csvCell` |
+| 11.1.x | Business logic sequence and limits | met | Quote state machine, draft-only edits, server totals, advisory-locked numbering |
+| 12.1.1 / 12.2.1 | Upload size and content checks (logo) | met | 2 MB, magic bytes, decode limit, re-encode; SVG refused |
+| 1.x (identity) | Account enumeration via invites | partial | Accepted by design for global identities; R4-2 |

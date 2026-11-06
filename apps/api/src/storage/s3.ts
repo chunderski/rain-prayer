@@ -2,7 +2,7 @@
 import { DeleteObjectCommand, GetObjectCommand, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type { Config } from "../config.js";
-import { assertKey, type ObjectStorage } from "./index.js";
+import { assertKey, contentTypeOfKey, type ObjectStorage } from "./index.js";
 
 export function createS3Storage(cfg: Config): ObjectStorage {
   const make = (endpoint: string) =>
@@ -36,7 +36,7 @@ export function createS3Storage(cfg: Config): ObjectStorage {
       assertKey(key);
       const url = await getSignedUrl(
         presigner,
-        new GetObjectCommand({ Bucket, Key: key, ResponseContentType: "image/jpeg", ResponseContentDisposition: "inline" }),
+        new GetObjectCommand({ Bucket, Key: key, ResponseContentType: contentTypeOfKey(key), ResponseContentDisposition: "inline" }),
         { expiresIn: ttlSeconds },
       );
       return { url, expiresAt: new Date(Date.now() + ttlSeconds * 1000).toISOString() };

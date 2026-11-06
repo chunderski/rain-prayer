@@ -69,6 +69,8 @@ export function newRefreshToken() {
 export interface AuthContext extends SessionInfo {
   userId: string;
   tenantId: string;
+  /** Set for client_viewer only: the one client whose portal data this login may read (D-081). */
+  clientId: string | null;
 }
 
 declare module "fastify" {
@@ -77,19 +79,32 @@ declare module "fastify" {
   }
 }
 
-/** Loads the caller's current membership inside the tenant (so revoked access applies immediately). */
+/**
+ * Loads the caller's current membership inside the tenant (so revoked access applies immediately).
+ * Only active memberships count: invited and disabled members get no session (Phase 4).
+ */
 export async function loadSession(tx: Tx, userId: string): Promise<SessionInfo | null> {
-  const { rows } = await tx.query<{ id: string; email: string; name: string; role: Role; tid: string; slug: string; tname: string }>(
-    `SELECT u.id, u.email, u.name, m.role, t.id AS tid, t.slug, t.name AS tname
+  const full = await loadSessionFull(tx, userId);
+  if (!full) return null;
+  const { clientId: _c, ...session } = full;
+  return session;
+}
+
+export async function loadSessionFull(tx: Tx, userId: string): Promise<(SessionInfo & { clientId: string | null }) | null> {
+  const { rows } = await tx.query<{ id: string; email: string; name: string; role: Role; tid: string; slug: string; tname: string; client_id: string | null }>(
+    `SELECT u.id, u.email, u.name, m.role, m.client_id, t.id AS tid, t.slug, t.name AS tname
        FROM membership m
        JOIN app_user u ON u.id = m.user_id
        JOIN tenant t ON t.id = m.tenant_id
-      WHERE m.user_id = $1 AND u.disabled_at IS NULL`,
+      WHERE m.user_id = $1 AND u.disabled_at IS NULL AND m.status = 'active'`,
     [userId],
   );
   const r = rows[0];
   if (!r) return null;
-  return { user: { id: r.id, email: r.email, name: r.name }, tenant: { id: r.tid, slug: r.slug, name: r.tname }, role: r.role };
+  return {
+    user: { id: r.id, email: r.email, name: r.name }, tenant: { id: r.tid, slug: r.slug, name: r.tname }, role: r.role,
+    clientId: r.role === "client_viewer" ? r.client_id : null,
+  };
 }
 
 /** Inserts a refresh token row (in the tenant transaction) and returns the opaque token. */
@@ -132,10 +147,11 @@ export function requireRole(cfg: Config, db: Db, min: Role) {
     const m = header?.match(/^Bearer ([A-Za-z0-9._~+/=-]+)$/);
     if (!m?.[1]) throw new AppError(401, "unauthorized", "Missing bearer token");
     const claims = await verifyAccessToken(cfg, m[1]);
-    const session = await db.withTenant(claims.tenantId, (tx) => loadSession(tx, claims.userId));
-    if (!session) throw new AppError(401, "unauthorized", "Session is no longer valid");
+    const full = await db.withTenant(claims.tenantId, (tx) => loadSessionFull(tx, claims.userId));
+    if (!full) throw new AppError(401, "unauthorized", "Session is no longer valid");
+    const { clientId, ...session } = full;
     // Set before the role check so a 403 can be audited against the caller (QA R-6).
-    req.auth = { ...session, userId: session.user.id, tenantId: session.tenant.id };
+    req.auth = { ...session, userId: session.user.id, tenantId: session.tenant.id, clientId };
     if (!hasRole(session.role, min)) throw new AppError(403, "forbidden", `Requires role ${min} or higher`);
   };
 }

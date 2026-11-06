@@ -24,7 +24,7 @@ import { audit } from "../lib/audit.js";
 import type { AuthContext } from "../lib/auth.js";
 import { loadReportData, storedPhotos, type StoredPhoto } from "../report/data.js";
 import { chunkRequests, renderDocsRequests } from "../report/gdocs.js";
-import { buildReportDoc, docImages, type ReportData } from "../report/model.js";
+import { buildReportDoc, docImages, LOGO_IMAGE_ID, requirementLabel, type ReportData } from "../report/model.js";
 import type { RiskService } from "../risk/service.js";
 import type { ObjectStorage } from "../storage/index.js";
 import {
@@ -89,7 +89,7 @@ export function sheetTabs(data: ReportData, risk: RiskResult | null, templateVer
     ["Title", "Severity", "Status", "Area", "Controls", "Framework requirements", "Description", "Recommendation"],
     ...data.findings.map((f) => [
       f.title, f.severity, f.status, cellText(f.areaName), f.controlIds.join(", "),
-      f.frameworks.map((x) => `${x.frameworkId} ${x.requirementCode}`).join(", "), f.description, cellText(f.recommendation),
+      f.frameworks.map(requirementLabel).join("; "), f.description, cellText(f.recommendation),
     ]),
   ];
   const scores = [

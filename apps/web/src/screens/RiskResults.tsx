@@ -3,6 +3,7 @@
  * before and after visual, control effectiveness, confidence, the engine's explanation sentences,
  * and "How was this calculated?" listing the contributing controls and findings.
  */
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import type { RiskResult, ScenarioResult } from "@sentinel/shared";
 import { useApi } from "../auth/AuthContext";
@@ -15,18 +16,50 @@ import { Banner, ButtonLink, Card, Chip, EmptyState, Loading, PageHeader, catego
 
 const WEIGHT_LABEL: Record<number, string> = { 1: "low weight", 2: "medium weight", 3: "high weight" };
 
-export function ScenarioCard({ s, findingTitle, assessmentId }: { s: ScenarioResult; findingTitle: (id: string) => string; assessmentId: string }) {
+/** One plain sentence for the collapsed card: what the controls did to the score. */
+export function scenarioReason(s: ScenarioResult): string {
+  return `Controls are ${formatPercent(s.controlEffectiveness.value)} effective, taking ${formatScore(s.inherent.score)} down to ${formatScore(s.residual.score)}.`;
+}
+
+/**
+ * Collapsed by default (tour fix): name, before and after levels, one-line reason, and confidence.
+ * The heading button expands the full explanation and contributors.
+ */
+export function ScenarioCard({ s, findingTitle, assessmentId, defaultOpen = false }: { s: ScenarioResult; findingTitle: (id: string) => string; assessmentId: string; defaultOpen?: boolean }) {
+  const [open, setOpen] = useState(defaultOpen);
   const hid = `res-${s.scenarioId}`;
+  const bodyId = `res-body-${s.scenarioId}`;
   return (
     <article aria-labelledby={hid} className="rounded-xl border-2 border-line bg-surface p-4" data-testid={`scenario-${s.scenarioId}`}>
-      <div className="flex flex-wrap items-start justify-between gap-2">
-        <h3 id={hid} className="text-xl font-bold">
-          {s.name}
-        </h3>
-        <div className="flex flex-wrap gap-2">
-          <Chip tone={categoryTone(s.category)}>{CATEGORY_LABEL[s.category]}</Chip>
-          <Chip tone={s.confidence === "low" ? "warn" : "neutral"}>{CONFIDENCE_LABEL[s.confidence]}</Chip>
-        </div>
+      <h3 className="text-xl font-bold">
+        <button
+          type="button"
+          id={hid}
+          aria-expanded={open}
+          aria-controls={bodyId}
+          onClick={() => setOpen((o) => !o)}
+          className="flex min-h-12 w-full items-center justify-between gap-2 text-left"
+        >
+          <span>{s.name}</span>
+          <span aria-hidden="true" className="shrink-0 text-base font-semibold text-primary underline underline-offset-4">
+            {open ? "Hide details ▴" : "Details ▾"}
+          </span>
+        </button>
+      </h3>
+      <div className="mt-1 flex flex-wrap items-center gap-2" data-testid="scenario-summary">
+        <span className="text-base text-muted">Before</span>
+        <LevelBadge level={s.inherent.level} score={s.inherent.score} />
+        <span aria-hidden="true">→</span>
+        <span className="text-base text-muted">after</span>
+        <LevelBadge level={s.residual.level} score={s.residual.score} />
+        <Chip tone={s.confidence === "low" ? "warn" : "neutral"}>{CONFIDENCE_LABEL[s.confidence]}</Chip>
+      </div>
+      <p className="mt-1 text-base">{scenarioReason(s)}</p>
+      <div id={bodyId} hidden={!open}>
+      {open && (
+      <>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <Chip tone={categoryTone(s.category)}>{CATEGORY_LABEL[s.category]}</Chip>
       </div>
       <div className="mt-3">
         <BeforeAfter inherent={s.inherent} residual={s.residual} />
@@ -81,6 +114,9 @@ export function ScenarioCard({ s, findingTitle, assessmentId }: { s: ScenarioRes
           </ul>
         </div>
       </details>
+      </>
+      )}
+      </div>
     </article>
   );
 }

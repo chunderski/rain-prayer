@@ -9,7 +9,8 @@ import { audit } from "../lib/audit.js";
 import { AppError, parse } from "../lib/errors.js";
 import { loadReportData } from "../report/data.js";
 import { renderHtml } from "../report/html.js";
-import { buildReportDoc, docImages } from "../report/model.js";
+import { buildReportDoc } from "../report/model.js";
+import { sendHtml, signedDocUrls } from "../report/send.js";
 import { inField, type FieldRouteDeps } from "./deps.js";
 
 const IdParams = z.object({ id: Uuid });
@@ -31,18 +32,9 @@ export async function reportRoutes(app: FastifyInstance, deps: ReportRouteDeps) 
   app.get("/assessments/:id/report/preview", role("viewer"), async (req, reply) => {
     const { id } = parse(IdParams, req.params);
     const doc = await inField(db, req, async (ctx) => buildReportDoc(await loadReportData(ctx, id, risk), "preview"));
-    const urls = new Map<string, string>();
-    for (const img of docImages(doc)) {
-      if (!urls.has(img.photoId)) urls.set(img.photoId, (await storage.signedUrl(img.storageKey, cfg.SIGNED_URL_TTL_SECONDS)).url);
-    }
+    const urls = await signedDocUrls(cfg, storage, doc);
     const { html, csp } = renderHtml(doc, urls, { webOrigin: cfg.WEB_ORIGIN, frameAncestors: [cfg.WEB_ORIGIN, ...cfg.embedOrigins] });
-    return reply
-      .header("content-type", "text/html; charset=utf-8")
-      .header("content-security-policy", csp)
-      .header("referrer-policy", "no-referrer")
-      .header("x-content-type-options", "nosniff")
-      .header("x-report-template", doc.templateVersion)
-      .send(html);
+    return sendHtml(reply, html, csp, { "x-report-template": doc.templateVersion });
   });
 
   app.get("/assessments/:id/narrative", role("viewer"), async (req) => {

@@ -192,6 +192,13 @@ export function createApiClient(options: ApiClientOptions = {}) {
       return data.session;
     },
 
+    /** POST /auth/setup: set a password from a one-time setup link; signs in like login. */
+    async completeSetup(body: { token: string; password: string }): Promise<SessionInfo> {
+      const data = await request("/auth/setup", { method: "POST", body, schema: TokenResponse, auth: false });
+      setSession(data);
+      return data.session;
+    },
+
     /** Restore a session from the refresh cookie at startup. Returns null when there is none. */
     async restore(): Promise<SessionInfo | null> {
       const ok = await refresh().catch(() => false);

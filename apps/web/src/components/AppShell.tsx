@@ -2,7 +2,8 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { useOnline } from "../offline/useOnline";
 import { summarize, useSync } from "../sync/SyncContext";
-import { Banner, Button, Logo } from "./ui";
+import { Banner, Button } from "./ui";
+import { BrandMark, useBrandName } from "../branding/BrandingContext";
 import { pendingLocalCount } from "../offline/db";
 import { PinSetupPrompt } from "../auth/PinScreens";
 
@@ -75,6 +76,7 @@ export function AppShell() {
   const { session, signOut, offlineSession } = useAuth();
   const { pathname } = useLocation();
   const focus = FOCUS_ROUTES.some((r) => r.test(pathname));
+  const brandName = useBrandName();
   return (
     <div className={"flex min-h-dvh flex-col bg-bg text-lg text-ink sm:pb-0 " + (focus ? "pb-4" : "pb-24")}>
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:p-3">
@@ -83,9 +85,9 @@ export function AppShell() {
       <header className="border-b-2 border-line bg-surface">
         <div className="mx-auto flex max-w-5xl items-center justify-between gap-3 px-4 py-2">
           <div className="flex min-w-0 items-center gap-2">
-            <Logo size={36} />
+            <BrandMark size={36} />
             <div className="min-w-0">
-              <p className="font-bold leading-tight">Sentinel Assess</p>
+              <p className="font-bold leading-tight" data-testid="brand-name">{brandName}</p>
               {session && <p className="truncate text-base text-muted">{session.tenant.name}</p>}
             </div>
           </div>

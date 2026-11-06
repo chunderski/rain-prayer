@@ -32,9 +32,12 @@ const STATUS_NEXT: Record<string, string> = { draft: "in_progress", in_progress:
 export async function findingsWithFrameworks(ctx: FieldCtx, assessmentId: string) {
   const findings = await listLive(ctx, "finding", "assessment_id", assessmentId);
   const scope = await assessmentScope(ctx, assessmentId);
-  const { rows } = await ctx.tx.query<{ c: string; frameworkId: string; requirementCode: string; relationship: string }>(
-    `SELECT cw.shared_control_id AS c, cw.framework_id AS "frameworkId", cw.requirement_code AS "requirementCode", cw.relationship
+  const { rows } = await ctx.tx.query<{ c: string; frameworkId: string; requirementCode: string; relationship: string; shortName: string; title: string }>(
+    `SELECT cw.shared_control_id AS c, cw.framework_id AS "frameworkId", cw.requirement_code AS "requirementCode", cw.relationship,
+            fv.short_name AS "shortName", r.title
        FROM crosswalk cw JOIN assessment_framework af ON af.framework_id = cw.framework_id AND af.version = cw.version
+       JOIN framework_version fv ON fv.framework_id = cw.framework_id AND fv.version = cw.version
+       JOIN requirement r ON r.framework_id = cw.framework_id AND r.version = cw.version AND r.code = cw.requirement_code
       WHERE af.assessment_id = $1 AND cw.library_version = $2
       ORDER BY cw.framework_id, cw.requirement_code`,
     [assessmentId, scope.libraryVersion],
@@ -50,7 +53,7 @@ export async function findingsWithFrameworks(ctx: FieldCtx, assessmentId: string
         seen.add(k);
         return true;
       })
-      .map(({ frameworkId, requirementCode, relationship }) => ({ frameworkId, requirementCode, relationship }));
+      .map(({ frameworkId, requirementCode, relationship, shortName, title }) => ({ frameworkId, requirementCode, relationship, shortName, title }));
     return { ...f, frameworks };
   });
 }
@@ -109,15 +112,7 @@ export async function fieldRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
   });
 
   // ---------------------------------------------------------------- members and assignment
-  app.get("/members", role("admin"), async (req) =>
-    db.withTenant(authOf(req).tenantId, async (tx) => {
-      const { rows } = await tx.query(
-        `SELECT m.user_id AS "userId", u.email, u.name, m.role FROM membership m JOIN app_user u ON u.id = m.user_id
-          WHERE u.disabled_at IS NULL ORDER BY lower(u.name), u.id`,
-      );
-      return rows;
-    }),
-  );
+  // GET /members moved to routes/members.ts (Phase 4 shape).
 
   app.put("/assessments/:id/assessors", role("admin"), async (req) => {
     const { id } = parse(IdParams, req.params);
@@ -126,7 +121,7 @@ export async function fieldRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
     return inField(db, req, async (ctx) => {
       await assessmentScope(ctx, id);
       const m = await ctx.tx.query<{ user_id: string }>(
-        "SELECT user_id FROM membership WHERE user_id = ANY($1::uuid[]) AND role IN ('owner', 'admin', 'assessor')",
+        "SELECT user_id FROM membership WHERE user_id = ANY($1::uuid[]) AND role IN ('owner', 'admin', 'assessor') AND status = 'active'",
         [userIds],
       );
       const ok = new Set(m.rows.map((r) => r.user_id));
@@ -208,7 +203,7 @@ export async function fieldRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
            JOIN assessment_framework af ON af.framework_id = cw.framework_id AND af.version = cw.version
            JOIN framework_version fv ON fv.framework_id = cw.framework_id AND fv.version = cw.version
           WHERE af.assessment_id = $1 AND cw.library_version = $2
-          ORDER BY fv.short_name, cw.requirement_code`,
+          ORDER BY cw.framework_id, cw.requirement_code`,
         [id, lv],
       );
       const assessors = await ctx.tx.query(

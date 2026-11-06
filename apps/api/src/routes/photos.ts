@@ -141,18 +141,18 @@ export async function photoRoutes(app: FastifyInstance, deps: FieldRouteDeps) {
   });
 
   // Local driver only: the token is the whole grant (one object, until it expires).
-  const local = storage as { readByToken?: (t: string) => Promise<Buffer | null> };
+  const local = storage as { readByToken?: (t: string) => Promise<{ body: Buffer; contentType: string } | null> };
   if (storage.driver === "local" && local.readByToken) {
     const fileLimiter = createUserLimiter("file", cfg.DATA_RATE_LIMIT_MAX * 2, cfg.DATA_RATE_LIMIT_WINDOW_SECONDS * 1000);
     app.get("/files/:token", { preHandler: fileLimiter }, async (req, reply) => {
       const { token } = req.params as { token: string };
-      const body = typeof token === "string" && token.length <= 700 ? await local.readByToken!(token) : null;
-      if (!body) throw new AppError(404, "not_found", "File not found or link expired");
+      const file = typeof token === "string" && token.length <= 700 ? await local.readByToken!(token) : null;
+      if (!file) throw new AppError(404, "not_found", "File not found or link expired");
       return reply
-        .header("content-type", "image/jpeg")
+        .header("content-type", file.contentType)
         .header("content-disposition", "inline")
         .header("cross-origin-resource-policy", "cross-origin")
-        .send(body);
+        .send(file.body);
     });
   }
 }

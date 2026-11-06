@@ -2,6 +2,7 @@
 import type { FieldCtx } from "../field/context.js";
 import { assessmentScope } from "../field/context.js";
 import { AppError, notFound } from "../lib/errors.js";
+import { contactLine, loadBranding } from "../lib/branding.js";
 import type { RiskService } from "../risk/service.js";
 import { findingsWithFrameworks } from "../routes/field.js";
 import type { NarrativeSection, ReportData, ReportFinding, ReportImage } from "./model.js";
@@ -96,8 +97,13 @@ export async function loadReportData(ctx: FieldCtx, assessmentId: string, risk: 
     [assessmentId, scope.libraryVersion, [...scope.controls.keys()]],
   );
 
+  const b = await loadBranding(ctx.tx);
   return {
     tenantName: a.tenantName,
+    brand: {
+      displayName: b.displayName, primaryColor: b.primaryColor, accentColor: b.accentColor, footer: b.reportFooter,
+      contact: contactLine(b), poweredBy: b.poweredBy, logoKey: b.logoKey,
+    },
     assessment: {
       id: a.id, title: a.title, status: a.status, clientName: a.clientName, siteName: a.siteName, siteAddress: a.siteAddress,
       libraryVersion: a.libraryVersion, frameworks: a.frameworks,

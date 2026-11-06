@@ -97,6 +97,62 @@ function ScrollTable({ id, title, children }: { id: string; title: string; child
 const thSite = "min-w-36 border-b-2 border-l-2 border-line p-2 text-left align-bottom";
 const thRow = "sticky left-0 z-[1] min-w-40 border-b-2 border-line bg-surface p-2 text-left font-semibold";
 
+const siteLabel = (s: SiteComparison["sites"][number]) => `${s.siteName}${s.completedAt ? "" : " (open: live scores)"}`;
+
+/** Phones (tour fix): one card per scenario with a row per site instead of a wide table. */
+function StackedComparison({ c, scenarioIds, scenarioName }: { c: SiteComparison; scenarioIds: string[]; scenarioName: (id: string) => string }) {
+  const rows: { key: string; title: string; cell: (s: SiteComparison["sites"][number]) => ReactNode }[] = [
+    { key: "overall", title: "Overall", cell: (s) => (isUnscored(s) ? <NotScoredBadge /> : <LevelBadge level={s.overall.level} score={s.overall.residual} />) },
+    ...scenarioIds.map((sid) => ({
+      key: sid,
+      title: scenarioName(sid),
+      cell: (s: SiteComparison["sites"][number]) => {
+        const v = s.byScenario[sid];
+        return v ? (
+          <span>
+            <LevelBadge level={v.level} score={v.residual} /> <span className="text-base text-muted">from {formatScore(v.inherent)}</span>
+          </span>
+        ) : (
+          <span className="text-muted">Not scored</span>
+        );
+      },
+    })),
+  ];
+  return (
+    <div className="sm:hidden" data-testid="comparison-stacked">
+      <h2 className="mb-2 text-2xl font-bold">Residual risk by scenario</h2>
+      <ul className="mb-6 flex flex-col gap-3">
+        {rows.map((r) => (
+          <li key={r.key}>
+            <section aria-labelledby={`stk-${r.key}`} className="rounded-xl border-2 border-line bg-surface p-3">
+              <h3 id={`stk-${r.key}`} className="text-xl font-bold">
+                {r.title}
+              </h3>
+              <dl className="mt-1 flex flex-col gap-1">
+                {c.sites.map((s) => (
+                  <div key={s.assessmentId} className="flex flex-wrap items-center justify-between gap-2 border-t border-line pt-1">
+                    <dt className="font-semibold">{siteLabel(s)}</dt>
+                    <dd>{r.cell(s)}</dd>
+                  </div>
+                ))}
+              </dl>
+            </section>
+          </li>
+        ))}
+      </ul>
+      <h2 className="mb-2 text-2xl font-bold">Findings by severity</h2>
+      <ul className="mb-6 flex flex-col gap-3">
+        {c.sites.map((s) => (
+          <li key={s.assessmentId} className="rounded-xl border-2 border-line bg-surface p-3">
+            <p className="font-bold">{siteLabel(s)}</p>
+            <p>{SEVERITY_ORDER.map((sev) => `${s.findingsBySeverity[sev] ?? 0} ${sev}`).join(", ")}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenarioName: (id: string) => string }) {
   const scenarioIds = [...new Set(c.sites.flatMap((s) => Object.keys(s.byScenario)))];
   // Worst first: highest residual anywhere.
@@ -130,6 +186,8 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
           </Banner>
         </div>
       )}
+      <StackedComparison c={c} scenarioIds={scenarioIds} scenarioName={scenarioName} />
+      <div className="hidden sm:block" data-testid="comparison-tables">
       <ScrollTable id="cmp-risk" title="Residual risk by scenario">
         <table className="w-full border-collapse text-left">
           <caption className="sr-only">Residual risk level and score for each scenario at each site. Not scored means the scenario had no inputs at that site.</caption>
@@ -188,6 +246,7 @@ export function ComparisonView({ c, scenarioName }: { c: SiteComparison; scenari
           </tbody>
         </table>
       </ScrollTable>
+      </div>
       <p className="text-base text-muted">Method {c.methodVersion}. Residual scores run from 0 to 25 (likelihood times impact, reduced by control effectiveness).</p>
     </>
   );

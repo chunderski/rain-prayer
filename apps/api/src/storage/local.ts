@@ -8,7 +8,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { mkdir, readFile, rm, writeFile, rename } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import type { Config } from "../config.js";
-import { assertKey, OBJECT_KEY, type ObjectStorage } from "./index.js";
+import { assertKey, contentTypeOfKey, OBJECT_KEY, type ObjectStorage } from "./index.js";
 
 const LABEL = "sentinel-assess/storage-url/v1";
 
@@ -42,7 +42,7 @@ export function verifyToken(signingKey: Buffer, token: string, nowSec = Math.flo
   }
 }
 
-export function createLocalStorage(cfg: Config): ObjectStorage & { root: string; readByToken(token: string): Promise<Buffer | null> } {
+export function createLocalStorage(cfg: Config): ObjectStorage & { root: string; readByToken(token: string): Promise<{ body: Buffer; contentType: string } | null> } {
   const root = resolve(cfg.LOCAL_STORAGE_DIR);
   const signingKey = storageSigningKey(cfg);
   const pathOf = (key: string) => {
@@ -76,7 +76,7 @@ export function createLocalStorage(cfg: Config): ObjectStorage & { root: string;
       const key = verifyToken(signingKey, token);
       if (!key) return null;
       try {
-        return await readFile(pathOf(key));
+        return { body: await readFile(pathOf(key)), contentType: contentTypeOfKey(key) };
       } catch {
         return null;
       }

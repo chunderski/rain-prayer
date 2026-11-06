@@ -1,5 +1,6 @@
 /** Settings, Integrations (admins): connect or disconnect Google for exports. */
 import { useState } from "react";
+import { SettingsNav } from "../components/SettingsNav";
 import { ApiError } from "../api/client";
 import { useApi, useCanAdmin } from "../auth/AuthContext";
 import { disconnectGoogle, fetchGoogle, fetchGoogleConnectUrl } from "../api/phase3";
@@ -59,6 +60,7 @@ export function IntegrationsScreen() {
   return (
     <>
       <PageHeader title="Integrations" subtitle="Settings" back={{ to: "/", label: "Home" }} />
+      <SettingsNav />
       {result === "connected" && (
         <div className="mb-3">
           <Banner tone="ok" live>

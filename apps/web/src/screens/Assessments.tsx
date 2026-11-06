@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { frameworkName } from "../field/labels";
 import { z } from "zod";
 import { useApi, useCanAdmin } from "../auth/AuthContext";
 import { AssessmentSummary } from "../api/schemas";
@@ -77,7 +78,7 @@ export function AssessmentsHome({ embedded = false }: { embedded?: boolean }) {
                 <p className="mt-2 flex flex-wrap gap-2">
                   {a.frameworks.map((f) => (
                     <Chip key={f.frameworkId} tone="primary">
-                      {f.shortName ?? f.frameworkId} v{f.version}
+                      {f.shortName ?? frameworkName(f.frameworkId)} v{f.version}
                     </Chip>
                   ))}
                 </p>
@@ -132,6 +133,9 @@ export function AssessmentDetail() {
             <ButtonLink to={`${base}/report`} variant="secondary" size="lg" block>
               Report and export
             </ButtonLink>
+            <ButtonLink to={`${base}/quotes`} variant="secondary" size="lg" block>
+              Quotes
+            </ButtonLink>
             {isAdmin && (
               <ButtonLink to={`${base}/assessors`} variant="secondary" size="lg" block>
                 Assign assessors
@@ -171,7 +175,7 @@ export function AssessmentDetail() {
             {data.frameworks.map((fw) => (
               <li key={fw.frameworkId}>
                 <Chip tone="primary">
-                  {fw.shortName ?? fw.frameworkId} v{fw.version}
+                  {fw.shortName ?? frameworkName(fw.frameworkId)} v{fw.version}
                 </Chip>
               </li>
             ))}

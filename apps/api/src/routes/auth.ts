@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import type { FastifyInstance, FastifyRequest } from "fastify";
-import { LoginRequest, type Role, type SessionInfo } from "@sentinel/shared";
+import { CompleteSetup, LoginRequest, type Role, type SessionInfo } from "@sentinel/shared";
 import type { Config } from "../config.js";
 import type { Db } from "../db/pool.js";
 import { audit } from "../lib/audit.js";
@@ -15,6 +15,7 @@ import {
   sha256,
   signAccessToken,
   verifyPassword,
+  hashPassword,
 } from "../lib/auth.js";
 import { AppError, parse } from "../lib/errors.js";
 
@@ -23,6 +24,7 @@ export interface Membership {
   slug: string;
   name: string;
   role: Role;
+  status?: "invited" | "active" | "disabled";
 }
 
 export interface UserRecord {
@@ -32,12 +34,30 @@ export interface UserRecord {
   password_hash: string | null;
   google_sub: string | null;
   locked_until: Date | null;
+  /** Active memberships only; sign-in never resolves to an invited or disabled one. */
   memberships: Membership[];
+  /** Invited or disabled memberships, used only to explain a refusal after the password checks out. */
+  inactive: Membership[];
 }
 
 export async function findUser(db: Db, email: string): Promise<UserRecord | null> {
-  const { rows } = await db.query<UserRecord>("SELECT * FROM auth_find_user($1)", [email]);
-  return rows[0] ?? null;
+  const { rows } = await db.query<Omit<UserRecord, "inactive">>("SELECT * FROM auth_find_user($1)", [email]);
+  const r = rows[0];
+  if (!r) return null;
+  const isActive = (m: Membership) => (m.status ?? "active") === "active";
+  return { ...r, memberships: r.memberships.filter(isActive), inactive: r.memberships.filter((m) => !isActive(m)) };
+}
+
+/** After a correct password: refuses with member_disabled when the only matching memberships are not active. */
+export function refuseInactive(user: UserRecord, slug?: string) {
+  const hit = slug
+    ? user.memberships.some((m) => m.slug === slug) ? undefined : user.inactive.find((m) => m.slug === slug)
+    : user.memberships.length === 0 ? user.inactive[0] : undefined;
+  if (hit) {
+    throw new AppError(403, "member_disabled", hit.status === "invited"
+      ? "Finish setting up this workspace login with the setup link from your administrator"
+      : "Your access to this workspace is disabled; ask its administrator");
+  }
 }
 
 export const reqMeta = (req: FastifyRequest) => ({ ip: req.ip, userAgent: req.headers["user-agent"] });
@@ -69,7 +89,7 @@ export async function startSession(
   req: FastifyRequest,
   userId: string,
   tenantId: string,
-  method: "password" | "google",
+  method: "password" | "google" | "setup",
 ): Promise<{ accessToken: string; refreshToken: string; session: SessionInfo }> {
   const m = reqMeta(req);
   return db.withTenant(tenantId, async (tx) => {
@@ -107,9 +127,10 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
       throw invalid;
     }
     // Audit failures in the tenant when it is unambiguous, otherwise unscoped.
+    const allMemberships = [...user.memberships, ...user.inactive];
     const failTenant =
-      (body.tenantSlug && user.memberships.find((m) => m.slug === body.tenantSlug)) ||
-      (user.memberships.length === 1 ? user.memberships[0] : undefined);
+      (body.tenantSlug && allMemberships.find((m) => m.slug === body.tenantSlug)) ||
+      (allMemberships.length === 1 ? allMemberships[0] : undefined);
     const logFailure = async (reason: string) => {
       if (failTenant) {
         await db.withTenant(failTenant.tenantId, (tx) =>
@@ -133,6 +154,12 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
       throw invalid;
     }
     await db.query("SELECT auth_register_login_success($1)", [user.user_id]);
+    try {
+      refuseInactive(user, body.tenantSlug);
+    } catch (err) {
+      await logFailure("member_not_active");
+      throw err;
+    }
     const tenant = resolveTenant(user.memberships, body.tenantSlug);
     const { accessToken, refreshToken, session } = await startSession(cfg, db, req, user.user_id, tenant.tenantId, "password");
     setRefreshCookie(cfg, reply, refreshToken);
@@ -229,7 +256,53 @@ export async function authRoutes(app: FastifyInstance, { cfg, db }: { cfg: Confi
     return reply.code(204).send();
   });
 
-  app.get("/auth/me", { config: relaxed, preHandler: requireRole(cfg, db, "viewer") }, async (req) => {
+  /**
+   * Completes a member setup link (D-082). New accounts set their first password; an existing account
+   * (password, Google link, or another active workspace) proves its current password instead, so an
+   * invite can never take over an account. The token is single use and expires after 72 hours.
+   */
+  app.post("/auth/setup", { config: strict }, async (req, reply) => {
+    const body = parse(CompleteSetup, req.body);
+    const hash = sha256(body.token);
+    const invalid = new AppError(400, "invalid_setup_token", "This setup link is invalid, expired, or already used; ask your administrator for a new one");
+    const { rows } = await db.query<{ tenant_id: string; user_id: string; email: string; password_hash: string | null; usable: boolean; claimable: boolean }>(
+      "SELECT * FROM auth_find_setup_token($1)", [hash],
+    );
+    const t = rows[0];
+    if (!t || !t.usable) {
+      await logUnscoped(db, req, "auth.setup.failure", t?.user_id ?? null, t?.email ?? "", { reason: t ? "unusable" : "unknown_token" });
+      throw invalid;
+    }
+    let newHash: string | null = null;
+    if (t.claimable) {
+      newHash = await hashPassword(body.password);
+    } else if (!t.password_hash) {
+      await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "existing_account_without_password" });
+      throw new AppError(409, "existing_account", "This email already has an account that signs in another way; sign in with it, then ask your administrator to add you again");
+    } else if (!(await verifyPassword(t.password_hash, body.password))) {
+      await db.query("SELECT auth_register_login_failure($1, $2, $3)", [t.user_id, cfg.LOGIN_MAX_FAILURES, cfg.LOGIN_LOCKOUT_SECONDS]);
+      await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "bad_existing_password" });
+      throw new AppError(401, "invalid_credentials", "This email already has an account; enter its current password to join the workspace");
+    }
+    let done: { tenant_id: string; user_id: string } | undefined;
+    try {
+      done = (await db.query<{ tenant_id: string; user_id: string }>("SELECT * FROM auth_complete_setup($1, $2)", [hash, newHash])).rows[0];
+    } catch {
+      done = undefined; // raced with another use or a change of the account
+    }
+    if (!done?.tenant_id) {
+      await logUnscoped(db, req, "auth.setup.failure", t.user_id, t.email, { reason: "consume_failed" });
+      throw invalid;
+    }
+    await db.withTenant(done.tenant_id, (tx) =>
+      audit(tx, { tenantId: done!.tenant_id, actorUserId: done!.user_id, actorEmail: t.email, action: "member.setup", entityType: "user", entityId: done!.user_id, ...reqMeta(req), details: { passwordSet: !!newHash } }),
+    );
+    const { accessToken, refreshToken, session } = await startSession(cfg, db, req, done.user_id, done.tenant_id, "setup");
+    setRefreshCookie(cfg, reply, refreshToken);
+    return { accessToken, session };
+  });
+
+  app.get("/auth/me", { config: relaxed, preHandler: requireRole(cfg, db, "client_viewer") }, async (req) => {
     const { user, tenant, role } = authOf(req);
     return { user, tenant, role } satisfies SessionInfo;
   });

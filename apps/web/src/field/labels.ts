@@ -72,16 +72,37 @@ export function isDeficient(q: Question, value: AnswerValue): boolean {
 }
 
 /** Group a control's framework mappings for "Counts toward" chips: one chip per framework. */
-export function frameworkChips(frameworks: WalkthroughFramework[]): { key: string; label: string }[] {
-  const by = new Map<string, { shortName: string; codes: string[] }>();
+/**
+ * One chip per framework requirement, using the framework short name and the requirement title
+ * ("CARVER: Accessibility (SA-CARVER-A)"); never a raw framework id (tour fix). Falls back to the
+ * requirement code while titles are not loaded.
+ */
+export function frameworkChips(frameworks: WalkthroughFramework[], titleOf?: (frameworkId: string, code: string) => string | undefined): { key: string; label: string }[] {
+  const seen = new Set<string>();
+  const out: { key: string; label: string }[] = [];
   for (const f of frameworks) {
-    const e = by.get(f.frameworkId) ?? { shortName: f.shortName, codes: [] };
-    if (!e.codes.includes(f.requirementCode)) e.codes.push(f.requirementCode);
-    by.set(f.frameworkId, e);
+    const key = `${f.frameworkId}:${f.requirementCode}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const title = titleOf?.(f.frameworkId, f.requirementCode);
+    out.push({ key, label: title ? `${f.shortName}: ${title} (${f.requirementCode})` : `${f.shortName}: ${f.requirementCode}` });
   }
-  return [...by.entries()].map(([key, e]) => ({ key, label: `${e.shortName}: ${e.codes.join(", ")}` }));
+  return out;
 }
 
 export function controlsFrameworks(controlIds: string[], index: Map<string, WalkthroughControl>): WalkthroughFramework[] {
   return controlIds.flatMap((id) => index.get(id)?.frameworks ?? []);
+}
+
+/** Short names of the bundled frameworks, used only when a response leaves the short name out. */
+const FRAMEWORK_SHORT: Record<string, string> = {
+  carver: "CARVER",
+  cpted: "CPTED",
+  "nist-csf-2": "NIST CSF 2.0",
+  "physical-general": "Physical Security",
+  "pqc-readiness": "PQC Readiness",
+};
+/** Never shows a raw id: unknown frameworks read "Framework" plus a humanized id. */
+export function frameworkName(id: string): string {
+  return FRAMEWORK_SHORT[id] ?? id.replace(/[-_]+/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
 }

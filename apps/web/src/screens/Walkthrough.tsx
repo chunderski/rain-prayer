@@ -260,7 +260,7 @@ export function WalkthroughStep() {
     go(i! + 1);
   }
 
-  const chips = frameworkChips(step.control.frameworks);
+  const chips = frameworkChips(step.control.frameworks, f.requirementTitle);
 
   return (
     <div className="pb-48">

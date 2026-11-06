@@ -86,6 +86,31 @@ export function PinLock() {
   );
 }
 
+const PIN_PROMPT_KEY = "sa.pinPromptDismissed";
+
+/** "Not now" hides the prompt for the rest of this browser session (tour fix). Storage may be blocked (iframes, private mode). */
+export function pinPromptDismissed(): boolean {
+  try {
+    return window.sessionStorage.getItem(PIN_PROMPT_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+export function dismissPinPrompt(): void {
+  try {
+    window.sessionStorage.setItem(PIN_PROMPT_KEY, "1");
+  } catch {
+    /* storage unavailable: the in-memory state still hides it until the next reload */
+  }
+}
+export function clearPinPromptDismissal(): void {
+  try {
+    window.sessionStorage.removeItem(PIN_PROMPT_KEY);
+  } catch {
+    /* ignore */
+  }
+}
+
 /** Shown after sign in until a PIN exists on this device. Collapsed to one line until opened. */
 export function PinSetupPrompt() {
   const { offlineSession } = useAuth();
@@ -96,9 +121,14 @@ export function PinSetupPrompt() {
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
-    if (offlineSession) return;
+    if (offlineSession || pinPromptDismissed()) return;
     hasPin().then((p) => !p && setState("prompt"), () => undefined);
   }, [offlineSession]);
+
+  function notNow() {
+    dismissPinPrompt();
+    setState("hidden");
+  }
 
   async function save(e: FormEvent) {
     e.preventDefault();
@@ -136,7 +166,7 @@ export function PinSetupPrompt() {
         {state === "prompt" ? (
           <div className="mt-3 flex flex-wrap gap-2">
             <Button onClick={() => setState("form")}>Set PIN</Button>
-            <Button variant="secondary" onClick={() => setState("hidden")}>
+            <Button variant="secondary" onClick={notNow}>
               Not now
             </Button>
           </div>
@@ -148,7 +178,7 @@ export function PinSetupPrompt() {
               <Button type="submit" disabled={busy}>
                 Save PIN
               </Button>
-              <Button variant="secondary" onClick={() => setState("hidden")}>
+              <Button variant="secondary" onClick={notNow}>
                 Not now
               </Button>
             </div>

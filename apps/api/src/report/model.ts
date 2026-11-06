@@ -6,7 +6,7 @@
 import type { RiskLevel, RiskResult } from "@sentinel/shared";
 
 /** Bump when the structure or wording of the template changes; recorded on every export. */
-export const TEMPLATE_VERSION = "report-template@1.0.0";
+export const TEMPLATE_VERSION = "report-template@1.1.0";
 
 export type NarrativeSection = "executive_summary" | "methodology" | "key_findings" | "recommendations";
 export const NARRATIVE_SECTIONS: NarrativeSection[] = ["executive_summary", "methodology", "key_findings", "recommendations"];
@@ -28,12 +28,30 @@ export type Block =
   /** One finding in the register: its title and body blocks (renderers may wrap it). */
   | { type: "finding"; title: string; severity: string; blocks: Block[] };
 
+/** Integrator branding applied to previews and exports (Phase 4). Colors are validated #RRGGBB. */
+export interface ReportBrand {
+  displayName: string;
+  primaryColor: string;
+  accentColor: string;
+  footer: string;
+  /** "email; phone; website", or "" */
+  contact: string;
+  /** "Powered by Sentinel Assess" line (always true on the standard plan). */
+  poweredBy: boolean;
+  logoKey: string | null;
+}
+
+export const POWERED_BY = "Powered by Sentinel Assess";
+/** Image id used for the brand logo in ImageUrls and DocImageUris maps. */
+export const LOGO_IMAGE_ID = "brand-logo";
+
 export interface ReportDoc {
   templateVersion: string;
   title: string;
   subtitle: string;
-  /** Tenant branding placeholder (integrator name until Phase 4 branding lands). */
+  /** Integrator display name (branding). */
   brandName: string;
+  brand: ReportBrand;
   generatedAt: string;
   blocks: Block[];
 }
@@ -47,12 +65,16 @@ export interface ReportFinding {
   status: string;
   areaName: string | null;
   controlIds: string[];
-  frameworks: { frameworkId: string; requirementCode: string; relationship: string }[];
+  frameworks: { frameworkId: string; requirementCode: string; relationship: string; shortName: string; title: string }[];
   photos: ReportImage[];
 }
 
+/** "CARVER: Accessibility (SA-CARVER-A)" (tour fix: names, not framework ids). */
+export const requirementLabel = (x: { shortName: string; title: string; requirementCode: string }) => `${x.shortName}: ${x.title} (${x.requirementCode})`;
+
 export interface ReportData {
   tenantName: string;
+  brand: ReportBrand;
   assessment: {
     id: string;
     title: string;
@@ -122,7 +144,7 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
     blocks.push({ type: "paragraph", text, tone, ...(level ? { level } : {}) });
 
   // Title page details.
-  p(`Prepared by ${data.tenantName} for ${a.clientName}`);
+  p(`Prepared by ${data.brand.displayName} for ${a.clientName}`);
   p(`Site: ${a.siteName}${a.siteAddress ? `, ${a.siteAddress}` : ""}`);
   p(`Assessment status: ${a.status.replace("_", " ")}. Generated ${data.generatedAt.slice(0, 10)}.`, "muted");
 
@@ -181,8 +203,8 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
       body.push({ type: "paragraph", text: meta, tone: "muted" });
       if (f.description) body.push({ type: "paragraph", text: f.description });
       if (f.recommendation) body.push({ type: "paragraph", text: `Recommendation: ${f.recommendation}` });
-      const reqs = f.frameworks.map((x) => `${x.frameworkId} ${x.requirementCode} (${x.relationship})`);
-      body.push({ type: "paragraph", text: `Counts toward: ${reqs.length ? reqs.join(", ") : "no mapped framework requirement"}. Controls: ${f.controlIds.join(", ")}.`, tone: "muted" });
+      const reqs = f.frameworks.map(requirementLabel);
+      body.push({ type: "paragraph", text: `Counts toward: ${reqs.length ? reqs.join("; ") : "no mapped framework requirement"}. Controls: ${f.controlIds.join(", ")}.`, tone: "muted" });
       for (const img of f.photos) body.push({ type: "image", image: img });
       blocks.push({ type: "finding", title: f.title, severity: f.severity, blocks: body });
     }
@@ -215,7 +237,8 @@ export function buildReportDoc(data: ReportData, mode: "preview" | "export"): Re
     templateVersion: TEMPLATE_VERSION,
     title: a.title,
     subtitle: `${a.clientName}, ${a.siteName}`,
-    brandName: data.tenantName,
+    brandName: data.brand.displayName,
+    brand: data.brand,
     generatedAt: data.generatedAt,
     blocks,
   };

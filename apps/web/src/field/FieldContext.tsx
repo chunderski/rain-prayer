@@ -10,7 +10,11 @@ import { useApi, useWriteCtx } from "../auth/AuthContext";
 import type { AssessmentDetail } from "../api/schemas";
 import { useOnline } from "../offline/useOnline";
 import { useLocal } from "../lib/useLocal";
-import { errorMessage } from "../lib/useAsync";
+import { errorMessage, useAsync } from "../lib/useAsync";
+import { cachedGet } from "../api/library";
+import { z } from "zod";
+
+const RequirementTitles = z.object({ requirements: z.array(z.object({ code: z.string(), title: z.string() })) });
 import type { LocalPhoto, LocalRecord } from "../offline/db";
 import { Banner, Loading } from "../components/ui";
 import { listAreas, listRecords, type WriteCtx } from "./repo";
@@ -37,6 +41,8 @@ export interface FieldData {
   online: boolean;
   /** Complete assessments are locked: every field write is refused (CW decision, D-057). */
   locked: boolean;
+  /** Requirement title for framework chips, once the pinned framework versions are loaded. */
+  requirementTitle: (frameworkId: string, code: string) => string | undefined;
   /** Fetch the assessment again (after complete or reopen). */
   reload: () => void;
 }
@@ -80,6 +86,22 @@ export function FieldLayout({ children }: { children?: ReactNode }) {
     // Reload when connectivity returns so a cached copy is refreshed.
   }, [api, id, attempt, online && base?.fromCache]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  const fwKey = (base?.assessment.frameworks ?? []).map((x) => `${x.frameworkId}@${x.version}`).join(",");
+  const titles = useAsync(async () => {
+    const map = new Map<string, string>();
+    const results = await Promise.all(
+      (base?.assessment.frameworks ?? []).map((x) =>
+        cachedGet(api, `/frameworks/${encodeURIComponent(x.frameworkId)}/versions/${encodeURIComponent(x.version)}`, RequirementTitles).then(
+          (r) => ({ id: x.frameworkId, reqs: r.data.requirements }),
+          () => null,
+        ),
+      ),
+    );
+    for (const r of results) if (r) for (const q of r.reqs) map.set(`${r.id}:${q.code}`, q.title);
+    return map;
+  }, [api, fwKey]);
+  const titleMap = titles.data;
+
   const siteId = base?.assessment.siteId;
   const records = useLocal(
     async () => {
@@ -112,9 +134,10 @@ export function FieldLayout({ children }: { children?: ReactNode }) {
       ctx,
       online,
       locked: base.assessment.status === "complete",
+      requirementTitle: (fw: string, code: string) => titleMap?.get(`${fw}:${code}`),
       reload: () => setAttempt((n) => n + 1),
     };
-  }, [base, records.data, ctx, online, id]);
+  }, [base, records.data, ctx, online, id, titleMap]);
   const { pathname } = useLocation();
 
   if (error && !base)
@@ -126,11 +149,12 @@ export function FieldLayout({ children }: { children?: ReactNode }) {
   if (!value) return <Loading label="Loading assessment" />;
   // The detail page shows its own lock panel; report and results screens stay usable when locked.
   const isIndex = /^\/assessments\/[^/]+\/?$/.test(pathname);
-  const readOnlyOk = isIndex || /\/(report|risk)\/?$/.test(pathname);
+  const isQuotes = /\/quotes(\/|$)/.test(pathname);
+  const readOnlyOk = isIndex || isQuotes || /\/(report|risk)\/?$/.test(pathname);
   return (
     <FieldCtx.Provider value={value}>
       <LockRejections />
-      {!isIndex && <LockedNotice />}
+      {!isIndex && !isQuotes && <LockedNotice />}
       <fieldset disabled={value.locked && !readOnlyOk} className="m-0 min-w-0 border-0 p-0">
         {children ?? <Outlet />}
       </fieldset>

@@ -40,7 +40,7 @@ export function FindingsList() {
         <ul className="flex flex-col gap-3" data-testid="findings-list">
           {findings.map((x) => {
             const sev = SEVERITY[x.data.severity];
-            const chips = frameworkChips(controlsFrameworks(x.data.controlIds, f.controls));
+            const chips = frameworkChips(controlsFrameworks(x.data.controlIds, f.controls), f.requirementTitle);
             const photos = f.photos.filter((p) => p.data.findingId === x.id).length;
             return (
               <li key={x.id}>
@@ -105,7 +105,7 @@ export function FindingEdit() {
   const [errors, setErrors] = useState<{ title?: string; controls?: string }>({});
   if (findingId && !existing) return <Banner tone="error">This finding is not on this device.</Banner>;
   const set = (p: Partial<Finding>) => setD({ ...d, ...p });
-  const chips = frameworkChips(controlsFrameworks(d.controlIds, f.controls));
+  const chips = frameworkChips(controlsFrameworks(d.controlIds, f.controls), f.requirementTitle);
 
   async function submit(e: FormEvent) {
     e.preventDefault();

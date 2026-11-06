@@ -4,6 +4,7 @@ import { createApiClient, type ApiClient } from "../api/client";
 import { clearClientData } from "../offline/db";
 import { loadProfile, saveProfile } from "./profile";
 import { hasPin, shouldLockAfterBackground } from "./pin";
+import { hasRole } from "@sentinel/shared";
 
 type Status = "loading" | "signed_out" | "signed_in";
 
@@ -17,6 +18,8 @@ interface AuthValue {
    */
   offlineSession: boolean;
   signIn: (req: LoginRequest) => Promise<void>;
+  /** Set a password from a setup link (POST /auth/setup), then continue signed in. */
+  completeSetup: (token: string, password: string) => Promise<void>;
   /** Signs out and wipes local data; `notice` is shown on the sign-in screen. */
   signOut: (notice?: string) => Promise<void>;
   /** The local PIN screen covers the app (offline start or after 5 minutes in the background). */
@@ -105,8 +108,22 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
     return () => document.removeEventListener("visibilitychange", onVis);
   }, [status]);
 
-  const value = useMemo<AuthValue>(
-    () => ({
+  const value = useMemo<AuthValue>(() => {
+    async function adopt(getSession: () => Promise<SessionInfo>) {
+      const previous = await loadProfile({ ignoreAge: true }).catch(() => null);
+      const s = await getSession();
+      // Field data on this device belongs to the previous user and workspace; never show it to someone else.
+      if (previous && (previous.user.id !== s.user.id || previous.tenant.id !== s.tenant.id)) {
+        await clearClientData().catch(() => undefined);
+      }
+      await saveProfile(s).catch(() => undefined);
+      setSession(s);
+      setOfflineSession(false);
+      setLocked(false);
+      setNotice(null);
+      setStatus("signed_in");
+    }
+    return {
       api,
       status,
       session,
@@ -115,32 +132,24 @@ export function AuthProvider({ children, client }: { children: ReactNode; client
       notice,
       unlock: () => setLocked(false),
       async signIn(req) {
-        const previous = await loadProfile({ ignoreAge: true }).catch(() => null);
-        const s = await api.login(req);
-        // Field data on this device belongs to the previous user and workspace; never show it to someone else.
-        if (previous && (previous.user.id !== s.user.id || previous.tenant.id !== s.tenant.id)) {
-          await clearClientData().catch(() => undefined);
-        }
-        await saveProfile(s).catch(() => undefined);
-        setSession(s);
-        setOfflineSession(false);
-        setLocked(false);
-        setNotice(null);
-        setStatus("signed_in");
+        await adopt(() => api.login(req));
+      },
+      async completeSetup(token, password) {
+        await adopt(() => api.completeSetup({ token, password }));
       },
       async signOut(message) {
         await api.logout();
         // Drafts, queued changes, cached field records, photos, and the cached profile (QA R-11).
         await clearClientData().catch(() => undefined);
+        clearPinPromptSession();
         setSession(null);
         setOfflineSession(false);
         setLocked(false);
         setNotice(message ?? null);
         setStatus("signed_out");
       },
-    }),
-    [api, status, session, offlineSession, locked, notice],
-  );
+    };
+  }, [api, status, session, offlineSession, locked, notice]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
@@ -166,5 +175,23 @@ export function useCanAdmin(): boolean {
 
 export function useCanWrite(): boolean {
   const { session } = useAuth();
-  return !!session && session.role !== "viewer";
+  return !!session && hasRole(session.role, "assessor");
+}
+
+export function useIsOwner(): boolean {
+  return useAuth().session?.role === "owner";
+}
+
+/** Which shell a session gets: client viewers see only the client portal (D-081). */
+export function shellFor(role: string | undefined | null): "portal" | "workspace" {
+  return role === "client_viewer" ? "portal" : "workspace";
+}
+
+/** Same key as PinScreens; kept here to avoid an import cycle. */
+function clearPinPromptSession() {
+  try {
+    window.sessionStorage.removeItem("sa.pinPromptDismissed");
+  } catch {
+    /* ignore */
+  }
 }

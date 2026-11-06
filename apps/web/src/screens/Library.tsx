@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { frameworkName } from "../field/labels";
 import { Link, useParams, useSearchParams } from "react-router-dom";
 import { ControlDomain } from "@sentinel/shared";
 import { useApi } from "../auth/AuthContext";
@@ -125,7 +126,7 @@ export function Library() {
                     const f = map.get(id);
                     return (
                       <Chip key={id} tone={categoryTone(f?.category ?? "")}>
-                        {f?.shortName ?? id}
+                        {f?.shortName ?? frameworkName(id)}
                         {f && <span className="font-normal"> v{f.version}</span>}
                       </Chip>
                     );
@@ -193,7 +194,7 @@ export function ControlDetailScreen() {
               <li key={fwId}>
                 <Card>
                   <h3 className="flex flex-wrap items-center gap-2 text-xl font-bold">
-                    {ms[0]?.frameworkShortName ?? f?.shortName ?? fwId}
+                    {ms[0]?.frameworkShortName ?? f?.shortName ?? frameworkName(fwId)}
                     {f && <Chip tone={categoryTone(f.category)}>v{f.version}</Chip>}
                   </h3>
                   <ul className="mt-2 flex flex-col gap-3">

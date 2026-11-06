@@ -35,13 +35,17 @@ function auditQuote(tx: Tx, a: AuthContext, req: FastifyRequest, action: string,
 }
 
 /**
- * Draft lines from confirmed findings: for each finding, active items whose controlIds intersect the
- * finding's controls, assetType matches first, placed in their tier (any becomes all); items in tiers the
- * quote does not present are skipped; a finding with no usable match gets one needsPricing line.
+ * Draft lines from confirmed findings. For each finding: candidate items share a control with it; when the
+ * finding's asset types are known (its asset or its tagged photos), items made for other asset types are
+ * dropped (a gate operator is never offered for a door). Then ONE best item per presented tier is chosen,
+ * ranked by asset type match, then number of shared controls, then sku. Untiered ("any") items are used
+ * only when no tiered item fits, as a single "all" line. A finding with no usable match gets one
+ * needsPricing line.
  */
 export async function suggestLines(tx: Tx, assessmentId: string, tiers: Tier[], fallbackMargin: number): Promise<QuoteLine[]> {
-  const findings = await tx.query<{ id: string; title: string; asset_type: string | null; controls: string[] }>(
+  const findings = await tx.query<{ id: string; title: string; asset_type: string | null; photo_asset_types: string[]; controls: string[] }>(
     `SELECT f.id, f.title, a.asset_type,
+            COALESCE((SELECT array_agg(DISTINCT p.asset_type) FROM photo p WHERE p.finding_id = f.id AND p.deleted_at IS NULL AND p.asset_type IS NOT NULL), '{}') AS photo_asset_types,
             COALESCE((SELECT array_agg(fc.control_id ORDER BY fc.control_id) FROM finding_control fc WHERE fc.finding_id = f.id), '{}') AS controls
        FROM finding f LEFT JOIN asset a ON a.id = f.asset_id AND a.deleted_at IS NULL
       WHERE f.assessment_id = $1 AND f.status = 'confirmed' AND f.deleted_at IS NULL
@@ -55,11 +59,15 @@ export async function suggestLines(tx: Tx, assessmentId: string, tiers: Tier[], 
   const lines: QuoteLine[] = [];
   for (const f of findings.rows) {
     const controls = new Set(f.controls);
-    const matches = items.rows
+    const assetTypes = new Set([f.asset_type, ...f.photo_asset_types].filter((x): x is string => !!x));
+    const ranked = items.rows
       .filter((i) => i.control_ids.some((c) => controls.has(c)))
-      .filter((i) => i.tier === "any" || tiers.includes(i.tier as Tier))
-      .map((i) => ({ i, rank: f.asset_type && i.asset_types.includes(f.asset_type) ? 0 : 1 }))
-      .sort((x, y) => x.rank - y.rank || x.i.sku.localeCompare(y.i.sku));
+      .filter((i) => !assetTypes.size || !i.asset_types.length || i.asset_types.some((t) => assetTypes.has(t)))
+      .map((i) => ({ i, assetMatch: i.asset_types.some((t) => assetTypes.has(t)) ? 1 : 0, overlap: i.control_ids.filter((c) => controls.has(c)).length }))
+      .sort((x, y) => y.assetMatch - x.assetMatch || y.overlap - x.overlap || x.i.sku.localeCompare(y.i.sku));
+    const tiered = tiers.map((t) => ranked.find((r) => r.i.tier === t)).filter((r): r is (typeof ranked)[number] => !!r);
+    const anyItem = ranked.find((r) => r.i.tier === "any");
+    const matches = tiered.length ? tiered : anyItem ? [anyItem] : [];
     if (!matches.length) {
       lines.push({
         id: randomUUID(), findingId: f.id, priceBookItemId: null, description: `Remediation: ${f.title}`.slice(0, 500), category: "service", unit: "lot",

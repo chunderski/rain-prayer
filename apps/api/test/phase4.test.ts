@@ -320,7 +320,8 @@ describe("quotes", () => {
     expect(q.laborRate).toBe(100);
     expect(q.terms).toBe("Net 30");
     const fence = q.lines.filter((l) => l.description.includes("fence gap"));
-    expect(fence.map((l) => l.tier).sort()).toEqual(["all", "good"]);
+    // One best item per presented tier; untiered ("any") items only when no tiered item fits.
+    expect(fence.map((l) => l.tier).sort()).toEqual(["good"]);
     expect(q.lines.some((l) => l.description.includes("SECRET-DRAFT-FINDING"))).toBe(false);
     const np = q.lines.filter((l) => l.needsPricing);
     expect(np).toHaveLength(1);

@@ -29,6 +29,16 @@ describe("health and errors", () => {
     expect(res.headers["x-content-type-options"]).toBe("nosniff");
   });
 
+  it("/theme.css echoes only validated hex colors and needs no auth", async () => {
+    const ok = await app.inject({ url: "/theme.css?p=0B4F6C&a=c8553d" });
+    expect(ok.statusCode).toBe(200);
+    expect(ok.headers["content-type"]).toContain("text/css");
+    expect(ok.body).toContain("--brand-primary:#0b4f6c;--brand-accent:#c8553d");
+    const hostile = await app.inject({ url: "/theme.css?p=" + encodeURIComponent("000000}body{background:url(x)") + "&a=zzzzzz" });
+    expect(hostile.body).toContain("--brand-primary:#0b3d91;--brand-accent:#b45309");
+    expect(hostile.body).not.toContain("url(");
+  });
+
   it("unknown routes use the error envelope", async () => {
     const res = await app.inject({ url: "/nope" });
     expect(res.statusCode).toBe(404);

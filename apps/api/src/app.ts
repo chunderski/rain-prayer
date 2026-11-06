@@ -190,6 +190,14 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
   const fieldDeps = { cfg, db, limiters, storage, walkthrough, vision: getVision, risk };
 
   app.get("/health", async () => ({ status: "ok" }));
+  // Brand color stylesheet for previews shown inside the PWA's sandboxed iframe, whose inherited CSP blocks
+  // the server's inline <style>. Public and stateless: it only echoes two validated hex colors, no tenant data.
+  app.get("/theme.css", async (req, reply) => {
+    const q = req.query as { p?: unknown; a?: unknown };
+    const hex = (v: unknown, d: string) => (typeof v === "string" && /^[0-9a-fA-F]{6}$/.test(v) ? `#${v.toLowerCase()}` : d);
+    reply.type("text/css; charset=utf-8");
+    return `:root{--brand-primary:${hex(q.p, "#0b3d91")};--brand-accent:${hex(q.a, "#b45309")};--brand-on-primary:#ffffff}\n`;
+  });
   await app.register(authRoutes, { cfg, db });
   await app.register(googleRoutes, { cfg, db, deps: deps.google ?? {} });
   await app.register(libraryRoutes, { cfg, db, limiters });

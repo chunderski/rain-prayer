@@ -30,7 +30,7 @@ export function buildCsp(env: Record<string, string>): string {
   return [
     "default-src 'self'",
     "script-src 'self'",
-    "style-src 'self'",
+    `style-src 'self' ${api}`,
     `img-src ${img}`,
     `connect-src 'self' ${api}`,
     "font-src 'self'",

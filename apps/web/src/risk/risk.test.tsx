@@ -105,6 +105,10 @@ describe("report and inputs helpers", () => {
   it("adds the preview stylesheet to server HTML", () => {
     expect(previewDocument("<html><head><title>x</title></head><body>R</body></html>", "https://app/r.css")).toContain('<head><link rel="stylesheet" href="https://app/r.css"><title>');
     expect(previewDocument("<p>R</p>", "/r.css")).toMatch(/^<!doctype html>.*<body><p>R<\/p><\/body>/);
+    // Brand colors are re-linked from /theme.css (the inline style is blocked by the inherited CSP); strict hex only.
+    const branded = previewDocument("<html><head><style>:root{--brand-primary:#0b4f6c;--brand-accent:#c8553d;--brand-on-primary:#ffffff}</style></head><body>R</body></html>", "/r.css");
+    expect(branded).toContain("/theme.css?p=0b4f6c&amp;a=c8553d");
+    expect(previewDocument("<style>:root{--brand-primary:#0b4f6c\"><script>;--brand-accent:#c8553d}</style>", "/r.css")).not.toContain("theme.css");
   });
 
   it("sends only scored or excluded scenarios", () => {

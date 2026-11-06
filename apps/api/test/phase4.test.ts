@@ -239,7 +239,7 @@ describe("members and setup links", () => {
 
 describe("client_viewer is refused outside the portal", () => {
   // Public by design: health, signed file links, sign-in flows, and the Google OAuth callback (state-checked).
-  const PUBLIC = new Set(["/health", "/files/:token", "/integrations/google/callback"]);
+  const PUBLIC = new Set(["/health", "/theme.css", "/files/:token", "/integrations/google/callback"]);
   it("every registered non-portal, non-auth route answers 401, 403, or 404, never 2xx", async () => {
     // OPTIONS routes are the CORS preflight handler (no data, no auth by design).
     const routes = app.routeRegistry.filter((r) => r.method !== "OPTIONS" && !r.url.startsWith("/portal/") && !r.url.startsWith("/auth/") && !PUBLIC.has(r.url) && !(r.method === "GET" && r.url === "/branding"));

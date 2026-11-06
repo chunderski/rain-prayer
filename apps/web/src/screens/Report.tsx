@@ -7,7 +7,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { ExportJob, Narrative } from "@sentinel/shared";
-import { ApiError } from "../api/client";
+import { ApiError, apiBaseUrl } from "../api/client";
 import { useApi, useCanAdmin, useCanWrite } from "../auth/AuthContext";
 import {
   draftNarrative,
@@ -107,7 +107,11 @@ function NarrativeCard({ section, current, onSaved }: { section: NarrativeSectio
 
 /** Wraps server HTML for srcdoc and adds the app's preview stylesheet (inline styles are blocked by CSP). */
 export function previewDocument(html: string, cssHref: string): string {
-  const link = `<link rel="stylesheet" href="${cssHref.replace(/"/g, "&quot;")}">`;
+  let link = `<link rel="stylesheet" href="${cssHref.replace(/"/g, "&quot;")}">`;
+  // The server's inline brand <style> is blocked by the CSP this srcdoc inherits, so re-link the two
+  // colors from the API's stateless /theme.css (strict hex only; anything else falls back to defaults).
+  const m = /--brand-primary:#([0-9a-fA-F]{6});--brand-accent:#([0-9a-fA-F]{6})/.exec(html);
+  if (m) link += `<link rel="stylesheet" href="${apiBaseUrl()}/theme.css?p=${m[1]}&amp;a=${m[2]}">`;
   if (/<head[^>]*>/i.test(html)) return html.replace(/<head[^>]*>/i, (m) => `${m}${link}`);
   return `<!doctype html><html><head><meta charset="utf-8">${link}</head><body>${html}</body></html>`;
 }

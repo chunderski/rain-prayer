@@ -1,4 +1,4 @@
-import { BrowserRouter, MemoryRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, MemoryRouter, Route, Routes, useLocation } from "react-router-dom";
 import { AuthProvider, useAuth } from "./auth/AuthContext";
 import type { ApiClient } from "./api/client";
 import { AppShell, OfflineBanner } from "./components/AppShell";
@@ -24,6 +24,14 @@ import { IntegrationsScreen } from "./screens/Settings";
 import { PinLock } from "./auth/PinScreens";
 import { useCanAdmin } from "./auth/AuthContext";
 import { Banner } from "./components/ui";
+import { shellFor } from "./auth/AuthContext";
+import { BrandingProvider } from "./branding/BrandingContext";
+import { BrandingScreen } from "./screens/Branding";
+import { MembersScreen, SetupScreen } from "./screens/Members";
+import { PriceBookScreen } from "./screens/PriceBook";
+import { QuoteEditorScreen, QuotesScreen } from "./screens/Quotes";
+import { PortalApp } from "./screens/Portal";
+import { PortfolioScreen } from "./screens/Portfolio";
 
 /** Admins land on the dashboard; everyone else on the assessments list. */
 function Home() {
@@ -31,7 +39,10 @@ function Home() {
 }
 
 function Gate() {
-  const { status, locked, notice } = useAuth();
+  const { status, locked, notice, session } = useAuth();
+  const { pathname } = useLocation();
+  // Setup links work signed out (new members) and replace any session on this device once used.
+  if (pathname === "/setup") return <SetupScreen />;
   if (status === "loading") return <Loading label="Starting Sentinel Assess" />;
   if (status === "signed_out")
     return (
@@ -49,6 +60,8 @@ function Gate() {
     );
   // R2-5: nothing from the cached workspace renders (and nothing syncs) until the PIN is entered.
   if (locked) return <PinLock />;
+  // Client viewers get the portal only: no field tools, sync, or PIN prompt (D-081).
+  if (shellFor(session?.role) === "portal") return <PortalApp />;
   return (
     <SyncProvider>
     <Routes>
@@ -57,6 +70,10 @@ function Gate() {
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="compare" element={<CompareScreen />} />
         <Route path="settings/integrations" element={<IntegrationsScreen />} />
+        <Route path="settings/branding" element={<BrandingScreen />} />
+        <Route path="settings/members" element={<MembersScreen />} />
+        <Route path="settings/price-book" element={<PriceBookScreen />} />
+        <Route path="portfolio" element={<PortfolioScreen />} />
         <Route path="assessments/new" element={<NewAssessment />} />
         <Route path="assessments/:id" element={<FieldLayout />}>
           <Route index element={<AssessmentDetail />} />
@@ -73,6 +90,8 @@ function Gate() {
           <Route path="risk" element={<RiskResultsScreen />} />
           <Route path="risk/inputs" element={<RiskInputsScreen />} />
           <Route path="report" element={<ReportScreen />} />
+          <Route path="quotes" element={<QuotesScreen />} />
+          <Route path="quotes/:quoteId" element={<QuoteEditorScreen key="quote" />} />
         </Route>
         <Route path="sync" element={<SyncReview />} />
         <Route path="clients" element={<ClientsList />} />
@@ -100,7 +119,9 @@ export function App({ router = "browser", initialPath = "/", client }: AppProps)
   const body = (
     <div className="min-h-dvh bg-bg text-lg text-ink">
       <AuthProvider client={client}>
-        <Gate />
+        <BrandingProvider>
+          <Gate />
+        </BrandingProvider>
       </AuthProvider>
     </div>
   );

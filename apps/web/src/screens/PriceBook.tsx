@@ -126,6 +126,7 @@ export function PriceBookScreen() {
   const [editing, setEditing] = useState<string | null>(null);
   const [adding, setAdding] = useState<Form | null>(null);
   const [msg, setMsg] = useState<{ tone: "ok" | "error"; text: string } | null>(null);
+  const [placeholderDismissed, setPlaceholderDismissed] = useState(false);
   useEffect(() => {
     const t = setTimeout(() => setQuery(q), 250);
     return () => clearTimeout(t);
@@ -144,7 +145,8 @@ export function PriceBookScreen() {
     setMsg(null);
     try {
       const r = await importTemplate(api);
-      setMsg({ tone: "ok", text: `Template imported: ${r.added} added, ${r.skipped} skipped because the SKU already exists.` });
+      setMsg({ tone: "ok", text: `Added ${r.added} ${r.added === 1 ? "item" : "items"}. Skipped ${r.skipped} that you already have.` });
+      setPlaceholderDismissed(false);
       items.reload();
     } catch (e) {
       setMsg({ tone: "error", text: errorMessage(e) || "The template could not be imported." });
@@ -162,7 +164,7 @@ export function PriceBookScreen() {
           <>
             <Button onClick={() => (setAdding(blank()), setEditing(null))}>Add item</Button>
             <Button variant="secondary" onClick={() => void runImport()}>
-              Import template
+              Import starter price book
             </Button>
           </>
         }
@@ -190,6 +192,13 @@ export function PriceBookScreen() {
           />
         </Card>
       )}
+      {list.some((i) => i.fromTemplate) && !placeholderDismissed && (
+        <div className="mb-3">
+          <Banner tone="warn" title="Placeholder prices" action={<Button variant="secondary" onClick={() => setPlaceholderDismissed(true)}>Dismiss</Button>}>
+            These starter prices are illustrative placeholders, not market prices. Replace them with your own costs, labor hours, and margins before you send a quote.
+          </Banner>
+        </div>
+      )}
       <div className="mb-3">
         <Field label="Search the price book" type="search" value={q} onChange={(e) => setQ(e.target.value)} hint="Name, SKU, or description" />
       </div>
@@ -199,8 +208,8 @@ export function PriceBookScreen() {
       {items.loading && !items.data && <Loading label="Loading price book" />}
       {items.error ? <Banner tone="error">{errorMessage(items.error)}</Banner> : null}
       {items.data && list.length === 0 && (
-        <EmptyState title={query ? "No matching items" : "No items yet"} action={!query ? <Button onClick={() => void runImport()}>Import template</Button> : undefined}>
-          {query ? "Try a different search." : "Start from the template, then adjust costs to yours."}
+        <EmptyState title={query ? "No matching items" : "Your price book is empty"} action={!query ? <Button onClick={() => void runImport()}>Import starter price book</Button> : undefined}>
+          {query ? "Try a different search." : "Import the starter price book to get going, or add your first item."}
         </EmptyState>
       )}
       <ul className="flex flex-col gap-3">
@@ -228,7 +237,10 @@ export function PriceBookScreen() {
                     Cost {money(i.materialCost)}, {i.laborHours} labor h, {i.defaultMarginPct}% margin · {i.tier === "any" ? "All tiers" : TIER_LABEL[i.tier]}
                   </p>
                   {i.controlIds.length > 0 && <p className="text-base text-muted">Remediates {i.controlIds.join(", ")}</p>}
-                  {!i.active && <Chip>Inactive</Chip>}
+                  <span className="mt-1 flex flex-wrap gap-2">
+                    {i.fromTemplate && <Chip tone="warn">! Placeholder price</Chip>}
+                    {!i.active && <Chip>Inactive</Chip>}
+                  </span>
                 </div>
                 <Button variant="secondary" onClick={() => (setEditing(i.id), setAdding(null))} aria-label={`Edit ${i.name}`}>
                   Edit

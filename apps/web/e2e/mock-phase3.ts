@@ -220,5 +220,5 @@ export function createPhase3Mock(opts: Phase3Options = {}) {
   }
   const jobs = new Map<string, Record<string, unknown>>();
   const pollsOf = new Map<string, number>();
-  return { state, handle };
+  return { state, handle, result };
 }

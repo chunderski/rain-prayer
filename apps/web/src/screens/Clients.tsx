@@ -6,7 +6,7 @@ import { useApi } from "../auth/AuthContext";
 import { ApiError } from "../api/client";
 import { ClientCreated, ClientDetail as ClientDetailSchema, ClientSummary, Site } from "../api/schemas";
 import { errorMessage, useAsync } from "../lib/useAsync";
-import { Banner, Button, Card, EmptyState, Field, Loading, PageHeader, TextArea } from "../components/ui";
+import { Banner, Button, ButtonLink, Card, EmptyState, Field, Loading, PageHeader, TextArea } from "../components/ui";
 
 function friendly(err: unknown): string {
   if (err instanceof ApiError && err.status === 403) return "Your role cannot do this. Ask an admin.";
@@ -57,11 +57,16 @@ export function ClientsList() {
       <PageHeader
         title="Clients"
         actions={
-          !open && (
-            <Button size="lg" onClick={() => setOpen(true)}>
-              <span aria-hidden="true">+</span> Add client
-            </Button>
-          )
+          <>
+            <ButtonLink to="/portfolio" variant="secondary" size="lg">
+              Portfolio
+            </ButtonLink>
+            {!open && (
+              <Button size="lg" onClick={() => setOpen(true)}>
+                <span aria-hidden="true">+</span> Add client
+              </Button>
+            )}
+          </>
         }
       />
       {open && (
@@ -154,7 +159,16 @@ export function ClientDetail() {
   const c = client.data;
   return (
     <>
-      <PageHeader title={c.name} subtitle={c.industry ?? undefined} back={{ to: "/clients", label: "Clients" }} />
+      <PageHeader
+        title={c.name}
+        subtitle={c.industry ?? undefined}
+        back={{ to: "/clients", label: "Clients" }}
+        actions={
+          <ButtonLink to={`/portfolio?clientId=${encodeURIComponent(c.id)}`} variant="secondary">
+            Portfolio for this client
+          </ButtonLink>
+        }
+      />
       {c.notes && <p className="mb-4 whitespace-pre-wrap">{c.notes}</p>}
       <section aria-labelledby="sites-h" className="mb-6">
         <h2 id="sites-h" className="mb-2 text-2xl font-bold">

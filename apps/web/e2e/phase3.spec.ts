@@ -52,6 +52,10 @@ test.describe("Phase 3 risk", () => {
     const cards = page.getByRole("article");
     await expect(cards.first()).toHaveAccessibleName("Forced entry after hours");
     const f = card(page, "Forced entry after hours");
+    // Tour fix: collapsed by default with the levels, a one-line reason, and confidence.
+    await expect(f.getByTestId("scenario-summary")).toContainText("Very high20");
+    await expect(f.getByTestId("explanation")).toHaveCount(0);
+    await f.getByRole("button", { name: "Forced entry after hours" }).click();
     await expect(f.getByTestId("before-after")).toContainText("Very high20");
     await expect(f.getByTestId("before-after")).toContainText("Medium12");
     await expect(f.getByTestId("explanation")).toContainText("Inherent risk is 20 of 25 (very high): likelihood 4 times impact 5.");
@@ -85,7 +89,7 @@ test.describe("Phase 3 risk", () => {
     await expect(page.getByRole("heading", { name: "Risk results", level: 1 })).toBeVisible();
   });
 
-  test("site comparison with caveats", async ({ page }, testInfo) => {
+  test("site comparison with caveats (stacked on phones)", async ({ page }, testInfo) => {
     const { p3 } = await setup(page);
     Object.assign(p3.state.inputs[0]!, { likelihood: 4, impact: 5 });
     Object.assign(p3.state.inputs[2]!, { likelihood: 2, impact: 3 });
@@ -96,11 +100,22 @@ test.describe("Phase 3 risk", () => {
     await page.getByRole("checkbox", { name: /Head office review/ }).check();
     await page.getByRole("button", { name: "Compare 2 assessments" }).click();
     await expect(page.getByTestId("caveats")).toContainText("The sites use different frameworks");
-    const row = page.getByRole("row", { name: /Ransomware on site systems/ });
-    await expect(row).toContainText("Very low 3.6");
-    await expect(row).toContainText("High 16");
-    await expect(page.getByRole("row", { name: /Tailgating/ })).toHaveCount(0);
-    await expect(page.getByRole("row", { name: /critical/i })).toContainText("1");
+    if (testInfo.project.name === "desktop-chrome") {
+      const row = page.getByRole("row", { name: /Ransomware on site systems/ });
+      await expect(row).toContainText("Very low 3.6");
+      await expect(row).toContainText("High 16");
+      await expect(page.getByRole("row", { name: /Tailgating/ })).toHaveCount(0);
+      await expect(page.getByRole("row", { name: /critical/i })).toContainText("1");
+      await expect(page.getByTestId("comparison-stacked")).toBeHidden();
+    } else {
+      await expect(page.getByTestId("comparison-tables")).toBeHidden();
+      const card = page.getByRole("region", { name: "Ransomware on site systems" });
+      await expect(card).toContainText("Very low3.6");
+      await expect(card).toContainText("High16");
+      await expect(page.getByRole("region", { name: /Tailgating/ })).toHaveCount(0);
+      // No sideways scrolling on a phone.
+      expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(true);
+    }
     await expectNoSeriousA11yViolations(page);
     await screenshotOnPixel(page, testInfo, "comparison.png");
   });
@@ -240,9 +255,14 @@ test.describe("Phase 3 local PIN", () => {
   });
 });
 
-/** "Not now" hides the prompt for this page load only; it is offered again after a reload. */
+/** Tour fix: "Not now" hides the prompt for the rest of the session, reloads included; a new session offers it again. */
 async function setPinFromPromptAfterReload(page: Page) {
   await expect(page.getByRole("region", { name: "Set a PIN for offline work" })).toHaveCount(0);
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
+  await page.waitForTimeout(300);
+  await expect(page.getByRole("region", { name: "Set a PIN for offline work" })).toHaveCount(0);
+  await page.evaluate(() => sessionStorage.clear());
   await page.reload();
   await expect(page.getByRole("heading", { name: "Dashboard", level: 1 })).toBeVisible();
   await setPinFromPrompt(page);

@@ -39,8 +39,11 @@ export const patchMember = (api: ApiClient, userId: string, body: { role?: strin
   api.request(`/members/${enc(userId)}`, { method: "PATCH", body, schema: Member });
 
 // ---------- price book ----------
-export const fetchPriceBook = (api: ApiClient, q = "") => api.get(`/price-book${q.trim() ? `?q=${enc(q.trim())}` : ""}`, z.array(PriceBookItem));
-export const putPriceBookItem = (api: ApiClient, item: PriceBookItem) => api.request(`/price-book/${enc(item.id)}`, { method: "PUT", body: item, schema: PriceBookItem });
+/** fromTemplate: an unedited starter template item with an illustrative placeholder price. */
+export const PriceBookEntry = PriceBookItem.extend({ fromTemplate: z.boolean().optional() });
+export type PriceBookEntry = z.infer<typeof PriceBookEntry>;
+export const fetchPriceBook = (api: ApiClient, q = "") => api.get(`/price-book${q.trim() ? `?q=${enc(q.trim())}` : ""}`, z.array(PriceBookEntry));
+export const putPriceBookItem = (api: ApiClient, item: PriceBookItem) => api.request(`/price-book/${enc(item.id)}`, { method: "PUT", body: item, schema: PriceBookEntry });
 export const importTemplate = (api: ApiClient) => api.post("/price-book/import-template", {}, z.object({ added: z.number(), skipped: z.number() }));
 
 // ---------- quotes ----------
@@ -86,6 +89,8 @@ export const PortalQuote = z.object({
   totals: z.array(z.object({ tier: Tier, price: z.number(), optionalPrice: z.number() })),
   respondedAt: z.string().nullable(),
   respondedBy: z.string().nullable(),
+  /** Not in the Phase 4 Quote contract yet; shown when the API adds it. */
+  acceptedTier: Tier.nullish(),
 });
 export type PortalQuote = z.infer<typeof PortalQuote>;
 
@@ -104,9 +109,9 @@ export const fetchPortfolio = (api: ApiClient, clientId = "") => api.get(`/portf
 export const TIER_LABEL: Record<Tier, string> = { good: "Good", better: "Better", best: "Best" };
 export const QUOTE_STATUS_LABEL: Record<z.infer<typeof QuoteStatus>, string> = {
   draft: "Draft",
-  pending_approval: "Waiting for owner approval",
-  approved: "Approved, not sent",
-  sent: "Sent to client",
+  pending_approval: "Pending approval",
+  approved: "Approved",
+  sent: "Sent",
   accepted: "Accepted",
   declined: "Declined",
   expired: "Expired",

@@ -51,7 +51,7 @@ describe("risk levels and explanations", () => {
   it("renders explanation sentences in order and links contributors to controls and findings", () => {
     render(
       <MemoryRouter>
-        <ScenarioCard s={scenario} assessmentId={A} findingTitle={() => "Entrance light out"} />
+        <ScenarioCard s={scenario} assessmentId={A} findingTitle={() => "Entrance light out"} defaultOpen />
       </MemoryRouter>,
     );
     const items = within(screen.getByTestId("explanation")).getAllByRole("listitem");

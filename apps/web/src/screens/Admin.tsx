@@ -51,7 +51,7 @@ export function AssessorsScreen() {
       {members.data && (
         <fieldset className="flex flex-col gap-2">
           <legend className="mb-2 text-xl font-bold">Workspace members</legend>
-          {members.data.map((m) => (
+          {members.data.filter((m) => m.role !== "client_viewer" && m.role !== "viewer" && m.status !== "disabled").map((m) => (
             <label key={m.userId} className="flex min-h-14 items-center gap-3 rounded-xl border-2 border-line bg-surface px-4">
               <input type="checkbox" className="size-6" checked={selected.includes(m.userId)} onChange={(e) => setSelected(e.target.checked ? [...selected, m.userId] : selected.filter((x) => x !== m.userId))} />
               <span>

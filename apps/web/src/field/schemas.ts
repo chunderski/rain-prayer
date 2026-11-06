@@ -68,7 +68,7 @@ export const TenantSettings = z.object({
 });
 export type TenantSettings = z.infer<typeof TenantSettings>;
 
-export const Member = z.object({ userId: z.string(), email: z.string(), name: z.string(), role: z.string() });
+export const Member = z.object({ userId: z.string(), email: z.string(), name: z.string(), role: z.string(), status: z.string().optional() });
 export type Member = z.infer<typeof Member>;
 
 export const ReviewResult = z.object({

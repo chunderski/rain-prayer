@@ -30,6 +30,9 @@ export function Dashboard() {
             <ButtonLink to="/compare" variant="secondary">
               Compare sites
             </ButtonLink>
+            <ButtonLink to="/portfolio" variant="secondary">
+              Portfolio
+            </ButtonLink>
             {isAdmin && (
               <ButtonLink to="/settings/integrations" variant="secondary">
                 Settings

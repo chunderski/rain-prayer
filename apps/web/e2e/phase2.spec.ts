@@ -62,7 +62,7 @@ test.describe("Phase 2 offline", () => {
     // Section 1, control 1: perimeter fence.
     await expect(page.getByRole("heading", { name: "Perimeter fence is intact", level: 2 })).toBeVisible();
     await expect(page.getByText("Section 1 of 2: Perimeter and lighting")).toBeVisible();
-    await expect(page.getByText("Physical security: SA-PER-1")).toBeVisible();
+    await expect(page.getByText("Physical security: Perimeter barriers (SA-PER-1)")).toBeVisible();
     await group(page, Q.fence).getByRole("button", { name: "Yes" }).click();
     for (const k of ["1", "Decimal point", "5"]) await page.getByRole("group", { name: `Keypad for ${Q.gap}` }).getByRole("button", { name: k, exact: true }).click();
     await page.getByRole("button", { name: "Save 1.5 in" }).click();
@@ -192,8 +192,8 @@ test.describe("Phase 2 field capture", () => {
     await page.goto(`/assessments/${ASSESSMENT_ID}/findings`);
     const item = page.getByTestId("findings-list").getByRole("listitem").filter({ hasText: "Entrance light not working" });
     await expect(item.getByText("AI-assisted, accepted")).toBeVisible();
-    await expect(item.getByText("Physical security: SA-LGT-1")).toBeVisible();
-    await expect(item.getByText("CPTED: SA-CPTED-NS")).toBeVisible();
+    await expect(item.getByText("Physical security: Exterior lighting (SA-LGT-1)")).toBeVisible();
+    await expect(item.getByText("CPTED: Natural surveillance (SA-CPTED-NS)")).toBeVisible();
     expect(dialogs).toEqual([]);
   });
 

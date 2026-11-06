@@ -59,7 +59,34 @@ const controlDetail = (id: string) => {
 
 export type ExtraHandler = (route: Route, req: Request, url: URL, reply: (status: number, body?: unknown) => Promise<void>, cors: Record<string, string>) => Promise<boolean>;
 
+export interface MockUser {
+  id: string;
+  email: string;
+  name: string;
+  role: "owner" | "admin" | "assessor" | "viewer" | "client_viewer";
+  clientId?: string | null;
+  status?: "invited" | "active" | "disabled";
+}
+
+export const DEFAULT_USER: MockUser = { id: "b0000000-0000-4000-8000-000000000001", email: "assessor@acme.test", name: "Alex Assessor", role: "admin", status: "active" };
+
+/** Requirement titles for framework chips (fixture wording, not library text). */
+export const REQUIREMENT_TITLES: Record<string, string> = {
+  "SA-LGT-1": "Exterior lighting",
+  "SA-PER-1": "Perimeter barriers",
+  "SA-CPTED-NS": "Natural surveillance",
+  "SA-CPTED-AC": "Natural access control",
+  "SA-CARVER-R": "Recognizability",
+  "GV.RR-02": "Roles and responsibilities",
+  "ID.AM-08": "Asset lifecycle",
+  "SA-PQC-INV-1": "Cryptographic inventory",
+};
+
 export interface MockOptions {
+  /** Phase 4: sign-in accounts by email (password PASSWORD). Unknown emails sign in as DEFAULT_USER. */
+  users?: MockUser[];
+  /** Routes that need no bearer token (Phase 4 /auth/setup). */
+  publicExtra?: ExtraHandler;
   /** Make login answer 409 tenant_required until a tenantSlug is sent. */
   multiTenant?: boolean;
   /** Assessments listed from the start (Phase 2 specs seed one). */
@@ -76,11 +103,20 @@ export interface MockState {
    * context.setOffline(true) set this too and the mock fails every API request like a dead network.
    */
   offline: boolean;
+  /** The signed-in user (Phase 4 role checks). */
+  user: MockUser;
+  users: MockUser[];
+  /** Start a session for a user, as /auth/setup does. */
+  signInAs: (u: MockUser) => void;
 }
 
 export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockState> {
-  const state: MockState = { createdAssessments: [], requests: [], offline: false };
+  const state: MockState = { createdAssessments: [], requests: [], offline: false, user: DEFAULT_USER, users: opts.users ?? [], signInAs: () => undefined };
   let signedIn = false;
+  state.signInAs = (u) => {
+    state.user = u;
+    signedIn = true;
+  };
   let tenant = TENANTS.acme;
   const clients: { id: string; name: string; industry: string | null; siteCount: number; createdAt: string; notes: string | null }[] = [
     { id: "c0000000-0000-4000-8000-000000000001", name: "Northwind Logistics", industry: "Logistics", siteCount: 2, createdAt: "2026-10-01T00:00:00Z", notes: null },
@@ -92,9 +128,9 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
   const assessments: Record<string, unknown>[] = [...(opts.seedAssessments ?? [])];
 
   const session = () => ({
-    user: { id: "b0000000-0000-4000-8000-000000000001", email: "assessor@acme.test", name: "Alex Assessor" },
+    user: { id: state.user.id, email: state.user.email, name: state.user.name },
     tenant,
-    role: "admin",
+    role: state.user.role,
   });
 
   await page.route(`${API}/**`, async (route: Route) => {
@@ -130,17 +166,28 @@ export async function mockApi(page: Page, opts: MockOptions = {}): Promise<MockS
         return err(409, "tenant_required", "Choose a workspace", { tenants: [TENANTS.acme, TENANTS.bluefield].map(({ slug, name }) => ({ slug, name })) });
       }
       tenant = body.tenantSlug === TENANTS.bluefield.slug ? TENANTS.bluefield : TENANTS.acme;
+      const known = state.users.find((u) => u.email === body.email);
+      if (known && known.status !== "active") return err(401, "invalid_credentials", "Email or password is incorrect");
+      state.user = known ?? DEFAULT_USER;
       signedIn = true;
       return reply(200, { accessToken: "mock-access-token", session: session() });
     }
     // Signed photo URLs carry their own grant, not a bearer token.
     if (path.startsWith("/files/") && opts.extra && (await opts.extra(route, req, url, reply, cors))) return;
+    if (opts.publicExtra && (await opts.publicExtra(route, req, url, reply, cors))) return;
     if (!authed) return err(401, "unauthorized", "Sign in required");
     if (opts.extra && (await opts.extra(route, req, url, reply, cors))) return;
 
     // Phase 3: admins land on the dashboard; specs that need real numbers use e2e/mock-phase3.ts.
     if (path === "/dashboard") return reply(200, { assessmentsByStatus: {}, findingsBySeverity: {}, openHighFindings: 0, topResidual: [], recent: [] });
     if (path === "/frameworks") return reply(200, FRAMEWORKS);
+    const fwv = path.match(/^\/frameworks\/([^/]+)\/versions\/([^/]+)$/);
+    if (fwv) {
+      const f = FRAMEWORKS.find((x) => x.id === fwv[1]);
+      if (!f) return err(404, "not_found", "Framework not found");
+      const codes = [...new Set(CONTROLS.flatMap((c) => c.mappings.filter((mp) => mp.frameworkId === f.id).map((mp) => mp.requirementCode)))];
+      return reply(200, { ...f, requirements: codes.map((code) => ({ code, title: REQUIREMENT_TITLES[code] ?? `Requirement ${code}`, controlIds: [] })) });
+    }
     if (path === "/controls") {
       const f = url.searchParams.get("framework");
       const d = url.searchParams.get("domain");

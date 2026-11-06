@@ -8,7 +8,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { quoteTotals, unitPrice, type Quote, type QuoteInput, type QuoteLine, type Tier, type TierTotals } from "@sentinel/shared";
 import { ApiError } from "../api/client";
 import { type PriceBookEntry, createQuote, fetchPriceBook, fetchQuote, fetchQuoteCsv, fetchQuotePreview, fetchQuotes, money, putQuote, QUOTE_STATUS_LABEL, quoteAction, TIER_LABEL } from "../api/phase4";
-import { useApi, useCanAdmin, useCanWrite, useIsOwner } from "../auth/AuthContext";
+import { shellFor, useApi, useAuth, useCanAdmin, useCanWrite, useIsOwner } from "../auth/AuthContext";
 import { useField } from "../field/FieldContext";
 import { errorMessage, useAsync } from "../lib/useAsync";
 import { Banner, Button, ButtonLink, Card, Chip, EmptyState, Field, Loading, PageHeader, SelectField, TextArea } from "../components/ui";
@@ -363,6 +363,7 @@ export function QuoteEditor({ quoteId, assessmentId, findingTitle: titleOf }: { 
   const canWrite = useCanWrite();
   const isAdmin = useCanAdmin();
   const isOwner = useIsOwner();
+  const isClientViewer = shellFor(useAuth().session?.role) === "portal";
   const loaded = useAsync(() => fetchQuote(api, quoteId), [api, quoteId]);
   const priceBook = useAsync(() => (canWrite ? fetchPriceBook(api) : Promise.resolve([] as PriceBookEntry[])), [api, canWrite]);
   const [quote, setQuote] = useState<Quote | null>(null);
@@ -631,9 +632,12 @@ export function QuoteEditor({ quoteId, assessmentId, findingTitle: titleOf }: { 
         <Button variant="secondary" size="lg" aria-expanded={showPreview} onClick={() => setShowPreview(!showPreview)}>
           {showPreview ? "Hide preview" : "Preview"}
         </Button>
-        <Button variant="secondary" size="lg" disabled={!!busy} onClick={() => void onCsv()}>
-          Download CSV
-        </Button>
+        {/* The CSV carries cost and margin: staff only, never client viewers. */}
+        {!isClientViewer && (
+          <Button variant="secondary" size="lg" disabled={!!busy} onClick={() => void onCsv()}>
+            Download CSV
+          </Button>
+        )}
       </section>
       {showPreview && <QuotePreview id={quote.id} />}
     </>

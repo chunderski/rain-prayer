@@ -18,7 +18,7 @@ import { authOf, type AuthContext } from "../lib/auth.js";
 import { loadBranding, reportBrandOf } from "../lib/branding.js";
 import { AppError, notFound, parse } from "../lib/errors.js";
 import { renderQuoteCsv, renderQuoteHtml } from "../quotes/render.js";
-import { computeTotals, loadQuote, nextQuoteNumber, nextRevision, replaceLines, validateLineRefs, type LoadedQuote } from "../quotes/service.js";
+import { clientQuoteView, computeTotals, loadQuote, nextQuoteNumber, nextRevision, replaceLines, validateLineRefs, type LoadedQuote } from "../quotes/service.js";
 import { sendHtml, signedDocUrls } from "../report/send.js";
 import { reqMeta } from "./auth.js";
 import type { ChannelDeps } from "./pricebook.js";
@@ -262,7 +262,9 @@ export async function quoteRoutes(app: FastifyInstance, deps: ChannelDeps) {
           break;
         }
       }
-      return out((await loadQuote(tx, id))!);
+      const done = out((await loadQuote(tx, id))!);
+      // Client logins get the prices-only view (cost and margin stay with the integrator).
+      return a.role === "client_viewer" ? clientQuoteView(done) : done;
     });
   });
 

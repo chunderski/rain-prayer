@@ -4,7 +4,7 @@
  * name the client. Also the public /setup page where an invited person sets a password.
  */
 import { useEffect, useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { CompleteSetup, CreateMember, type Member } from "@sentinel/shared";
 import { ApiError } from "../api/client";
@@ -24,6 +24,9 @@ const STATUS_CHIP: Record<Member["status"], { tone: "ok" | "warn" | "neutral"; t
 const ERROR_TEXT: Record<string, string> = {
   last_owner: "The workspace needs at least one active owner. Make someone else an owner first.",
   forbidden: "Only owners can create or change owners and admins.",
+  member_exists: "This person is already a member of the workspace.",
+  invite_pending: "This person has not finished setup yet. Create a new invite to send a fresh link.",
+  unknown_client: "That client no longer exists. Refresh and choose again.",
 };
 
 function InviteLink({ url, expiresAt, onDone }: { url: string; expiresAt: string; onDone: () => void }) {
@@ -248,16 +251,35 @@ export function MembersScreen() {
   );
 }
 
-/** Public page from a setup link: choose a password, then continue signed in. */
+/** Reads the one-time token from the link fragment (#token=, never sent to servers) or, as a fallback, the query. */
+export function setupTokenFrom(hash: string, search: string): string {
+  const fromHash = new URLSearchParams(hash.replace(/^#/, "")).get("token");
+  return fromHash ?? new URLSearchParams(search).get("token") ?? "";
+}
+
+/**
+ * Public page from a setup link. New people choose a password; someone who already has a Sentinel
+ * Assess account enters its current password to join this workspace (the API never replaces it).
+ */
 export function SetupScreen() {
   const { completeSetup } = useAuth();
-  const [params, setParams] = useSearchParams();
-  // Keep the token in memory and take it out of the address bar (history, screenshots, referrers).
-  const [token] = useState(() => params.get("token") ?? "");
+  const location = useLocation();
   const navigate = useNavigate();
+  // Keep the token in memory and take it out of the address bar (history, screenshots, shoulder surfing).
+  const [token, setToken] = useState(() => setupTokenFrom(location.hash, location.search));
   useEffect(() => {
-    if (params.has("token")) setParams({}, { replace: true });
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // Also covers opening a second link while this page is open (only the fragment changes).
+    const next = setupTokenFrom(location.hash, location.search);
+    if (next && next !== token) {
+      setToken(next);
+      setMode("new");
+      setMsg(null);
+      setPassword("");
+      setConfirm("");
+    }
+    if (location.hash || location.search) navigate("/setup", { replace: true });
+  }, [location.hash, location.search]); // eslint-disable-line react-hooks/exhaustive-deps
+  const [mode, setMode] = useState<"new" | "existing">("new");
   const [password, setPassword] = useState("");
   const [confirm, setConfirm] = useState("");
   const [errors, setErrors] = useState<{ password?: string; confirm?: string }>({});
@@ -267,25 +289,33 @@ export function SetupScreen() {
   async function submit(e: FormEvent) {
     e.preventDefault();
     setMsg(null);
-    const parsed = CompleteSetup.safeParse({ token, password });
-    const pwErr = password.length < 12 ? "Use at least 12 characters." : password.length > 256 ? "Use at most 256 characters." : undefined;
-    const confErr = !pwErr && password !== confirm ? "The passwords do not match." : undefined;
+    const pwErr = mode === "existing" ? (password ? undefined : "Enter your current password.") : password.length < 12 ? "Use at least 12 characters." : password.length > 256 ? "Use at most 256 characters." : undefined;
+    const confErr = mode === "new" && !pwErr && password !== confirm ? "The passwords do not match." : undefined;
     setErrors({ password: pwErr, confirm: confErr });
     if (pwErr || confErr) return;
-    if (!parsed.success) return setMsg("This setup link is not valid. Ask your admin for a new one.");
+    if (!CompleteSetup.shape.token.safeParse(token).success) return setMsg("This setup link is not valid. Ask your admin for a new one.");
     setBusy(true);
     try {
       await completeSetup(token, password);
       navigate("/", { replace: true });
     } catch (err) {
       const code = err instanceof ApiError ? err.code : "";
-      setMsg(
-        err instanceof ApiError && (err.status === 400 || err.status === 404 || err.status === 410 || code === "invalid_token")
-          ? "This setup link has expired or was already used. Ask your admin for a new one."
-          : err instanceof ApiError && err.status === 429
-            ? "Too many attempts. Wait a minute and try again."
-            : errorMessage(err) || "The password could not be set.",
-      );
+      if (code === "invalid_credentials") {
+        setMode("existing");
+        setPassword("");
+        setConfirm("");
+        setMsg(mode === "existing" ? "That is not the current password for this account. Try again." : "This email already has a Sentinel Assess account. Enter its current password to join this workspace.");
+      } else if (code === "existing_account") {
+        setMsg("This email already has an account that signs in another way, such as Google. Sign in with it, then ask your admin to add you again.");
+      } else if (code === "invalid_setup_token" || (err instanceof ApiError && (err.status === 400 || err.status === 404 || err.status === 410))) {
+        setMsg("This setup link has expired or was already used. Ask your admin for a new one.");
+      } else if (err instanceof ApiError && err.status === 429) {
+        setMsg("Too many attempts. Wait a minute and try again.");
+      } else if (code === "validation_failed" && mode === "existing") {
+        setMsg("That is not the current password for this account.");
+      } else {
+        setMsg(errorMessage(err) || "The password could not be set.");
+      }
     } finally {
       setBusy(false);
     }
@@ -295,18 +325,34 @@ export function SetupScreen() {
     <main id="main" className="mx-auto flex min-h-dvh max-w-md flex-col justify-center gap-4 px-4 py-8">
       <div className="flex items-center gap-3">
         <Logo size={44} />
-        <h1 className="text-3xl font-bold">Set your password</h1>
+        <h1 className="text-3xl font-bold">{mode === "new" ? "Set your password" : "Join with your account"}</h1>
       </div>
       {!token ? (
         <Banner tone="error">This page needs the setup link your admin shared. Open the full link, or ask for a new one.</Banner>
       ) : (
         <form onSubmit={submit} noValidate className="flex flex-col gap-3">
-          <p>Choose a password for your Sentinel Assess account. You are signed in once it is set.</p>
-          <Field label="New password" type="password" autoComplete="new-password" value={password} maxLength={256} error={errors.password} hint="At least 12 characters. A short sentence is easy to remember." onChange={(e) => setPassword(e.target.value)} />
-          <Field label="Confirm password" type="password" autoComplete="new-password" value={confirm} maxLength={256} error={errors.confirm} onChange={(e) => setConfirm(e.target.value)} />
+          <fieldset className="m-0 flex flex-col gap-2 border-0 p-0">
+            <legend className="font-semibold">Do you already have a Sentinel Assess account with this email?</legend>
+            <label className="flex min-h-12 items-center gap-3">
+              <input type="radio" name="setup-mode" className="size-6" checked={mode === "new"} onChange={() => (setMode("new"), setMsg(null))} />
+              No, I am new: choose a password
+            </label>
+            <label className="flex min-h-12 items-center gap-3">
+              <input type="radio" name="setup-mode" className="size-6" checked={mode === "existing"} onChange={() => (setMode("existing"), setMsg(null))} />
+              Yes: use my current password
+            </label>
+          </fieldset>
+          {mode === "new" ? (
+            <>
+              <Field label="New password" type="password" autoComplete="new-password" value={password} maxLength={256} error={errors.password} hint="At least 12 characters. A short sentence is easy to remember." onChange={(e) => setPassword(e.target.value)} />
+              <Field label="Confirm password" type="password" autoComplete="new-password" value={confirm} maxLength={256} error={errors.confirm} onChange={(e) => setConfirm(e.target.value)} />
+            </>
+          ) : (
+            <Field label="Current password" type="password" autoComplete="current-password" value={password} maxLength={256} error={errors.password} hint="Your existing password stays the same; this only adds you to the workspace." onChange={(e) => setPassword(e.target.value)} />
+          )}
           {msg && <Banner tone="error">{msg}</Banner>}
           <Button type="submit" size="lg" block disabled={busy}>
-            {busy ? "Saving" : "Set password and continue"}
+            {busy ? "Saving" : mode === "new" ? "Set password and continue" : "Join and continue"}
           </Button>
         </form>
       )}

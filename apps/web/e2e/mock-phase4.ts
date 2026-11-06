@@ -9,7 +9,7 @@
 import { randomBytes, randomUUID } from "node:crypto";
 import type { Request, Route } from "@playwright/test";
 import { quoteTotals, QuoteInput, type Quote, type QuoteLine, type Tier } from "@sentinel/shared";
-import { API, type MockState, type MockUser } from "./mock-api";
+import { API, PASSWORD, type MockState, type MockUser } from "./mock-api";
 import { ASSESSMENT_ID, SEEDED_ASSESSMENT } from "./mock-field";
 import { FINDING_ID } from "./mock-phase3";
 import { contrastRatio } from "../src/branding/theme";
@@ -24,6 +24,12 @@ export const USERS: Record<"owner" | "admin" | "estimator" | "carmen" | "viewer"
   estimator: { id: "b0000000-0000-4000-8000-0000000000a2", email: "est@acme.test", name: "Erin Estimator", role: "assessor", status: "active" },
   carmen: { id: "b0000000-0000-4000-8000-0000000000a3", email: "carmen@northwind.test", name: "Carmen Diaz", role: "client_viewer", clientId: NORTHWIND, status: "active" },
   viewer: { id: "b0000000-0000-4000-8000-0000000000a4", email: "viewer@acme.test", name: "Vic Viewer", role: "viewer", status: "active" },
+};
+
+/** Accounts that already exist in another workspace (setup must prove the current password). */
+const EXISTING_ACCOUNTS: Record<string, { id: string; kind: "password" | "google" }> = {
+  "pat@partner.test": { id: "b0000000-0000-4000-8000-0000000000b1", kind: "password" },
+  "gail@google.test": { id: "b0000000-0000-4000-8000-0000000000b2", kind: "google" },
 };
 
 const RANK: Record<string, number> = { client_viewer: 0, viewer: 1, assessor: 2, admin: 3, owner: 4 };
@@ -247,12 +253,14 @@ export function createPhase4Mock(opts: Phase4Options) {
       const b = req.postDataJSON() as { email: string; name: string; role: MockUser["role"]; clientId: string | null };
       if ((b.role === "owner" || b.role === "admin") && user().role !== "owner") return err(403, "forbidden", "Owners only may create owners or admins");
       if ((b.role === "client_viewer") !== (b.clientId !== null)) return err(422, "validation_failed", "clientId is required for client_viewer and only for it");
-      const u = { id: randomUUID(), email: b.email, name: b.name, role: b.role, clientId: b.clientId, status: "invited" as const };
+      if (state.members.some((x) => x.email === b.email)) return err(409, "member_exists", "Already a member");
+      const existing = EXISTING_ACCOUNTS[b.email];
+      const u = { id: existing?.id ?? randomUUID(), email: b.email, name: b.name, role: b.role, clientId: b.clientId, status: "invited" as const, existing: existing?.kind ?? null };
       state.members.push(u);
       api.users.push(u);
       const token = randomBytes(24).toString("hex");
       state.tokens.set(token, u.id);
-      return done(reply(201, { member: member(u), setupUrl: `http://localhost:4173/setup?token=${token}`, expiresAt: new Date(Date.now() + 72 * 3600_000).toISOString() }));
+      return done(reply(201, { member: member(u), setupUrl: `http://localhost:4173/setup#token=${token}`, expiresAt: new Date(Date.now() + 72 * 3600_000).toISOString() }));
     }
     const pm = p.match(/^\/members\/([^/]+)$/);
     if (pm && m === "PATCH") {
@@ -432,8 +440,11 @@ export function createPhase4Mock(opts: Phase4Options) {
     const userId = state.tokens.get(b.token);
     if (!userId) return done(reply(400, { error: { code: "invalid_token", message: "Invalid or used token" } }));
     if (!b.password || b.password.length < 12) return done(reply(422, { error: { code: "validation_failed", message: "Password too short" } }));
+    const u = state.members.find((x) => x.id === userId)! as (typeof state.members)[number] & { existing?: string | null };
+    // Same rule as the API: an existing account proves its current password and is never given a new one.
+    if (u.existing === "google") return done(reply(409, { error: { code: "existing_account", message: "Signs in another way" } }));
+    if (u.existing === "password" && b.password !== PASSWORD) return done(reply(401, { error: { code: "invalid_credentials", message: "Enter the current password" } }));
     state.tokens.delete(b.token);
-    const u = state.members.find((x) => x.id === userId)!;
     u.status = "active";
     state.passwords.set(u.id, b.password);
     api!.signInAs(u);

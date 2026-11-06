@@ -237,3 +237,12 @@ describe("portfolio", () => {
     ).toMatch(/^Residual 16 High \(.+\), then 9 Medium \(.+\): improving\.$/);
   });
 });
+
+describe("setup link", () => {
+  it("reads the token from the fragment first", async () => {
+    const { setupTokenFrom } = await import("./Members");
+    expect(setupTokenFrom("#token=abc", "")).toBe("abc");
+    expect(setupTokenFrom("", "?token=q")).toBe("q");
+    expect(setupTokenFrom("", "")).toBe("");
+  });
+});

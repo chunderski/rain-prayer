@@ -97,7 +97,7 @@ test.describe("Phase 4 branding and members", () => {
     await page.getByRole("button", { name: "Create invite" }).click();
     await expect(page.getByText("Share this securely")).toBeVisible();
     const link = await page.getByTestId("setup-link").inputValue();
-    expect(link).toMatch(/\/setup\?token=[0-9a-f]{48}$/);
+    expect(link).toMatch(/\/setup#token=[0-9a-f]{48}$/);
     await page.getByRole("button", { name: "Copy link" }).click();
     await expect(page.getByText(/Link copied|Copy is blocked here/)).toBeVisible();
     await page.getByRole("button", { name: "Done" }).click();
@@ -105,9 +105,9 @@ test.describe("Phase 4 branding and members", () => {
     await expect(page.getByTestId("member-dana@northwind.test")).toContainText("Client: Northwind Logistics");
 
     await signOut(page);
-    await page.goto(new URL(link).pathname + new URL(link).search);
+    await page.goto(new URL(link).pathname + new URL(link).hash);
     await expect(page.getByRole("heading", { name: "Set your password", level: 1 })).toBeVisible();
-    await expect(page).toHaveURL(/\/setup$/); // token taken out of the address bar
+    await expect(page).toHaveURL(/\/setup$/); // token taken out of the address bar (fragment cleared)
     await page.getByLabel("New password").fill("short");
     await page.getByRole("button", { name: "Set password and continue" }).click();
     await expect(page.getByText("Use at least 12 characters.")).toBeVisible();
@@ -126,6 +126,39 @@ test.describe("Phase 4 branding and members", () => {
     await row.getByRole("button", { name: "Disable" }).click();
     await expect(row.getByRole("alert")).toContainText("at least one active owner");
   });
+});
+
+test("setup: an existing account joins with its current password; Google-only accounts are told what to do", async ({ page }) => {
+  await setup(page);
+  await signInAs(page, USERS.owner.email);
+  const invite = async (email: string) => {
+    await page.goto("/settings/members");
+    await page.getByLabel("Email").fill(email);
+    await page.getByLabel("Name").fill("Pat Partner");
+    await page.getByLabel("Role", { exact: true }).selectOption("assessor");
+    await page.getByRole("button", { name: "Create invite" }).click();
+    return page.getByTestId("setup-link").inputValue();
+  };
+  const google = await invite("gail@google.test");
+  const link = await invite("pat@partner.test");
+  await signOut(page);
+
+  await page.goto(new URL(google).pathname + new URL(google).hash);
+  await page.getByLabel("New password").fill("a long sentence password");
+  await page.getByLabel("Confirm password").fill("a long sentence password");
+  await page.getByRole("button", { name: "Set password and continue" }).click();
+  await expect(page.getByText(/already has an account that signs in another way, such as Google/)).toBeVisible();
+
+  await page.goto(new URL(link).pathname + new URL(link).hash);
+  await page.getByLabel("New password").fill("a long sentence password");
+  await page.getByLabel("Confirm password").fill("a long sentence password");
+  await page.getByRole("button", { name: "Set password and continue" }).click();
+  await expect(page.getByText("This email already has a Sentinel Assess account. Enter its current password to join this workspace.")).toBeVisible();
+  await expect(page.getByRole("radio", { name: /Yes: use my current password/ })).toBeChecked();
+  await expect(page.getByLabel("Current password", { exact: true })).toHaveValue("");
+  await page.getByLabel("Current password", { exact: true }).fill(PASSWORD);
+  await page.getByRole("button", { name: "Join and continue" }).click();
+  await expect(page.getByRole("heading", { name: /^(Dashboard|Assessments)$/, level: 1 })).toBeVisible();
 });
 
 test.describe("Phase 4 quotes and portal", () => {
@@ -220,10 +253,11 @@ test.describe("Phase 4 quotes and portal", () => {
     await expect(finding).toHaveAttribute("aria-expanded", "false");
     await finding.click();
     await expect(page.getByText("Physical security: Perimeter barriers (SA-PER-1)")).toBeVisible();
+    // axe cannot inject into the script-less sandboxed preview frame, so it runs before the report opens.
+    await expectNoSeriousA11yViolations(page);
     await page.getByRole("button", { name: "Show report" }).click();
     await expect(page.getByTestId("portal-report")).toHaveAttribute("sandbox", "");
     await expect(page.frameLocator('[data-testid="portal-report"]').getByText("Approved summary for Northwind.")).toBeVisible();
-    await expectNoSeriousA11yViolations(page);
 
     await page.getByRole("link", { name: new RegExp(q.number) }).click();
     await page.getByRole("button", { name: "Decline", exact: true }).click();

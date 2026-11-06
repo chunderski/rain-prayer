@@ -13,7 +13,7 @@ import { guard } from "../lib/access.js";
 import { authOf } from "../lib/auth.js";
 import { loadBranding, reportBrandOf } from "../lib/branding.js";
 import { AppError, notFound, parse } from "../lib/errors.js";
-import { loadQuote } from "../quotes/service.js";
+import { clientQuoteView, loadQuote } from "../quotes/service.js";
 import { loadReportData } from "../report/data.js";
 import { renderHtml } from "../report/html.js";
 import { buildReportDoc } from "../report/model.js";
@@ -119,7 +119,7 @@ export async function portalRoutes(app: FastifyInstance, deps: ChannelDeps) {
 
   app.get("/portal/quotes/:id", role("client_viewer"), async (req) => {
     const { id } = parse(IdParams, req.params);
-    return db.withTenant(authOf(req).tenantId, async (tx) => (await portalQuote(tx, req, id)).quote);
+    return db.withTenant(authOf(req).tenantId, async (tx) => clientQuoteView((await portalQuote(tx, req, id)).quote));
   });
 
   app.get("/portal/quotes/:id/preview", role("client_viewer"), async (req, reply) => {

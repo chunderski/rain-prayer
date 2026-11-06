@@ -38,13 +38,19 @@ export function contrastRatio(a: string, b: string): number | null {
 export const MIN_TEXT_CONTRAST = 4.5;
 export const WHITE = "#ffffff";
 
-/** Darkens a color step by step until white text on it reaches 4.5:1 (the API's rule). */
+/** The light theme's page background (index.css --sa-bg): primary is also link text on it. */
+export const LIGHT_BG = "#f3f5f9";
+
+/**
+ * Darkens a color step by step until white text on it reaches 4.5:1 (the API's rule) and it also
+ * reads at 4.5:1 as link text on the app background.
+ */
 export function accessibleAlternative(hex: string, target = MIN_TEXT_CONTRAST): string | null {
   const rgb = parseHex(hex);
   if (!rgb) return null;
   for (let k = 1; k >= 0; k -= 0.02) {
     const c = toHex([rgb[0] * k, rgb[1] * k, rgb[2] * k]);
-    if ((contrastRatio(c, WHITE) ?? 0) >= target) return c;
+    if ((contrastRatio(c, WHITE) ?? 0) >= target && (contrastRatio(c, LIGHT_BG) ?? 0) >= target) return c;
   }
   return "#000000";
 }
@@ -68,7 +74,9 @@ export function brandVars(primaryColor: string, dark: boolean): Record<string, s
   if (!parseHex(primaryColor)) return null;
   if (!dark) {
     if ((contrastRatio(primaryColor, WHITE) ?? 0) < MIN_TEXT_CONTRAST) return null;
-    return { "--sa-primary": primaryColor, "--sa-on-primary": WHITE, "--sa-primary-soft": tint(primaryColor, 0.85) };
+    // A color that just passes on white can miss 4.5:1 as link text on the grey page; nudge it darker for the UI.
+    const ui = (contrastRatio(primaryColor, LIGHT_BG) ?? 0) >= MIN_TEXT_CONTRAST ? primaryColor : accessibleAlternative(primaryColor)!;
+    return { "--sa-primary": ui, "--sa-on-primary": WHITE, "--sa-primary-soft": tint(ui, 0.85) };
   }
   if ((contrastRatio(primaryColor, SURFACE.dark) ?? 0) < MIN_TEXT_CONTRAST) return null;
   if ((contrastRatio(primaryColor, DARK_TEXT) ?? 0) < MIN_TEXT_CONTRAST) return null;

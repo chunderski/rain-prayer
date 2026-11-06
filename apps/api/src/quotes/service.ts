@@ -2,7 +2,7 @@
  * Quote persistence. Totals always come from quoteTotals in packages/shared (D-080); this file never
  * does quote arithmetic of its own beyond comparing a tier's marginPct with the tenant minimum.
  */
-import { quoteTotals, type Quote, type QuoteInput, type QuoteLine, type TierTotals } from "@sentinel/shared";
+import { quoteTotals, unitPrice, type Quote, type QuoteInput, type QuoteLine, type TierTotals } from "@sentinel/shared";
 import type { Tx } from "../db/pool.js";
 import { AppError } from "../lib/errors.js";
 
@@ -109,4 +109,38 @@ export async function nextRevision(tx: Tx, tenantId: string, baseNumber: string)
   await tx.query("SELECT pg_advisory_xact_lock(hashtextextended('sentinel-quote-number:' || $1, 0))", [tenantId]);
   const { rows } = await tx.query<{ r: number }>("SELECT max(revision) AS r FROM quote WHERE base_number = $1", [baseNumber]);
   return (rows[0]?.r ?? 1) + 1;
+}
+
+/**
+ * What a client login may see of a quote: sell prices only. Cost, labor hours, margin, the
+ * minimum-margin snapshot, internal notes about pricing, and approver identity stay with the integrator.
+ */
+export function clientQuoteView(q: LoadedQuote["quote"]) {
+  return {
+    id: q.id,
+    assessmentId: q.assessmentId,
+    number: q.number,
+    title: q.title,
+    status: q.status,
+    currency: q.currency,
+    validUntil: q.validUntil,
+    tiers: q.tiers,
+    terms: q.terms,
+    notes: q.notes,
+    lines: q.lines.map((l) => ({
+      id: l.id,
+      findingId: l.findingId,
+      description: l.description,
+      unit: l.unit,
+      quantity: l.quantity,
+      tier: l.tier,
+      optional: l.optional,
+      unitPrice: unitPrice(l, q.laborRate),
+    })),
+    totals: q.totals.map((t) => ({ tier: t.tier, price: t.price, optionalPrice: t.optionalPrice })),
+    sentAt: q.sentAt,
+    respondedAt: q.respondedAt,
+    respondedBy: q.respondedBy,
+    acceptedTier: q.acceptedTier,
+  };
 }

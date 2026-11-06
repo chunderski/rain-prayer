@@ -363,7 +363,12 @@ describe("quotes", () => {
     expect((await act(assessor, q.id, { action: "send" })).statusCode).toBe(403);
     q = Quote.parse(ok(await act(adminTok, q.id, { action: "send" })));
     expect(q.status).toBe("sent");
-    expect(Quote.parse(ok(await call(cv, "GET", `/portal/quotes/${q.id}`))).id).toBe(q.id);
+    const portalBody = ok(await call(cv, "GET", `/portal/quotes/${q.id}`)) as Record<string, unknown> & { lines: Record<string, unknown>[]; totals: Record<string, unknown>[] };
+    expect(portalBody.id).toBe(q.id);
+    // Prices only: integrator cost, labor, and margin never reach a client login.
+    const leaked = JSON.stringify(portalBody);
+    for (const k of ["materialCost", "laborHours", "laborRate", "marginPct", "minMarginPct", "belowMinMargin", "approvedBy", "\"margin\"", "\"cost\"", "\"materials\"", "\"labor\""]) expect(leaked).not.toContain(k);
+    expect(portalBody.lines.every((l) => typeof l.unitPrice === "number")).toBe(true);
     const pa = ok(await call(cv, "GET", "/portal/assessments")).find((x: PortalAssessment) => x.id === aDone);
     expect(pa.quotes.map((x: { id: string }) => x.id)).toEqual([q.id]);
     const preview = await call(cv, "GET", `/portal/quotes/${q.id}/preview`);
@@ -378,7 +383,11 @@ describe("quotes", () => {
     expect((await act(blueCv, q.id, { action: "accept", tier: "good", name: "Blue" })).statusCode).toBe(404);
     expect((await act(viewer, q.id, { action: "accept", tier: "good", name: "Vic" })).statusCode).toBe(403);
     expect((await act(cv, q.id, { action: "approve" })).statusCode).toBe(403);
-    expect((await act(cv, q.id, { action: "accept", tier: "good", name: "Casey Client" })).statusCode).toBe(200);
+    const accepted = await act(cv, q.id, { action: "accept", tier: "good", name: "Casey Client" });
+    expect(accepted.statusCode).toBe(200);
+    expect(accepted.body).not.toContain("materialCost");
+    expect(accepted.body).not.toContain("marginPct");
+    expect(accepted.json().acceptedTier).toBe("good");
     const raw = ok(await call(viewer, "GET", `/quotes/${q.id}`));
     expect(Quote.parse(raw)).toMatchObject({ status: "accepted", respondedBy: "Casey Client" });
     expect(raw.acceptedTier).toBe("good");

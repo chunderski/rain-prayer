@@ -24,6 +24,16 @@ npm run dev:api     # http://localhost:3000
 npm run dev:web     # http://localhost:5173
 ```
 
+## Demo from one address (remote preview or tunnel)
+
+`scripts/demo-server.mjs` serves the built app and proxies `/api` to the API on one port, so the product works from a single URL (a cloud preview, a tunnel, or another device on your network). Demo use only.
+
+```bash
+npm --prefix apps/web exec -- env VITE_API_URL=http://localhost:8080/api vite build   # or: cd apps/web && VITE_API_URL=http://localhost:8080/api npx vite build
+WEB_ORIGIN=http://localhost:8080 API_PUBLIC_URL=http://localhost:8080/api npm run start -w @sentinel/api   # plus your usual DB and JWT env
+node scripts/demo-server.mjs   # http://localhost:8080
+```
+
 ## Checks
 
 ```bash

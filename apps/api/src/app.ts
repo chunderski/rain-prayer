@@ -196,6 +196,8 @@ export async function buildApp(cfg: Config, deps: AppDeps = {}): Promise<Fastify
     const q = req.query as { p?: unknown; a?: unknown };
     const hex = (v: unknown, d: string) => (typeof v === "string" && /^[0-9a-fA-F]{6}$/.test(v) ? `#${v.toLowerCase()}` : d);
     reply.type("text/css; charset=utf-8");
+    // Loaded by sandboxed (opaque-origin) preview iframes; harmless to share since it carries no data.
+    reply.header("Cross-Origin-Resource-Policy", "cross-origin");
     return `:root{--brand-primary:${hex(q.p, "#0b3d91")};--brand-accent:${hex(q.a, "#b45309")};--brand-on-primary:#ffffff}\n`;
   });
   await app.register(authRoutes, { cfg, db });

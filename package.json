@@ -18,7 +18,9 @@
     "dev:web": "npm run dev -w @sentinel/web",
     "db:migrate": "npm run db:migrate -w @sentinel/api",
     "db:seed": "npm run db:seed -w @sentinel/api",
-    "validate:frameworks": "npm run validate -w @sentinel/frameworks"
+    "validate:frameworks": "npm run validate -w @sentinel/frameworks",
+    "demo": "node scripts/demo/run-demo.mjs",
+    "demo:reset": "node scripts/demo/run-demo.mjs --reset"
   },
   "devDependencies": {
     "typescript": "^5.9.3",

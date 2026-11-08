@@ -11,3 +11,4 @@ test-results/
 dev-dist/
 __pycache__/
 !**/.env*.example
+.demo/

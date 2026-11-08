@@ -24,6 +24,10 @@ npm run dev:api     # http://localhost:3000
 npm run dev:web     # http://localhost:5173
 ```
 
+## Customer demo
+
+One command runs the whole product with a ready-made customer story: `npm run demo` (needs Node.js 22+ and Docker Desktop). See [docs/DEMO.md](docs/DEMO.md) for setup, a 10-minute walkthrough, and troubleshooting.
+
 ## Demo from one address (remote preview or tunnel)
 
 `scripts/demo-server.mjs` serves the built app and proxies `/api` to the API on one port, so the product works from a single URL (a cloud preview, a tunnel, or another device on your network). Demo use only.

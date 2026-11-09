@@ -107,6 +107,24 @@ async function connectWithRetry(url, seconds) {
   }
 }
 
+/** Docker Desktop installed but closed: open it and wait. Not installed: say how to get it. */
+async function startDocker() {
+  const installed = run("docker", ["--version"], { quiet: true, allowFail: true }).status === 0
+    || (platform() === "darwin" && existsSync("/Applications/Docker.app"));
+  if (!installed)
+    fail("Docker Desktop is not installed. Download it from https://www.docker.com/products/docker-desktop (on a Mac, pick Apple chip or Intel chip to match your Mac), install it, open it once and accept its terms, then run `npm run demo` again.");
+  if (platform() === "darwin") run("open", ["-a", "Docker"], { quiet: true, allowFail: true });
+  else if (IS_WIN && existsSync("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe"))
+    spawn("C:\\Program Files\\Docker\\Docker\\Docker Desktop.exe", [], { detached: true, stdio: "ignore" }).unref();
+  say("Waiting for Docker Desktop to start (up to 2 minutes; accept its terms if it asks)");
+  const until = Date.now() + 120_000;
+  while (Date.now() < until) {
+    if (run("docker", ["info"], { quiet: true, allowFail: true }).status === 0) return;
+    await new Promise((r) => setTimeout(r, 3000));
+  }
+  fail("Docker Desktop did not finish starting. Open it yourself, wait until it says it is running, then run `npm run demo` again.");
+}
+
 let adminUrl = process.env.DEMO_ADMIN_DATABASE_URL;
 let dbHostPort;
 if (adminUrl) {
@@ -115,7 +133,7 @@ if (adminUrl) {
   say(`Using your Postgres at ${dbHostPort}`);
 } else {
   if (run("docker", ["info"], { quiet: true, allowFail: true }).status !== 0)
-    fail("Docker is not running. Install Docker Desktop (https://www.docker.com/products/docker-desktop), open it, wait until it says it is running, then run `npm run demo` again.");
+    await startDocker();
   const exists = run("docker", ["ps", "-a", "--filter", `name=^${CONTAINER}$`, "--format", "{{.Status}}"], { quiet: true }).stdout.trim();
   if (!exists) {
     say("Starting a private database in Docker (first run downloads it, about a minute)");

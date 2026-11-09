@@ -97,7 +97,8 @@ This has not yet been tested against the live Anthropic service, so try it priva
 
 | Message | Fix |
 |---|---|
-| *Docker is not running* | Open Docker Desktop, wait until it says it is running, try again. |
+| *Docker Desktop is not installed* | Install it from docker.com (on a Mac, pick Apple chip or Intel chip to match your Mac), open it once and accept its terms, try again. |
+| *Docker Desktop did not finish starting* | The demo opens Docker Desktop for you and waits two minutes. If that is not enough, open it yourself, wait until it says it is running, try again. |
 | *Node.js 22 or newer is needed* | Install the LTS version from nodejs.org, open a new terminal, try again. |
 | *port 8080 ... busy* | Something else uses that port. Run `DEMO_PORT=8090 npm run demo` (PowerShell: `$env:DEMO_PORT=8090; npm run demo`) and open http://localhost:8090. |
 | *The demo database belongs to an earlier setup* | Run `npm run demo:reset`. |

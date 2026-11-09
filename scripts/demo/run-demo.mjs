@@ -40,6 +40,12 @@ const IMAGE = process.env.DEMO_PG_IMAGE ?? "postgres:16-alpine";
 const ORIGIN = `http://localhost:${PORT}`;
 const IS_WIN = platform() === "win32";
 
+// Docker Desktop on a Mac can leave its command-line tool off the PATH (user-level install).
+if (platform() === "darwin") {
+  const extra = [join(process.env.HOME ?? "", ".docker/bin"), "/Applications/Docker.app/Contents/Resources/bin", "/usr/local/bin", "/opt/homebrew/bin"];
+  process.env.PATH = [...extra.filter((d) => existsSync(d)), process.env.PATH].join(":");
+}
+
 const say = (msg) => console.log(`\x1b[36m▸\x1b[0m ${msg}`);
 const fail = (msg) => {
   console.error(`\n\x1b[31mCould not start the demo:\x1b[0m ${msg}\n`);
@@ -122,7 +128,9 @@ async function startDocker() {
     if (run("docker", ["info"], { quiet: true, allowFail: true }).status === 0) return;
     await new Promise((r) => setTimeout(r, 3000));
   }
-  fail("Docker Desktop did not finish starting. Open it yourself, wait until it says it is running, then run `npm run demo` again.");
+  const why = run("docker", ["info"], { quiet: true, allowFail: true });
+  const detail = (why.error?.message ?? why.stderr ?? "").trim().split("\n").slice(-2).join(" ");
+  fail(`Docker Desktop did not finish starting. Open it yourself, finish any setup questions it shows, wait until it says "Engine running", then run \`npm run demo\` again.${detail ? `\n  (Docker said: ${detail})` : ""}`);
 }
 
 let adminUrl = process.env.DEMO_ADMIN_DATABASE_URL;
